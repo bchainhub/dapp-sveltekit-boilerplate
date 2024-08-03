@@ -1,0 +1,136 @@
+:root {
+	--skc-font-family-base: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	--skc-font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+	--skc-color-white: hsl(0, 0%, 100%);
+	--skc-color-whitesmoke: hsl(0, 0%, 97%);
+	--skc-color-porcelain: hsl(216, 14%, 93%);
+	--skc-color-black: hsl(0, 0%, 0%);
+	--skc-color-shark: hsl(216, 8%, 12%);
+	--skc-color-cod-grey: hsl(216, 14%, 3%);
+	--skc-color-sea-nymph: hsl(167, 15%, 52%);
+	--skc-color-mineral-green: hsl(167, 15%, 32%);
+	--skc-color-success: hsl(120, 100%, 32%);
+	--skc-color-info: hsl(195, 80%, 63%);
+	--skc-color-warning: hsl(44, 100%, 50%);
+	--skc-color-danger: hsl(358, 95%, 60%);
+	--skc-color-puerto-rico: hsl(167, 68%, 45%);
+	--skc-color-jungle-green: hsl(167, 68%, 41%);
+	--skc-color-niagara: hsl(167, 68%, 38%);
+	--skc-color-observatory: hsl(167, 68%, 32%);
+	--skc-color-shamrock: hsl(167, 68%, 50%);
+	--skc-color-turquoise: hsl(167, 68%, 56%);
+	--skc-color-bermuda: hsl(167, 68%, 65%);
+
+	--skc-color-primary: var(--skc-color-puerto-rico);
+	--skc-color-primary-dark: var(--skc-color-jungle-green);
+	--skc-color-primary-darker: var(--skc-color-niagara);
+	--skc-color-primary-darkest: var(--skc-color-observatory);
+	--skc-color-primary-light: var(--skc-color-shamrock);
+	--skc-color-primary-lighter: var(--skc-color-turquoise);
+	--skc-color-primary-lightest: var(--skc-color-bermuda);
+	--skc-color-secondary: var(--skc-color-cod-grey);
+
+	--skc-color-content: var(--skc-color-shark);
+	--skc-color-content-inverse: var(--skc-color-white);
+	--skc-font-color-base: var(--skc-color-content);
+	--skc-link-color: var(--skc-color-primary);
+	--skc-link-hover-color: var(--skc-color-primary-dark);
+
+	--skc-background-color-light: var(--skc-color-white);
+	--skc-background-color-dark: var(--skc-color-black);
+	--skc-background-color-transparent: 'transparent';
+	--skc-background-color: var(--skc-background-color-light);
+
+	--skc-background-surface-color: var(--skc-color-whitesmoke);
+	--skc-navbar-background-color: var(--skc-background-surface-color);
+	--skc-navbar-link-color: var(--skc-font-color-base);
+	--skc-navbar-link-hover-color: var(--skc-color-primary-dark);
+
+	--skc-footer-color: var(--skc-font-color-base);
+	--skc-footer-background-color: var(--skc-background-surface-color);
+	--skc-footer-background-color-light: var(--skc-color-porcelain);
+	--skc-footer-background-color-dark: var(--skc-color-shark);
+	--skc-footer-background-color-transparent: 'transparent';
+	--skc-footer-text-color: var(--skc-font-color-base);
+	--skc-footer-text-color-light: var(--skc-color-shark);
+	--skc-footer-text-color-dark: var(--skc-color-white);
+	--skc-footer-title-color: var(--skc-font-color-base);
+	--skc-footer-title-color-light: var(--skc-color-shark);
+	--skc-footer-title-color-dark: var(--skc-color-white);
+	--skc-footer-link-color: var(--skc-footer-link-color-light);
+	--skc-footer-link-hover-color: var(--skc-color-primary-dark);
+
+	--skc-footer-link-color-light: var(--skc-color-mineral-green);
+	--skc-footer-link-hover-color-light: var(--skc-color-primary-light);
+	--skc-footer-link-color-dark: var(--skc-color-sea-nymph);
+	--skc-footer-link-hover-color-dark: var(--skc-color-primary-dark);
+
+	--skc-code-font-size: 90%;
+	--skc-highlighted-code-line-bg: hsla(0, 0%, 0%, 0.1);
+	--skc-menu-color-background-hover: var(--skc-menu-color-background-hover);
+
+	--skc-font-size-base: 100%;
+	--skc-font-weight-light: 300;
+	--skc-font-weight-normal: 400;
+	--skc-font-weight-semibold: 500;
+	--skc-font-weight-bold: 700;
+	--skc-font-weight-base: var(--skc-font-weight-normal);
+
+	--skc-global-shadow-lw: 0 1px 2px 0 hsla(0, 0%, 0%, 0.102);
+	--skc-navbar-shadow: var(--skc-global-shadow-lw);
+
+	--skc-hr-background-color: hsla(0, 0%, 40%, 0.2);
+	--skc-transition-fast: 200ms;
+	--skc-transition-slow: 400ms;
+	--skc-transition-timing-default: cubic-bezier(0.08,0.52,0.52,1);
+}
+
+[data-theme='dark'] {
+	--skc-color-primary: var(--skc-color-puerto-rico);
+	--skc-color-primary-dark: var(--skc-color-bermuda);
+	--skc-color-primary-darker: var(--skc-color-turquoise);
+	--skc-color-primary-darkest: var(--skc-color-shamrock);
+	--skc-color-primary-light: var(--skc-color-observatory);
+	--skc-color-primary-lighter: var(--skc-color-niagara);
+	--skc-color-primary-lightest: var(--skc-color-jungle-green);
+	--skc-color-secondary: var(--skc-color-porcelain);
+	--skc-link-hover-color: var(--skc-color-primary-light);
+
+	--skc-background-color: var(--skc-background-color-dark);
+	--skc-background-surface-color: var(--skc-color-shark);
+	--skc-color-content: var(--skc-color-white);
+	--skc-color-content-inverse: var(--skc-color-shark);
+	--skc-navbar-background-color: var(--skc-background-surface-color);
+	--skc-navbar-link-color: var(--skc-font-color-base);
+	--skc-navbar-link-hover-color: var(--skc-color-primary-light);
+	--skc-footer-background-color: var(--skc-background-surface-color);
+	--skc-footer-text-color: var(--skc-font-color-base);
+	--skc-footer-title-color: var(--skc-font-color-base);
+	--skc-footer-link-color: var(--skc-footer-link-color-light);
+	--skc-footer-link-hover-color: var(--skc-color-primary-light);
+}
+
+.footer-transparent {
+	--skc-ft-bg-color: var(--skc-footer-background-color-transparent);
+	--skc-ft-text-color: var(--skc-footer-text-color);
+	--skc-ft-title-color: var(--skc-footer-title-color);
+	--skc-ft-link-color: var(--skc-footer-link-color);
+	--skc-ft-link-hover-color: var(--skc-footer-link-hover-color);
+}
+
+.footer-dark {
+	--skc-ft-bg-color: var(--skc-footer-background-color-dark);
+	--skc-ft-text-color: var(--skc-footer-text-color-dark);
+	--skc-ft-title-color: var(--skc-footer-title-color-dark);
+	--skc-ft-link-color: var(--skc-footer-link-color-dark);
+	--skc-ft-link-hover-color: var(--skc-footer-link-hover-color-dark);
+}
+
+.footer-light {
+	--skc-ft-bg-color: var(--skc-footer-background-color-light);
+	--skc-ft-text-color: var(--skc-footer-text-color-light);
+	--skc-ft-title-color: var(--skc-footer-title-color-light);
+	--skc-ft-link-color: var(--skc-footer-link-color-light);
+	--skc-ft-link-hover-color: var(--skc-footer-link-hover-color-light);
+}

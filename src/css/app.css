@@ -1,0 +1,123 @@
+@import 'variables.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+	height: 100%;
+	font-family: var(--skc-font-family-base);
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	background-color: var(--skc-background-color);
+	color: var(--skc-color-content);
+	font-size: var(--skc-font-size-base);
+	font-weight: var(--skc-font-weight-base);
+}
+
+main {
+	flex: 1;
+}
+
+a {
+	color: var(--skc-link-color);
+	transition: color var(--skc-transition-fast) var(--skc-transition-timing-default);
+}
+
+a:hover {
+	color: var(--skc-link-hover-color);
+	text-decoration: underline;
+}
+
+header {
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+	background-color: var(--skc-navbar-background-color);
+	color: var(--skc-navbar-link-color);
+	box-shadow: var(--skc-navbar-shadow);
+	transition: transform 0.3s ease;
+}
+
+header.nav-hidden {
+	transform: translateY(-100%);
+}
+
+header a {
+	color: var(--skc-navbar-link-color);
+}
+
+header a:hover {
+	color: var(--skc-navbar-link-hover-color);
+	text-decoration: none;
+}
+
+footer {
+	flex-shrink: 0;
+	background-color: var(--skc-footer-background-color);
+	color: var(--skc-footer-link-color);
+}
+
+footer a {
+	color: var(--skc-footer-link-color);
+}
+
+footer a:hover {
+	color: var(--skc-footer-link-hover-color);
+	text-decoration: none;
+}
+
+.footer {
+	background-color: var(--skc-ft-bg-color);
+	color: var(--skc-ft-text-color);
+}
+
+.footer a {
+	color: var(--skc-ft-link-color);
+}
+
+.footer a:hover {
+	color: var(--skc-ft-link-hover-color);
+	text-decoration: none;
+}
+
+hr {
+	border-color: var(--skc-hr-background-color);
+}
+
+.menu-item:hover {
+	background-color: var(--skc-menu-color-background-hover);
+}
+
+code {
+	font-family: var(--skc-font-family-monospace);
+	font-size: var(--skc-code-font-size);
+}
+
+nav {
+	background-color: var(--skc-navbar-background-color);
+}
+
+nav button {
+	background: none;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	color: var(--skc-navbar-link-color);
+}
+
+nav button:hover {
+	color: var(--skc-navbar-link-hover-color);
+}
+
+.nav-hidden {
+	transform: translateY(-100%);
+	transition: transform 0.3s ease;
+}
+
+.shadow-navbar {
+	box-shadow: var(--skc-navbar-shadow);
+}
