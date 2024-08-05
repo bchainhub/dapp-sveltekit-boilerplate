@@ -29,7 +29,7 @@ vite.config.ts.timestamp-*
 # Locks
 package-lock.json
 yarn.lock
-pnpm-lock.json
+pnpm-lock.yaml
 
 # Logs
 npm-debug.log*
