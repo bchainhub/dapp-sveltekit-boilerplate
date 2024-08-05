@@ -13,7 +13,6 @@ export const load: LayoutServerLoad = async (event) => {
 	}
 
 	return {
-		session,
-		config: event.locals.config
+		session
 	};
 };

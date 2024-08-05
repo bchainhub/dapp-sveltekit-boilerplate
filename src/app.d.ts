@@ -31,7 +31,6 @@ interface Config {
 
 declare namespace App {
 	interface Locals {
-		config: Config;
 		db?: D1Database;
 		session?: {
 			challenge: string;

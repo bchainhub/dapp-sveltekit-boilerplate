@@ -5,6 +5,7 @@ import { v7 as uuidv7 } from 'uuid';
 import { generateToken } from '$lib/helpers/jwt';
 import { env } from '$env/dynamic/private';
 import { genv } from '$lib/helpers/genv';
+import { config } from '$app/site.config';
 import type { Session as AuthSession, User as AuthUser } from "@auth/core/types";
 
 interface User extends AuthUser {
@@ -21,7 +22,7 @@ export const { handle, signIn, signOut } = SvelteKitAuth(async (platform, locals
 	const d1Namespace = genv(platform).D1_NAMESPACE;
 	const authSecret = genv(platform).AUTH_SECRET as string;
 	const maxAge = genv(platform).LOGIN_MAX_AGE || 604800; // 1 week
-	const bareUrl = locals.config.url.replace(/(^\w+:|^)\/\//, '');
+	const bareUrl = config.url.replace(/(^\w+:|^)\/\//, '');
 	const passkeyDuration = Number(env.PASSKEY_DURATION);
 	const finalPasskeyDuration = isNaN(passkeyDuration) ? 60000 : (passkeyDuration * 1000);
 
@@ -32,8 +33,8 @@ export const { handle, signIn, signOut } = SvelteKitAuth(async (platform, locals
 				name: 'CorePass',
 				relayingParty: {
 					id: bareUrl,
-					name: locals.config.title,
-					origin: locals.config.url,
+					name: config.title,
+					origin: config.url,
 				},
 				enableConditionalUI: true,
 				formFields: {
@@ -53,7 +54,6 @@ export const { handle, signIn, signOut } = SvelteKitAuth(async (platform, locals
 				registrationOptions: {
 					//userID: `pipe-${generateToken(uuidv7())}`,
 					//userName: "",
-					//attestation: "indirect",
 					timeout: finalPasskeyDuration,
 					extensions: {
 						appid: bareUrl,
