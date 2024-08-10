@@ -1,3 +1,5 @@
+import { Target } from "lucide-svelte";
+
 export const config: Config = {
 	title: "MOTA",
 	url: "http://localhost:3000",
@@ -10,12 +12,16 @@ export const config: Config = {
 				src: "/img/logo.svg",
 				alt: "MOTA"
 			},
+			style: "auto",
+			orientation: "horizontal",
 			hideOnScroll: true,
+			iconExternal: true,
 			items: [
 				{
 					label: "Home",
 					to: "/",
-					position: "left"
+					position: "left",
+					icon: "home"
 				},
 				{
 					label: "About",
@@ -56,27 +62,47 @@ export const config: Config = {
 				src: "/img/logo-footer.svg",
 				alt: "MOTA"
 			},
+			iconExternal: true,
 			links: [
 				{
 					title: "1st Category",
 					items: [
-						{ label: "Item 1", to: "/" },
-						{ label: "Item 2", href: "https://coreblockchain.net" }
+						{ label: "Home", to: "/", icon: "home" },
+						{ label: "Core", href: "https://coreblockchain.net" }
 					]
 				},
 				{
 					title: "2nd Category",
 					items: [
-						{ label: "Item 1", to: "/" },
-						{ label: "Item 2", href: "https://coreblockchain.net" }
+						{ label: "About", to: "/about" },
+						{ label: "Core CIP", href: "https://cip.coreblockchain.net" }
 					]
 				},
 				{
 					title: "3rd Category",
 					items: [
-						{ label: "Item 1", to: "/" },
-						{ label: "Item 2", href: "https://coreblockchain.net", target: "_blank" }
+						{ label: "Services", to: "/services" },
+						{ label: "PayTo", href: "https://payto.money", target: "_blank" }
 					]
+				}
+			],
+			liner: [
+				{
+					label: "🦖 Donate monthly",
+					to: "payto://xcb/cb7147879011ea207df5b35a24ca6f0859dcfb145999?rc=m&donate=1&org=MOTA+Foundation&item=Donation&color-f=0d2b27&color-b=2fa99b"
+				},
+				{
+					label: "Privacy Policy",
+					to: "/privacy"
+				},
+				{
+					label: "Terms of Service",
+					to: "/terms-of-service"
+				},
+				{
+					label: "Imprint",
+					href: "https://coreblockchain.net",
+					target: "_blank"
 				}
 			],
 			copyright: `Copyright © 2020-${new Date().getFullYear()} MOTA Foundation`

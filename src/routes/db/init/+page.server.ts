@@ -45,8 +45,8 @@ export const GET: RequestHandler = async ({ platform, locals }) => {
 		await locals.db.prepare(`
 			ALTER TABLE users ADD COLUMN coreId CHAR(44);
 			CREATE INDEX idx_coreid ON users (coreId);
-			ALTER TABLE users ADD COLUMN isActive BOOLEAN DEFAULT false;
-			ALTER TABLE users ADD COLUMN isVerified BOOLEAN DEFAULT false;
+			ALTER TABLE users ADD COLUMN isActive BOOLEAN DEFAULT 0;
+			ALTER TABLE users ADD COLUMN isVerified BOOLEAN DEFAULT 0;
 		`).run();
 
 		return json({ error: 'Database initialized successfully', code: 200.01 }, { status: 200 });

@@ -18,7 +18,13 @@ body {
 	font-weight: var(--skc-font-weight-base);
 }
 
-main {
+.holder {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.view {
 	flex: 1;
 }
 
@@ -97,7 +103,7 @@ code {
 	font-size: var(--skc-code-font-size);
 }
 
-nav {
+nav#dropdown-menu {
 	background-color: var(--skc-navbar-background-color);
 }
 
@@ -120,4 +126,76 @@ nav button:hover {
 
 .shadow-navbar {
 	box-shadow: var(--skc-navbar-shadow);
+}
+
+.menu-button {
+	width: 100%;
+	transition: color var(--skc-transition-fast) var(--skc-transition-timing-default);
+}
+
+button.neon, .neon > button {
+	border: 2px solid var(--skc-color-primary);
+	color: var(--skc-color-primary);
+	background-color: hsla(167, 68%, 45%, 0.2);
+	border-radius: 1.4rem;
+	padding: .3rem .7rem;
+	cursor: pointer;
+	transition: background-color var(--skc-transition-fast) var(--skc-transition-timing-default),
+                border-color var(--skc-transition-fast) var(--skc-transition-timing-default);
+}
+
+button.neon:hover, .neon > button:hover {
+	border-color: var(--skc-color-primary-dark);
+	color: var(--skc-color-primary-dark);
+}
+
+.horizontal-menu > button {
+	width: 100%;
+	transition: color var(--skc-transition-fast) var(--skc-transition-timing-default);
+}
+
+.horizontal-menu.left > button {
+	text-align: left;
+}
+
+.horizontal-menu.right > button {
+	text-align: right;
+}
+
+.vertical-menu > button {
+	width: 100%;
+	transition: color var(--skc-transition-fast) var(--skc-transition-timing-default);
+}
+
+.vertical-menu.left > button {
+	text-align: left;
+}
+
+.vertical-menu.right > button {
+	text-align: right;
+}
+
+.glass {
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+}
+
+@media (max-width: 767px) {
+	.vertical-max-w {
+		max-width: 100%;
+	}
+}
+
+@media (min-width: 768px) {
+	header.transparent.vertical nav ul li :hover {
+		background-color: var(--skc-navbar-background-color);
+		border-radius: var(--skc-navbar-border-radius);
+	}
+
+	header.transparent {
+		background-color: transparent;
+		box-shadow: none;
+		backdrop-filter: blur(7px);
+		-webkit-backdrop-filter: blur(7px);
+	}
 }
