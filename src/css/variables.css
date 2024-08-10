@@ -46,6 +46,7 @@
 	--skc-navbar-background-color: var(--skc-background-surface-color);
 	--skc-navbar-link-color: var(--skc-font-color-base);
 	--skc-navbar-link-hover-color: var(--skc-color-primary-dark);
+	--skc-navbar-border-radius: .5rem;
 
 	--skc-footer-color: var(--skc-font-color-base);
 	--skc-footer-background-color: var(--skc-background-surface-color);
@@ -77,7 +78,7 @@
 	--skc-font-weight-bold: 700;
 	--skc-font-weight-base: var(--skc-font-weight-normal);
 
-	--skc-global-shadow-lw: 0 1px 2px 0 hsla(0, 0%, 0%, 0.102);
+	--skc-global-shadow-lw: 0 1px 2px 0 hsla(0, 0%, 0%, 0.1);
 	--skc-navbar-shadow: var(--skc-global-shadow-lw);
 
 	--skc-hr-background-color: hsla(0, 0%, 40%, 0.2);

@@ -1,20 +1,14 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
+	import { Icon } from '$lib/components';
 	import { ChevronDown, ChevronUp, ArrowUpRight } from 'lucide-svelte';
-
-	type MenuItem = {
-		label: string;
-		to?: string;
-		href?: string;
-		target?: "_blank" | "_self" | "_parent" | "_top";
-		action?: () => void;
-	};
 
 	export let title: string = 'Menu';
 	export let items: MenuItem[] = [];
 	export let open: boolean = false;
 	export let position: 'left' | 'right' = 'left';
 	export let isSmall: boolean = false;
+	export let iconExternal: boolean = true;
 
 	let dropdownRef: HTMLDivElement | null = null;
 
@@ -69,8 +63,11 @@
 			<div class="py-1">
 				{#each items as item (item.label)}
 					<a href={item.href || '#'} target={item.target || '_self'} class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left flex items-center" on:click={(e) => handleItemClick(item, e)}>
+						{#if item.icon}
+							<Icon name={item.icon} className="h-4 w-4 mr-1.5" />
+						{/if}
 						{item.label}
-						{#if item.href}
+						{#if item.href && (typeof iconExternal === 'undefined' || iconExternal === true)}
 							<ArrowUpRight class="ml-1 h-4 w-4" />
 						{/if}
 					</a>

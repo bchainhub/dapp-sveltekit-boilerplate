@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { config } from '../site.config';
-	import { SquareArrowLeft } from 'lucide-svelte';
+	import { Home } from 'lucide-svelte';
 </script>
 
 <div class="flex flex-col justify-center items-center mt-2 mb-2">
-	<div class="max-w-lg w-full overflow-hidden mt-4 mb-4">
+	<div class="overflow-hidden mt-4 mb-4">
 		<div class="p-6">
 			<h1 class="text-2xl font-semibold">
 				{#if $page.status === 404}
@@ -37,8 +37,8 @@
 				<div>{$page.error?.message || 'Unexpected error.'}</div>
 			{/if}
 			<div class="mt-4">
-				<a href="/" class="flex items-center space-x-2">
-					<SquareArrowLeft /> 
+				<a href="/" class="flex items-center">
+					<Home class="mr-2" />
 					<span>Go back home</span>
 				</a>
 			</div>

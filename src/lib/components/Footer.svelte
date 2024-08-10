@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { config } from '../../site.config';
 	import { ArrowUpRight } from 'lucide-svelte';
-	const { style, logo, links, copyright } = config?.themeConfig?.footer || {};
+	import { Icon } from '$lib/components';
+	const { style, logo, links, copyright, liner, iconExternal } = config?.themeConfig?.footer || {};
 	const footerClass = style && `footer-${style}`;
 </script>
 
@@ -13,16 +14,24 @@
 					<div>
 						<h4 class="font-bold mb-2">{title}</h4>
 						<ul class="space-y-1">
-							{#each items as { label, to, href, target }}
+							{#each items as { label, to, href, target, icon }}
 								<li>
 									{#if to}
-										<a href={to} class="hover:text-footer-link-hover flex items-center">
+										<a href={to} class="hover:text-footer-link-hover flex justify-center md:justify-start items-center">
+											{#if icon}
+												<Icon name={icon} className="h-4 w-4 mr-1.5" />
+											{/if}
 											{label}
 										</a>
 									{:else if href}
-										<a href={href} target={target ? target : undefined} rel={target ? 'noopener noreferrer' : undefined} class="hover:text-footer-link-hover flex items-center">
+										<a href={href} target={target ? target : undefined} rel={target ? 'noopener noreferrer' : undefined} class="hover:text-footer-link-hover flex justify-center md:justify-start items-center">
+											{#if icon}
+												<Icon name={icon} className="h-4 w-4 mr-1.5" />
+											{/if}
 											{label}
-											<ArrowUpRight class="ml-1 h-4 w-4" />
+											{#if typeof iconExternal === 'undefined' || iconExternal === true}
+												<ArrowUpRight class="ml-1 h-4 w-4 inline-block align-middle" />
+											{/if}
 										</a>
 									{/if}
 								</li>
@@ -46,6 +55,26 @@
 			<div class="text-center text-sm text-footer-link mt-4 md:mt-0">
 				{copyright}
 			</div>
+			{#if liner}
+				<div class="flex flex-wrap justify-center text-sm md:justify-start gap-4 mt-4 md:mt-0 md:ml-4">
+					{#each liner as { label, to, href, target }}
+						<div class="flex items-center">
+							{#if to}
+								<a href={to} class="hover:text-footer-link-hover">
+									{label}
+								</a>
+							{:else if href}
+								<a href={href} target={target ? target : undefined} rel={target ? 'noopener noreferrer' : undefined} class="hover:text-footer-link-hover flex items-center">
+									{label}
+									{#if typeof iconExternal === 'undefined' || iconExternal === true}
+										<ArrowUpRight class="h-4 w-4" />
+									{/if}
+								</a>
+							{/if}
+						</div>
+					{/each}
+				</div>
+			{/if}
 		</div>
 	</div>
 </footer>
