@@ -158,69 +158,67 @@
 			</button>
 		</div>
 		{#if orientation === 'vertical'}
-			<aside>
-				<nav class="hidden md:block">
-					<ul class="flex flex-col space-y-1">
-						{#each items as { label, to, href, target, icon }}
-							<li>
-								{#if to}
-									<a href={to} class="flex items-center block p-2">
-										{#if icon}
-											<Icon name={icon} className="h-5 w-5 mr-1.5" />
-										{/if}
-										{label}
-									</a>
-								{:else if href}
-									<a href={href} target={target ? target : undefined} rel={target ? 'noopener noreferrer' : undefined} class="flex items-center p-2">
-										{#if icon}
-											<Icon name={icon} className="h-5 w-5 mr-1.5" />
-										{/if}
-										{label}
-										{#if typeof iconExternal === 'undefined' || iconExternal === true}
-											<ArrowUpRight class="ml-1 h-4 w-4" />
-										{/if}
-									</a>
-								{/if}
-							</li>
-						{/each}
-						{#if $page.data.session}
-							<ActionsDropdown
-								title={$page.data.session.user?.name ?? "User"}
-								bind:open={dropdownOpen}
-								items={menuItems}
-								position="left"
-								isSmall={true}
-								iconExternal={iconExternal}
-								on:select={handleSelect} />
-						{:else}
-							<li>
-								<SignIn action="register" className="block vertical-menu left p-2">
-									<div slot="submitButton">Register</div>
-								</SignIn>
-							</li>
-							<li>
-								<SignIn className="block vertical-menu left p-2">
-									<div slot="submitButton" class="flex items-center whitespace-nowrap">
-										<Icon name="corepass" className="w-5 h-5 mr-1.5" color="#1066df" />
-										CorePass SignIn
-									</div>
-								</SignIn>
-							</li>
-						{/if}
-						<li class="hidden md:flex items-center">
-							<button on:click={rotateTheme} class="menu-button focus:outline-none flex items-center p-2">
-								{#if theme === 'system'}
-									<Haze class="w-6 h-6 mr-1.5 text-gray-500" />System theme
-								{:else if theme === 'dark'}
-									<Moon class="w-6 h-6 mr-1.5 text-gray-500" />Dark theme
-								{:else}
-									<Sun class="w-6 h-6 mr-1.5 text-yellow-500" />Light theme
-								{/if}
-							</button>
+			<nav class="hidden md:block">
+				<ul class="flex flex-col space-y-1">
+					{#each items as { label, to, href, target, icon }}
+						<li>
+							{#if to}
+								<a href={to} class="flex items-center block p-2">
+									{#if icon}
+										<Icon name={icon} className="h-5 w-5 mr-1.5" />
+									{/if}
+									{label}
+								</a>
+							{:else if href}
+								<a href={href} target={target ? target : undefined} rel={target ? 'noopener noreferrer' : undefined} class="flex items-center p-2">
+									{#if icon}
+										<Icon name={icon} className="h-5 w-5 mr-1.5" />
+									{/if}
+									{label}
+									{#if typeof iconExternal === 'undefined' || iconExternal === true}
+										<ArrowUpRight class="ml-1 h-4 w-4" />
+									{/if}
+								</a>
+							{/if}
 						</li>
-					</ul>
-				</nav>
-			</aside>
+					{/each}
+					{#if $page.data.session}
+						<ActionsDropdown
+							title={$page.data.session.user?.name ?? "User"}
+							bind:open={dropdownOpen}
+							items={menuItems}
+							position="left"
+							isSmall={true}
+							iconExternal={iconExternal}
+							on:select={handleSelect} />
+					{:else}
+						<li>
+							<SignIn action="register" className="block vertical-menu left p-2">
+								<div slot="submitButton">Register</div>
+							</SignIn>
+						</li>
+						<li>
+							<SignIn className="block vertical-menu left p-2">
+								<div slot="submitButton" class="flex items-center whitespace-nowrap">
+									<Icon name="corepass" className="w-5 h-5 mr-1.5" color="#1066df" />
+									CorePass SignIn
+								</div>
+							</SignIn>
+						</li>
+					{/if}
+					<li class="hidden md:flex items-center">
+						<button on:click={rotateTheme} class="menu-button focus:outline-none flex items-center p-2">
+							{#if theme === 'system'}
+								<Haze class="w-6 h-6 mr-1.5 text-gray-500" />System theme
+							{:else if theme === 'dark'}
+								<Moon class="w-6 h-6 mr-1.5 text-gray-500" />Dark theme
+							{:else}
+								<Sun class="w-6 h-6 mr-1.5 text-yellow-500" />Light theme
+							{/if}
+						</button>
+					</li>
+				</ul>
+			</nav>
 		{:else}
 			<nav class="hidden md:flex flex-1 items-center justify-between">
 				<ul class="flex items-center space-x-4">
@@ -316,7 +314,7 @@
 	</div>
 
 	{#if isOpen}
-		<nav id="dropdown-menu" class="absolute top-full left-0 w-full shadow-md z-50 md:hidden">
+		<nav id="dropdown-menu" class="absolute top-full left-0 w-full max-h-[calc(100vh-4rem)] h-auto overflow-y-auto shadow-md z-50 md:hidden">
 			<ul class="flex flex-col space-y-4 p-4">
 				{#each items as { label, to, href, target, icon }}
 					<li>
