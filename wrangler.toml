@@ -27,7 +27,7 @@ LOGIN_MAX_AGE = 604800
 DB_INIT = false
 DB_CLEAN = false
 DB_CLEAN_TOKEN = "" # Set your token in the Dashboard or using wrangler secret: npx wrangler secret put <KEY> <VALUE>
-NODE_VERSION = 20
+NODE_VERSION = "^20.9.0"
 
 [env.staging]
 name = "dapp-sveltekit-boilerplate-staging"
@@ -38,4 +38,4 @@ LOGIN_MAX_AGE = 604800
 DB_INIT = false
 DB_CLEAN = false
 DB_CLEAN_TOKEN = "H1PGHoEbDo6DY/buGMyPhwvY9yoTXiFtQAPAJTfIhFWt"
-NODE_VERSION = 20
+NODE_VERSION = "^20.9.0"

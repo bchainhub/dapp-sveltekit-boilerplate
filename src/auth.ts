@@ -1,8 +1,8 @@
 import { SvelteKitAuth } from "@auth/sveltekit";
 import Passkey from "@auth/sveltekit/providers/passkey";
 import { D1Adapter } from "@auth/d1-adapter";
-import { v7 as uuidv7 } from 'uuid';
-import { generateToken } from '$lib/helpers/jwt';
+//import { v7 as uuidv7 } from 'uuid';
+//import { generateToken } from '$lib/helpers/jwt';
 import { env } from '$env/dynamic/private';
 import { genv } from '$lib/helpers/genv';
 import { config } from './site.config';
