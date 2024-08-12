@@ -14,7 +14,7 @@
 	let lastScrollTop = 0;
 	let isNavHidden = false;
 	let dropdownOpen = false;
-	let theme = defaultMode || 'system';
+	let theme = respectPrefersColorScheme ? 'system' : defaultMode;
 
 	const menuItems = [
 		...(config?.themeConfig?.navbar?.authItems ?? []),
@@ -90,6 +90,8 @@
 				document.documentElement.setAttribute('data-theme', theme);
 			}
 			localStorage.setItem('theme', theme);
+		} else {
+			localStorage.setItem('theme', theme);
 		}
 	};
 
@@ -110,11 +112,11 @@
 	};
 
 	onMount(() => {
-		if (typeof window !== 'undefined') {
-			const storedTheme = localStorage.getItem('theme') || defaultMode || (respectPrefersColorScheme ? 'system' : 'light');
-			theme = storedTheme;
-			applyTheme();
+		const storedTheme = localStorage.getItem('theme') || (respectPrefersColorScheme ? 'system' : defaultMode);
+		theme = storedTheme;
+		applyTheme();
 
+		if (typeof window !== 'undefined') {
 			window.addEventListener('scroll', handleScroll);
 			document.addEventListener('click', handleClickOutside);
 		}
