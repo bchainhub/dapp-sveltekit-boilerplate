@@ -231,7 +231,7 @@ const secret = genv(platform).SECRET;
 
 ## Management API
 
-### Pipe
+### Pipe (WIP)
 
 - Update User using Pipe.
 
@@ -253,7 +253,7 @@ Json body:
 
 `GET /db/init`
 
-### DB / Clean Accounts
+### DB / Clean Accounts (WIP)
 
 - Clean all accounts non-active and older than one day.
 
@@ -267,7 +267,7 @@ Json body:
 
 - `token`: Auth token for cleaning from environment variable.
 
-## Error codes
+## Error codes (WIP)
 
 Err ID | Err Code | Category | Description
 --- | --- | --- | ---
