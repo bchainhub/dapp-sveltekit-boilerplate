@@ -1,6 +1,6 @@
 <h1 class="text-4xl font-bold text-center mb-8">Welcome to SvelteKit Dapp Boilerplate</h1>
 <p class="text-center mb-4">
-	Visit <a href="https://github.com/rastislavcore/" target="_blank" rel="noopener noreferrer">GitHub repository</a> to read the readme file and start using this template.
+	Visit <a href="https://github.com/bchainhub/dapp-sveltekit-boilerplate" target="_blank" rel="noopener noreferrer">GitHub repository</a> to read the readme file and start using this template.
 </p>
 <p class="text-center mb-4">
 	The main focus of this template is to provide a solid foundation for building web applications with SvelteKit, along with security and compatibility with Cloudflare services.
