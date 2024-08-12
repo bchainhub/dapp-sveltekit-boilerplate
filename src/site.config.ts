@@ -1,5 +1,3 @@
-import { Target } from "lucide-svelte";
-
 export const config: Config = {
 	title: "MOTA",
 	url: "http://localhost:3000",
