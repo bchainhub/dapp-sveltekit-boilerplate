@@ -1,7 +1,7 @@
 export const config: Config = {
 	title: "MOTA",
 	url: "http://localhost:3000",
-	organizationName: "rastislavcore",
+	organizationName: "bchainhub",
 	projectName: "dapp-sveltekit-boilerplate",
 	favicon: "/img/favicon.png",
 	themeConfig: {
