@@ -1,5 +1,7 @@
 # SvelteKit Boilerplate WIP
 
+This project is work-in-progress, then it can introduce any breaking changes. Please, use it with caution.
+
 Welcome to the SvelteKit Boilerplate! This project provides a solid foundation for building web applications with SvelteKit, along with security features and compatibility with Cloudflare services.
 
 ## Features
@@ -186,7 +188,7 @@ Dependencies:
 
 - Cloudflare D1 database.
 - DB initialization process.
-- Node.js version 20 or higher.
+- Node.js version 20.9.0 or higher.
 - CorePass if you would like to use Pipe - activation model.
 
 Before first run of your application you need to:
