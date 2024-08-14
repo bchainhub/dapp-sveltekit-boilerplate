@@ -21,7 +21,6 @@
 		<li><a href="https://github.com/bchainhub/ican.js" target="_blank" rel="noopener noreferrer">ICAN / IBAN Validation</a></li>
 		<li><a href="https://github.com/bchainhub/exchange-rounding" target="_blank" rel="noopener noreferrer">Exchange Number Format</a></li>
 		<li><a href="https://github.com/bchainhub/payto-rl" target="_blank" rel="noopener noreferrer">PayTo resource locators</a></li>
-		<li><a href="https://github.com/auth0/node-jsonwebtoken" target="_blank" rel="noopener noreferrer">Json Web Token</a></li>
 		<li><a href="https://github.com/uuidjs/uuid" target="_blank" rel="noopener noreferrer">UUID</a></li>
 	</ul>
 </div>
