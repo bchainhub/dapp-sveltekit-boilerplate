@@ -14,7 +14,7 @@ interface Config {
 			authItems?: NavbarItem[];
 			style?: "auto" | "transparent";
 			hideOnScroll?: boolean;
-			orientatuion?: "horizontal" | "vertical";
+			orientation?: "horizontal" | "vertical";
 			iconExternal?: boolean;
 		};
 		footer?: {
@@ -23,6 +23,7 @@ interface Config {
 			links?: { title: string; items: FooterLinkItem[] }[];
 			copyright?: string;
 			liner?: FooterLinkItem[];
+			iconExternal?: boolean;
 		};
 		metadata?: { name?: string; content: string; property?: string }[];
 		colorMode?: {
@@ -71,10 +72,10 @@ declare namespace App {
 
 	interface Platform {
 		env: Env;
+		caches: CacheStorage & { default: Cache };
 		context: {
 			waitUntil(promise: Promise<any>): void;
 		};
-		caches: CacheStorage & { default: Cache };
 	}
 }
 
@@ -87,8 +88,7 @@ type Env = {
 	D1_NAMESPACE?: string;
 	KV_NAMESPACE?: string;
 	R2_NAMESPACE?: string;
-	JWT_SECRET?: string;
-	JWT_DURATION?: string;
 	PIPE_DURATION?: string;
 	PASSKEY_DURATION?: string;
+	[key: string]: D1Database | KVNamespace | R2Bucket | string | undefined;
 };

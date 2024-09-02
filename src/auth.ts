@@ -21,7 +21,7 @@ interface Session extends AuthSession {
 export const { handle, signIn, signOut } = SvelteKitAuth(async (event) => {
 	const d1Namespace = genv(event.platform).D1_NAMESPACE;
 	const authSecret = genv(event.platform).AUTH_SECRET as string;
-	const maxAge = genv(event.platform).LOGIN_MAX_AGE || 604800; // 1 week
+	const maxAge = genv(event.platform).LOGIN_MAX_AGE || 86400; // 24h
 	const bareUrl = config.url.replace(/(^\w+:|^)\/\//, '');
 	const passkeyDuration = Number(env.PASSKEY_DURATION);
 	const finalPasskeyDuration = isNaN(passkeyDuration) ? 60000 : (passkeyDuration * 1000);

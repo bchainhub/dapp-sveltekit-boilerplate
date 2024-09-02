@@ -7,13 +7,17 @@ import type { KVNamespace } from '@cloudflare/workers-types';
  * @returns The KV namespace instance.
  * @throws Will throw an error if the KV namespace is not defined or not found.
  */
-export function getKVNamespace(platform: any): KVNamespace {
+export function getKVNamespace(platform?: Readonly<App.Platform>): KVNamespace {
+	if (!platform) {
+		throw new Error("Platform is undefined.");
+	}
+
 	const kvName = env.KV_NAMESPACE;
 	if (!kvName) {
 		throw new Error("KV namespace name not defined.");
 	}
 
-	const kv = platform.env[kvName as keyof typeof platform.env] as unknown as KVNamespace;
+	const kv = platform.env[kvName as keyof typeof platform.env] as KVNamespace | undefined;
 
 	if (!kv) {
 		throw new Error("KV namespace not found.");

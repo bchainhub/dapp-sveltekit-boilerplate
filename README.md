@@ -64,7 +64,7 @@ Update the `site.config.ts` file located in `/src` to customize the project sett
 You can customize application settings in `wrangler.toml` file:
 
 - `AUTH_SECRET`: Secret key for authentication.
-- `LOGIN_MAX_AGE`: Login expiration time. Default is 1 week.
+- `LOGIN_MAX_AGE`: Login expiration time. Default is 24 hours.
 - `DB_INIT`: Enable the functionality to initialize the database.
 - `DB_CLEAN`: Enable functionality to clean the database.
 - `DB_CLEAN_TOKEN`: Token for cleaning the database. This prevents for unauthorized cleaning.
@@ -82,8 +82,6 @@ Environment variables are stored in the `.env` file. You can add your own enviro
 - `D1_NAMESPACE`: Cloudflare D1 namespace name.
 - `KV_NAMESPACE`: Cloudflare KV namespace name.
 - `R2_NAMESPACE`: Cloudflare R2 namespace name.
-- `JWT_SECRET`: Secret key for JWT token.
-- `JWT_DURATION`: JWT token expiration time.
 - `PIPE_DURATION`: Pipe expiration time.
 - `PASSKEY_DURATION`: Passkey expiration time.
 
