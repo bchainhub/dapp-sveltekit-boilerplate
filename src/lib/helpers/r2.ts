@@ -1,13 +1,21 @@
 import { env } from '$env/dynamic/private';
 import type { R2Bucket } from '@cloudflare/workers-types';
+import type { RequestEvent } from '@sveltejs/kit';
+
+interface ExtendedPlatform extends Readonly<App.Platform> {
+	env: {
+		[key: string]: R2Bucket;
+	};
+}
 
 /**
- * Retrieves and validates the R2 bucket instance from the platform environment.
- * @param platform - The platform object from SvelteKit.
+ * Retrieves and validates the R2 bucket instance from the RequestEvent object.
+ * @param event - The RequestEvent object provided by SvelteKit.
  * @returns The R2 bucket instance.
  * @throws Will throw an error if the R2 bucket binding is not defined or not found.
  */
-export function getR2Bucket(platform?: Readonly<App.Platform>): R2Bucket {
+export function getR2Bucket(event: RequestEvent): R2Bucket {
+	const platform = event.platform as ExtendedPlatform;
 	if (!platform) {
 		throw new Error("Platform is undefined.");
 	}
@@ -20,7 +28,7 @@ export function getR2Bucket(platform?: Readonly<App.Platform>): R2Bucket {
 		throw new Error("R2 bucket name not defined.");
 	}
 
-	const bucket = platform.env[bucketName as keyof typeof platform.env] as R2Bucket | undefined;
+	const bucket = platform.env[bucketName] as R2Bucket | undefined;
 
 	if (!bucket) {
 		throw new Error("R2 bucket not found.");

@@ -76,14 +76,14 @@ Environment variables are stored in the `.env` file. You can add your own enviro
 - `CLOUDFLARE_API_TOKEN`: Cloudflare API token.
 - `ENABLE_API`: Enable or disable the API.
 - `ENABLE_AUTH`: Enable or disable authentication.
-- `ENABLE_PIPE`: Enable or disable Pipe.
 - `ONLY_ACTIVATED`: Enable or disable only activated users. This prevents not activated users to login. CorePass is sending activation request using Pipe.
 - `ENABLE_FILE_ACCESS`: Enable or disable file access.
 - `D1_NAMESPACE`: Cloudflare D1 namespace name.
 - `KV_NAMESPACE`: Cloudflare KV namespace name.
 - `R2_NAMESPACE`: Cloudflare R2 namespace name.
-- `PIPE_DURATION`: Pipe expiration time.
 - `PASSKEY_DURATION`: Passkey expiration time.
+- `CAPTURE_COUNTRY`: Capture country from CF pages, Netlify, Vercel. If enabled.
+- `CAPTURE_CITY`: Capture city from CF pages, Netlify, Vercel. If enabled.
 
 Generate the authentication secret key, cleaning token, JWT secret in secure way or using the following command:
 
@@ -206,6 +206,11 @@ Key points:
 - Separate Management Systems: The environment variables for Cloudflare Workers and SvelteKit are managed separately and do not overlap. `platform.env` in Cloudflare Workers is not directly accessible to SvelteKit components or server-side logic.
 - Deployment Context: When using SvelteKit, the environment variables accessed via `import { env } from '$env/dynamic/private';` are provided by the deployment environment's configuration. These could come from services like Vercel, Netlify, or other hosting providers that support environment variable management.
 - No Cross-Access: SvelteKit does not have a built-in mechanism to directly access Cloudflare Workers' environment variables set via `wrangler.toml`. Similarly, Cloudflare Workers cannot directly access environment variables set up for a SvelteKit deployment.
+
+About Platform Environment Variables:
+
+- Platform environment variables are stored in the `wrangler.toml` file.
+- These variables are accessible in server-side code except those that are prefixed with `PUBLIC_`.
 
 ### Local environment variables
 
