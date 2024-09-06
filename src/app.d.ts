@@ -14,7 +14,7 @@ interface Config {
 			authItems?: NavbarItem[];
 			style?: "auto" | "transparent";
 			hideOnScroll?: boolean;
-			orientatuion?: "horizontal" | "vertical";
+			orientation?: "horizontal" | "vertical";
 			iconExternal?: boolean;
 		};
 		footer?: {
@@ -23,6 +23,7 @@ interface Config {
 			links?: { title: string; items: FooterLinkItem[] }[];
 			copyright?: string;
 			liner?: FooterLinkItem[];
+			iconExternal?: boolean;
 		};
 		metadata?: { name?: string; content: string; property?: string }[];
 		colorMode?: {
@@ -63,6 +64,8 @@ declare namespace App {
 		session?: {
 			challenge: string;
 		};
+		country?: string;
+		city?: string;
 	}
 
 	interface PageData {
@@ -70,11 +73,25 @@ declare namespace App {
 	}
 
 	interface Platform {
-		env: Env;
-		context: {
+		caches?: CacheStorage & { default: Cache };
+		context?: {
 			waitUntil(promise: Promise<any>): void;
 		};
-		caches: CacheStorage & { default: Cache };
+		env?: Env;
+		// Cloudflare-specific properties
+		cf?: {
+			asn?: string;               // Autonomous System Number
+			asOrganization?: string;    // Organization name of ASN
+			city?: string;              // City of the request origin
+			continent?: string;         // Continent of the request origin
+			country?: string;           // Country code (ISO 3166-1 Alpha 2)
+			latitude?: string;          // Latitude of the request origin
+			longitude?: string;         // Longitude of the request origin
+			postalCode?: string;        // Postal code of the request origin
+			region?: string;            // Region name
+			regionCode?: string;        // Region code
+			timezone?: string;          // Timezone of the request origin
+		};
 	}
 }
 
@@ -82,13 +99,11 @@ type Env = {
 	ENABLE_API?: string;
 	ENABLE_AUTH?: string;
 	ONLY_ACTIVATED?: string;
-	ENABLE_PIPE?: string;
 	ENABLE_FILE_ACCESS?: string;
 	D1_NAMESPACE?: string;
 	KV_NAMESPACE?: string;
 	R2_NAMESPACE?: string;
-	JWT_SECRET?: string;
-	JWT_DURATION?: string;
-	PIPE_DURATION?: string;
 	PASSKEY_DURATION?: string;
+	CAPTURE_COUNTRY?: string;
+	CAPTURE_CITY?: string;
 };

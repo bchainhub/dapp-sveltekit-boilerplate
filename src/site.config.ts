@@ -1,3 +1,4 @@
+import type { Config } from './app';
 export const config: Config = {
 	title: "MOTA",
 	url: "http://localhost:3000",
