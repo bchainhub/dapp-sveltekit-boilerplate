@@ -23,9 +23,13 @@ Welcome to the SvelteKit Boilerplate! This project provides a solid foundation f
 
 - **[CloudFlare Pages](https://developers.cloudflare.com/pages/)**: Deploy web applications directly to Cloudflare's global network.
 - **[CloudFlare Functions API](https://developers.cloudflare.com/workers/)**: Build and deploy serverless functions.
-- **[CloudFlare D1](https://developers.cloudflare.com/d1/)**: Database solution for Cloudflare applications.
 - **[CloudFlare KV](https://developers.cloudflare.com/workers/runtime-apis/kv/)**: Key-Value storage for serverless applications.
 - **[Cloudflare R2](https://developers.cloudflare.com/r2/)**: Cloudflare R2 Storage allows developers to store large amounts of unstructured data.
+
+## Database Support
+
+- **[CloudFlare D1](https://developers.cloudflare.com/d1/)**: Database solution for Cloudflare applications.
+- **[Prisma](https://www.prisma.io/)**: Prisma with Accelerate. Modern database access for TypeScript & Node.js.
 
 ## Installation
 
@@ -78,12 +82,18 @@ Environment variables are stored in the `.env` file. You can add your own enviro
 - `ENABLE_AUTH`: Enable or disable authentication.
 - `ONLY_ACTIVATED`: Enable or disable only activated users. This prevents not activated users to login. CorePass is sending activation request using Pipe.
 - `ENABLE_FILE_ACCESS`: Enable or disable file access.
-- `D1_NAMESPACE`: Cloudflare D1 namespace name.
 - `KV_NAMESPACE`: Cloudflare KV namespace name.
 - `R2_NAMESPACE`: Cloudflare R2 namespace name.
 - `PASSKEY_DURATION`: Passkey expiration time.
 - `CAPTURE_COUNTRY`: Capture country from CF pages, Netlify, Vercel. If enabled.
 - `CAPTURE_CITY`: Capture city from CF pages, Netlify, Vercel. If enabled.
+
+Environment variables for database setup:
+
+- `DB_TYPE`: Database type: D1, PRISMA. Default is no database (empty string).
+- `D1_NAMESPACE`: Cloudflare D1 namespace name.
+- `PRISMA_PROVIDER`: Prisma provider.
+- `PRISMA_API_KEY`: Prisma API key.
 
 Generate the authentication secret key, cleaning token, JWT secret in secure way or using the following command:
 

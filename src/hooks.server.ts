@@ -8,18 +8,18 @@ import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
-		if (!event.platform) {
-			return resolve(event); // Continue without initializing services
-		}
-
 		// Initialize the database if D1_NAMESPACE is provided
-		if (env.D1_NAMESPACE && event.platform) {
+		if (env.DB_TYPE) {
 			try {
 				const db = getDatabaseInstance(event);
 				event.locals.db = db;
 			} catch (error) {
 				console.error('Failed to initialize database:', error);
 			}
+		}
+
+		if (!event.platform) {
+			return resolve(event); // Continue without initializing services
 		}
 
 		// Check if authentication is enabled via the environment variable (DB required)

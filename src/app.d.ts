@@ -58,7 +58,7 @@ type MenuItem = NavbarItem & {
 	action?: () => void;
 };
 
-interface User {
+interface User { // TODO: Review and update as needed
 	name?: string | null;
 	email?: string | null;
 	image?: string | null;
@@ -68,7 +68,7 @@ interface User {
 }
 
 // Define the session type to include user and session-specific properties
-interface Session {
+interface Session { // TODO: Review and update as needed
 	user?: User | null;       // User information associated with the session
 	expires: string;          // Expiration date as an ISO string
 	accessToken?: string;     // Optional access token for OAuth/JWT providers
@@ -111,9 +111,12 @@ type Env = {
 	ENABLE_AUTH?: string;
 	ONLY_ACTIVATED?: string;
 	ENABLE_FILE_ACCESS?: string;
+	DB_TYPE?: string;
 	D1_NAMESPACE?: string;
 	KV_NAMESPACE?: string;
 	R2_NAMESPACE?: string;
+	PRISMA_PROVIDER?: string;
+	PRISMA_API_KEY?: string;
 	PASSKEY_DURATION?: string;
 	CAPTURE_COUNTRY?: string;
 	CAPTURE_CITY?: string;

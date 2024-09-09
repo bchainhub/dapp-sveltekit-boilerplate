@@ -1,13 +1,14 @@
 import { SvelteKitAuth } from "@auth/sveltekit";
 import Passkey from "@auth/sveltekit/providers/passkey";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import { D1Adapter } from "@auth/d1-adapter";
-//import { v7 as uuidv7 } from 'uuid';
-//import { generateToken } from '$lib/helpers/jwt';
+import { PrismaClient } from '@prisma/client';
 import { env } from '$env/dynamic/private';
 import { genv } from '$lib/helpers/genv';
 import { config } from './site.config';
 import type { Session as AuthSession, User as AuthUser } from "@auth/core/types";
 
+// Define User and Session interfaces
 interface User extends AuthUser {
 	coreId?: string;
 	isActive?: boolean;
@@ -18,15 +19,28 @@ interface Session extends AuthSession {
 	user: User;
 }
 
-export const { handle, signIn, signOut } = SvelteKitAuth(async (event) => {
-	const d1Namespace = genv(event.platform).D1_NAMESPACE;
-	const authSecret = genv(event.platform).AUTH_SECRET as string;
-	const maxAge = genv(event.platform).LOGIN_MAX_AGE || 86400; // 24h
-	const bareUrl = config.url.replace(/(^\w+:|^)\/\//, '');
-	const passkeyDuration = Number(env.PASSKEY_DURATION);
-	const finalPasskeyDuration = isNaN(passkeyDuration) ? 60000 : (passkeyDuration * 1000);
+// Define Prisma client globally to reuse the instance
+let prisma: PrismaClient | null = null;
 
-	const authOptions = {
+const auth = SvelteKitAuth(async (event) => {
+	const db = event.locals.db;
+	if (!db) throw new Error('Database instance not found. Authentication cannot proceed.');
+
+	const authSecret = genv(event.platform).AUTH_SECRET as string;
+	const maxAge = genv(event.platform).LOGIN_MAX_AGE || 86400; // Default to 24 hours
+	const bareUrl = config.url.replace(/(^\w+:|^)\/\//, '');
+	const passkeyDuration = Number(env.PASSKEY_DURATION) || 60000;
+
+	let adapter;
+	if (db instanceof PrismaClient) {
+		adapter = PrismaAdapter(db);
+	} else if (db instanceof D1Adapter) {
+		adapter = D1Adapter(db);
+	} else {
+		throw new Error('Unsupported database type.');
+	}
+
+	return {
 		providers: [
 			Passkey({
 				id: `corepass/${bareUrl}`,
@@ -45,16 +59,14 @@ export const { handle, signIn, signOut } = SvelteKitAuth(async (event) => {
 					},
 				},
 				authenticationOptions: {
-					timeout: finalPasskeyDuration,
+					timeout: passkeyDuration,
 					userVerification: "required",
 					extensions: {
 						appid: bareUrl,
 					},
 				},
 				registrationOptions: {
-					//userID: `pipe-${generateToken(uuidv7())}`,
-					//userName: "",
-					timeout: finalPasskeyDuration,
+					timeout: passkeyDuration,
 					extensions: {
 						appid: bareUrl,
 					},
@@ -68,7 +80,7 @@ export const { handle, signIn, signOut } = SvelteKitAuth(async (event) => {
 				},
 			}),
 		],
-		adapter: D1Adapter(d1Namespace),
+		adapter,
 		secret: authSecret,
 		maxAge: maxAge,
 		experimental: { enableWebAuthn: true },
@@ -87,6 +99,8 @@ export const { handle, signIn, signOut } = SvelteKitAuth(async (event) => {
 				return session;
 			},
 		},
-	}
-	return authOptions;
+	};
 });
+
+// Export handle, signIn, and signOut separately
+export const { handle, signIn, signOut } = auth;
