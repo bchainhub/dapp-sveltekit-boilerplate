@@ -7,6 +7,7 @@
 	--skc-color-porcelain: hsl(216, 14%, 93%);
 	--skc-color-black: hsl(0, 0%, 0%);
 	--skc-color-shark: hsl(216, 8%, 12%);
+	--skc-color-blackgreen: hsl(180, 25%, 5%);
 	--skc-color-cod-grey: hsl(216, 14%, 3%);
 	--skc-color-sea-nymph: hsl(167, 15%, 52%);
 	--skc-color-mineral-green: hsl(167, 15%, 32%);
@@ -38,7 +39,7 @@
 	--skc-link-hover-color: var(--skc-color-primary-dark);
 
 	--skc-background-color-light: var(--skc-color-white);
-	--skc-background-color-dark: var(--skc-color-black);
+	--skc-background-color-dark: var(--skc-color-blackgreen);
 	--skc-background-color-transparent: 'transparent';
 	--skc-background-color: var(--skc-background-color-light);
 

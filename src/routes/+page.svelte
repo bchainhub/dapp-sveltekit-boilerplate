@@ -30,12 +30,18 @@
 	<ul class="list-disc list-inside pl-4 space-y-2">
 		<li><a href="https://developers.cloudflare.com/pages/" target="_blank" rel="noopener noreferrer">Cloudflare Pages</a></li>
 		<li><a href="https://developers.cloudflare.com/workers/" target="_blank" rel="noopener noreferrer">Cloudflare Functions</a></li>
-		<li><a href="https://developers.cloudflare.com/d1/" target="_blank" rel="noopener noreferrer">Cloudflare D1</a></li>
 		<li><a href="https://developers.cloudflare.com/workers/kv/" target="_blank" rel="noopener noreferrer">Cloudflare KV</a></li>
 		<li><a href="https://developers.cloudflare.com/r2/" target="_blank" rel="noopener noreferrer">Cloudflare R2</a></li>
 		<li><a href="https://corepass.net" target="_blank" rel="noopener noreferrer">CorePass Login; CorePass KYX print; CorePass passkey</a></li>
 		<li><a href="https://docs.corepass.net/corepass-protocol/#request-blockchain-transaction" target="_blank" rel="noopener noreferrer">CorePass minting</a></li>
 		<li><a href="https://payto.money" target="_blank" rel="noopener noreferrer">PayTo</a></li>
 		<li><a href="https://authjs.dev/getting-started/providers/passkey" target="_blank" rel="noopener noreferrer">Passkey / WebAuthn</a></li>
+	</ul>
+</div>
+<div class="mb-8">
+	<h2 class="text-2xl font-semibold mb-4">💾 Supported Databases</h2>
+	<ul class="list-disc list-inside pl-4 space-y-2">
+		<li><a href="https://developers.cloudflare.com/d1/" target="_blank" rel="noopener noreferrer">Cloudflare D1</a></li>
+		<li><a href="https://prisma.io" target="_blank" rel="noopener noreferrer">Prisma Accelerate</a></li>
 	</ul>
 </div>
