@@ -21,6 +21,7 @@
 		<li><a href="https://github.com/bchainhub/ican.js" target="_blank" rel="noopener noreferrer">ICAN / IBAN Validation</a></li>
 		<li><a href="https://github.com/bchainhub/exchange-rounding" target="_blank" rel="noopener noreferrer">Exchange Number Format</a></li>
 		<li><a href="https://github.com/bchainhub/payto-rl" target="_blank" rel="noopener noreferrer">PayTo resource locators</a></li>
+		<li><a href="https://txms.info" target="_blank" rel="noopener noreferrer">TxMS - 0G connectivity for transaction transmission</a></li>
 		<li><a href="https://github.com/uuidjs/uuid" target="_blank" rel="noopener noreferrer">UUID</a></li>
 	</ul>
 </div>

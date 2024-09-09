@@ -22,7 +22,6 @@
 	];
 
 	const handleSelect = (event: CustomEvent<{ label: string; action: () => void; }>) => {
-		console.log(`Selected item: ${event.detail.label}`);
 		event.detail.action();
 	};
 
@@ -46,7 +45,7 @@
 	};
 
 	const rotateTheme = () => {
-		let prefersDark = defaultMode;
+		let prefersDark = defaultMode === 'dark' ? true : false;
 		if (typeof window !== 'undefined') {
 			prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 		}
@@ -87,11 +86,11 @@
 				const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 				document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
 			} else {
-				document.documentElement.setAttribute('data-theme', theme);
+				document.documentElement.setAttribute('data-theme', theme ?? '');
 			}
-			localStorage.setItem('theme', theme);
+			localStorage.setItem('theme', theme ?? '');
 		} else {
-			localStorage.setItem('theme', theme);
+			localStorage.setItem('theme', theme ?? '');
 		}
 	};
 

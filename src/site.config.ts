@@ -1,4 +1,3 @@
-import type { Config } from './app';
 export const config: Config = {
 	title: "MOTA",
 	url: "http://localhost:3000",
@@ -109,7 +108,6 @@ export const config: Config = {
 		metadata: [
 			{ name: "viewport", content: "width=device-width, initial-scale=1.0" },
 			{ name: "theme-color", content: "#25c19f" },
-			{ name: "apple-mobile-web-app-capable", content: "yes" },
 			{ name: "description", content: "This is SvetleKit Boilerplate website" },
 			{ name: "keywords", content: "website, sveltekit, vite, cloudflare" },
 			{ property: "og:type", content: "website" }
