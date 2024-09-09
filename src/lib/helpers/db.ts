@@ -2,12 +2,6 @@ import { env } from '$env/dynamic/private';
 import type { D1Database } from '@cloudflare/workers-types';
 import type { RequestEvent } from '@sveltejs/kit';
 
-interface ExtendedPlatform extends Readonly<App.Platform> {
-	env: {
-		[key: string]: D1Database;
-	};
-}
-
 /**
  * Retrieves and validates the database instance from the RequestEvent object.
  * @param event - The RequestEvent object provided by SvelteKit.
@@ -15,8 +9,7 @@ interface ExtendedPlatform extends Readonly<App.Platform> {
  * @throws Will throw an error if the database name is not defined or the database instance is not found.
  */
 export function getDatabaseInstance(event: RequestEvent): D1Database {
-	const platform = event.platform as ExtendedPlatform;
-	if (!platform) {
+	if (!event.platform) {
 		throw new Error("Platform is undefined.");
 	}
 
@@ -25,7 +18,7 @@ export function getDatabaseInstance(event: RequestEvent): D1Database {
 		throw new Error("Database name not defined.");
 	}
 
-	const db = platform.env[dbName] as D1Database | undefined;
+	const db = (event.platform?.env as Record<string, D1Database | undefined>)?.[dbName];
 
 	if (!db) {
 		throw new Error("Database not found.");

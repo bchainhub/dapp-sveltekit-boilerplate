@@ -18,7 +18,7 @@ export const GET: RequestHandler = async ({ platform, locals }) => {
 		await up(locals.db);
 
 		// Additional fields for the Authenticator table
-		await locals.db.prepare(`
+		await locals.db?.prepare(`
 			CREATE TABLE IF NOT EXISTS "Authenticator" (
 				"id" TEXT NOT NULL PRIMARY KEY,
 				"credentialID" TEXT NOT NULL,
@@ -34,7 +34,7 @@ export const GET: RequestHandler = async ({ platform, locals }) => {
 		`).run();
 
 		// Index for the credentialID field
-		await locals.db.prepare(`
+		await locals.db?.prepare(`
 			CREATE UNIQUE INDEX IF NOT EXISTS "Authenticator_credentialID_key" ON "Authenticator"("credentialID");
 		`).run();
 
@@ -42,7 +42,7 @@ export const GET: RequestHandler = async ({ platform, locals }) => {
 		// coreId - The Core ID of the user (free item)
 		// isActive - Whether the user Core ID is updated (user is activated)
 		// isVerified - Whether the user Core ID is KYC verified (free item)
-		await locals.db.prepare(`
+		await locals.db?.prepare(`
 			ALTER TABLE users ADD COLUMN coreId CHAR(44);
 			CREATE INDEX idx_coreid ON users (coreId);
 			ALTER TABLE users ADD COLUMN isActive BOOLEAN DEFAULT 0;

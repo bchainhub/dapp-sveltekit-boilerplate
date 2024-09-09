@@ -1,4 +1,6 @@
-import type { D1Database, KVNamespace, R2Bucket } from '@cloudflare/workers-types';
+type D1Database = import('@cloudflare/workers-types').D1Database;
+type KVNamespace = import('@cloudflare/workers-types').KVNamespace;
+type R2Bucket = import('@cloudflare/workers-types').R2Bucket;
 
 interface Config {
 	title: string;
@@ -56,6 +58,24 @@ type MenuItem = NavbarItem & {
 	action?: () => void;
 };
 
+interface User {
+	name?: string | null;
+	email?: string | null;
+	image?: string | null;
+	id?: string | null;      // Optional user ID (can be from OAuth provider or internal)
+	role?: string | null;     // Optional role for authorization
+	[key: string]: any;       // Allow other properties as needed for flexibility
+}
+
+// Define the session type to include user and session-specific properties
+interface Session {
+	user?: User | null;       // User information associated with the session
+	expires: string;          // Expiration date as an ISO string
+	accessToken?: string;     // Optional access token for OAuth/JWT providers
+	refreshToken?: string;    // Optional refresh token for OAuth/JWT providers
+	[key: string]: any;       // Allow extensions for future changes or addons
+}
+
 declare namespace App {
 	interface Locals {
 		db?: D1Database;
@@ -69,7 +89,8 @@ declare namespace App {
 	}
 
 	interface PageData {
-		config: Config;
+		session: Session | null;
+		config?: Config;
 	}
 
 	interface Platform {
@@ -80,17 +101,7 @@ declare namespace App {
 		env?: Env;
 		// Cloudflare-specific properties
 		cf?: {
-			asn?: string;               // Autonomous System Number
-			asOrganization?: string;    // Organization name of ASN
-			city?: string;              // City of the request origin
-			continent?: string;         // Continent of the request origin
-			country?: string;           // Country code (ISO 3166-1 Alpha 2)
-			latitude?: string;          // Latitude of the request origin
-			longitude?: string;         // Longitude of the request origin
-			postalCode?: string;        // Postal code of the request origin
-			region?: string;            // Region name
-			regionCode?: string;        // Region code
-			timezone?: string;          // Timezone of the request origin
+			[key: string]: string | undefined;
 		};
 	}
 }
