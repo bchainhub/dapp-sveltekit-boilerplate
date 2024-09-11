@@ -16,7 +16,7 @@ export function getR2Bucket(event: RequestEvent): R2Bucket {
 	if (env.ENABLE_FILE_ACCESS !== 'true') {
 		throw new Error("File access is disabled.");
 	}
-	const bucketName = env.R2_NAMESPACE;
+	const bucketName = env.R2_NAME;
 	if (!bucketName) {
 		throw new Error("R2 bucket name not defined.");
 	}

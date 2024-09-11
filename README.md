@@ -1,4 +1,4 @@
-# SvelteKit Boilerplate WIP
+# SvelteKit Boilerplate WIP (Work in Progress)
 
 This project is work-in-progress, then it can introduce any breaking changes. Please, use it with caution.
 
@@ -68,10 +68,8 @@ Update the `site.config.ts` file located in `/src` to customize the project sett
 You can customize application settings in `wrangler.toml` file:
 
 - `AUTH_SECRET`: Secret key for authentication.
-- `LOGIN_MAX_AGE`: Login expiration time. Default is 24 hours.
-- `DB_INIT`: Enable the functionality to initialize the database.
-- `DB_CLEAN`: Enable functionality to clean the database.
-- `DB_CLEAN_TOKEN`: Token for cleaning the database. This prevents for unauthorized cleaning.
+- `LOGIN_MAX_AGE`: Login expiration time. Default is 24 hours (86400).
+- `DB_INIT`: Enable the functionality to initialize the database using token value. Append `tk` to the URL to define custom token. (Example: `…?tk=yourtoken`).
 - `NODE_VERSION`: Node.js version.
 
 Environment variables are stored in the `.env` file. You can add your own environment variables to this file.
@@ -80,18 +78,20 @@ Environment variables are stored in the `.env` file. You can add your own enviro
 - `CLOUDFLARE_API_TOKEN`: Cloudflare API token.
 - `ENABLE_API`: Enable or disable the API.
 - `ENABLE_AUTH`: Enable or disable authentication.
-- `ONLY_ACTIVATED`: Enable or disable only activated users. This prevents not activated users to login. CorePass is sending activation request using Pipe.
+- `REG_COREID`: Valid Core ID for WebAuthn provider registration. Default is true.
+- `VERIFIED_ONLY`: Enable or disable only verified users. This prevents not KYC verified users to register.
+- `VERIFIED_EXPIRATION_DAYS`: Verified expiration time. (Value in days).
 - `ENABLE_FILE_ACCESS`: Enable or disable file access.
-- `KV_NAMESPACE`: Cloudflare KV namespace name.
-- `R2_NAMESPACE`: Cloudflare R2 namespace name.
-- `PASSKEY_DURATION`: Passkey expiration time.
+- `KV_NAME`: Cloudflare KV namespace name.
+- `R2_NAME`: Cloudflare R2 namespace name.
+- `PASSKEY_DURATION`: Passkey expiration time. Default is 2 minutes (120000).
 - `CAPTURE_COUNTRY`: Capture country from CF pages, Netlify, Vercel. If enabled.
 - `CAPTURE_CITY`: Capture city from CF pages, Netlify, Vercel. If enabled.
 
 Environment variables for database setup:
 
 - `DB_TYPE`: Database type: D1, PRISMA. Default is no database (empty string).
-- `D1_NAMESPACE`: Cloudflare D1 namespace name.
+- `DB_NAME`: Database name.
 - `PRISMA_PROVIDER`: Prisma provider.
 - `PRISMA_API_KEY`: Prisma API key.
 
@@ -119,19 +119,19 @@ You can use tool to generate TailwindCSS colors: [TailwindCSS Color Generator](h
 
 ## Connection to D1
 
-You can connect your application to Cloudflare D1 by setting the `D1_NAMESPACE` variable in the `.env` file. You can find the D1 namespace in the Cloudflare dashboard and bind it with your `D1_NAMESPACE` setup.
+You can connect your application to Cloudflare D1 by setting the `DB_NAME` variable in the `.env` file. You can find the D1 namespace in the Cloudflare dashboard and bind it with your `DB_NAME` setup.
 
 Make sure the `wrangler.toml` file is properly configured with the correct DB binding information.
 
 ## Connection to KV
 
-You can connect your application to Cloudflare KV by setting the `KV_NAMESPACE` variable in the `.env` file. You can find the KV namespace in the Cloudflare dashboard and bind it with your `KV_NAMESPACE` setup.
+You can connect your application to Cloudflare KV by setting the `KV_NAME` variable in the `.env` file. You can find the KV namespace in the Cloudflare dashboard and bind it with your `KV_NAME` setup.
 
 Make sure the `wrangler.toml` file is properly configured with the correct KV binding information.
 
 ## Connection to R2
 
-You can connect your application to Cloudflare R2 by setting the `R2_NAMESPACE` variable in the `.env` file or dashboard. You can find the R2 namespace in the Cloudflare dashboard and bind it with your `R2_NAMESPACE` setup.
+You can connect your application to Cloudflare R2 by setting the `R2_NAME` variable in the `.env` file or dashboard. You can find the R2 namespace in the Cloudflare dashboard and bind it with your `R2_NAME` setup.
 
 Make sure the `wrangler.toml` file is properly configured with the correct R2 binding information.
 
@@ -201,11 +201,11 @@ Dependencies:
 
 Before first run of your application you need to:
 
-- Create a new D1 database in the Cloudflare dashboard.
-- Set the D1 namespace in the `wrangler.toml` file or dashboard.
-- Initialize the D1 database with enabling `DB_INIT=true` in the `wrangler.toml` file or dashboard.
-- Load the url: `yoururl.com/db/init` to initialize the seeding.
-- Set the `DB_INIT=false` in the `wrangler.toml` file or dashboard. This is important to prevent the database initialization on every url access.
+- Create a new database.
+- Set the DB name `DB_NAME` in the `wrangler.toml` file or dashboard.
+- Initialize the database with enabling `DB_INIT=yourtoken` in the `wrangler.toml` file or dashboard.
+- Load the url: `yoururl.com/db/init?tk=yourtoken` to initialize the seeding.
+- Set the `DB_INIT=false` in the `wrangler.toml` file or dashboard. This is important to disable db initialization.
 
 ## Security
 
@@ -244,41 +244,11 @@ const secret = genv(platform).SECRET;
 
 ## Management API
 
-### Pipe (WIP)
-
-- Update User using Pipe.
-
-`POST /pipe`
-
-Header:
-
-- Content-Type: application/json
-- Authorization: Bearer ${token}
-
-Json body:
-
-- `id`: Pipie ID w/o prefix `pipe-`
-- `coreId`: Core ID
-
 ### DB / Initialize
 
-- Initialize the D1 database.
+- Initialize the database.
 
 `GET /db/init`
-
-### DB / Clean Accounts (WIP)
-
-- Clean all accounts non-active and older than one day.
-
-`POST /db/cleanAccounts`
-
-Header:
-
-- Content-Type: application/json
-
-Json body:
-
-- `token`: Auth token for cleaning from environment variable.
 
 ## Error codes (WIP)
 

@@ -8,7 +8,7 @@ import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
-		// Initialize the database if D1_NAMESPACE is provided
+		// Initialize the database
 		if (env.DB_TYPE) {
 			try {
 				const db = getDatabaseInstance(event);
@@ -28,8 +28,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 			return await authHandle({ event, resolve });
 		}
 
-		// Initialize the KV namespace if KV_NAMESPACE is provided
-		if (env.KV_NAMESPACE && event.platform) {
+		// Initialize the KV namespace if KV_NAME is provided
+		if (env.KV_NAME && event.platform) {
 			try {
 				const kv = getKVNamespace(event);
 				event.locals.kv = kv;
@@ -38,8 +38,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 			}
 		}
 
-		// Initialize the R2 bucket if R2_NAMESPACE is provided
-		if (env.R2_NAMESPACE && event.platform) {
+		// Initialize the R2 bucket if R2_NAME is provided
+		if (env.R2_NAME && event.platform) {
 			try {
 				const bucket = getR2Bucket(event);
 				event.locals.bucket = bucket;

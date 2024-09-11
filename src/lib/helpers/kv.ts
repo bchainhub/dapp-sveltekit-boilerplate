@@ -13,7 +13,7 @@ export function getKVNamespace(event: RequestEvent): KVNamespace {
 		throw new Error("Platform is undefined.");
 	}
 
-	const kvName = env.KV_NAMESPACE;
+	const kvName = env.KV_NAME;
 	if (!kvName) {
 		throw new Error("KV namespace name not defined.");
 	}
