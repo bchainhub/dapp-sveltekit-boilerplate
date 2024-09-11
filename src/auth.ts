@@ -1,17 +1,17 @@
-import { SvelteKitAuth } from "@auth/sveltekit";
-import Passkey from "@auth/sveltekit/providers/passkey";
-import { PrismaAdapter } from "@auth/prisma-adapter";
+import { SvelteKitAuth, type SvelteKitAuthConfig } from "@auth/sveltekit";
+import WebAuthn from "@auth/core/providers/webauthn";
 import { D1Adapter } from "@auth/d1-adapter";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from '@prisma/client';
 import { env } from '$env/dynamic/private';
 import { genv } from '$lib/helpers/genv';
 import { config } from './site.config';
+import Ican from '@blockchainhub/ican';
 import type { Session as AuthSession, User as AuthUser } from "@auth/core/types";
 
-// Define User and Session interfaces
+// TODO: Define User and Session interfaces; Move to a shared file if needed
 interface User extends AuthUser {
-	coreId?: string;
-	isActive?: boolean;
+	authId?: string;
 	isVerified?: boolean;
 }
 
@@ -27,9 +27,9 @@ const auth = SvelteKitAuth(async (event) => {
 	if (!db) throw new Error('Database instance not found. Authentication cannot proceed.');
 
 	const authSecret = genv(event.platform).AUTH_SECRET as string;
-	const maxAge = genv(event.platform).LOGIN_MAX_AGE || 86400; // Default to 24 hours
+	const maxAge = Number(genv(event.platform).LOGIN_MAX_AGE) || 86400; // Default to 24 hours
 	const bareUrl = config.url.replace(/(^\w+:|^)\/\//, '');
-	const passkeyDuration = Number(env.PASSKEY_DURATION) || 60000;
+	const passkeyDuration = Number(env.PASSKEY_DURATION) || 120000; // 2 minutes
 
 	let adapter;
 	if (db instanceof PrismaClient) {
@@ -42,7 +42,7 @@ const auth = SvelteKitAuth(async (event) => {
 
 	return {
 		providers: [
-			Passkey({
+			WebAuthn({
 				id: `corepass/${bareUrl}`,
 				name: 'CorePass',
 				relayingParty: {
@@ -51,13 +51,6 @@ const auth = SvelteKitAuth(async (event) => {
 					origin: config.url,
 				},
 				enableConditionalUI: true,
-				formFields: {
-					email: {
-						label: "Email",
-						required: true,
-						autocomplete: "username webauthn",
-					},
-				},
 				authenticationOptions: {
 					timeout: passkeyDuration,
 					userVerification: "required",
@@ -76,31 +69,89 @@ const auth = SvelteKitAuth(async (event) => {
 						userVerification: "required",
 						authenticatorAttachment: "cross-platform",
 					},
-					supportedAlgorithmIDs: [-8], // EdDSA
+					supportedAlgorithmIDs: [-8], // EdDSA only!
 				},
 			}),
 		],
 		adapter,
 		secret: authSecret,
-		maxAge: maxAge,
+		session: {
+			maxAge: maxAge,
+		},
 		experimental: { enableWebAuthn: true },
 		callbacks: {
-			async signIn({ user }: { user: User }) {
-				if (env.ONLY_ACTIVATED === 'true' && !user.isActive) {
+			async signIn({ account, credentials, user }: { account: any; credentials?: any; user: User }) {
+				const isNewUser = account?.isNewUser;
+				const credentialID = credentials?.credentialID;
+				if (credentialID) {
+					user.authId = credentialID;
+				} else {
 					return false;
 				}
+
+				// For new users, handle registration logic
+				if (isNewUser) {
+					const regCoreId = env.REG_COREID === undefined ? true : (env.REG_COREID === 'true');
+
+					// Only Apps with valid Core ID can sign up
+					if (regCoreId && !Ican.isValid(credentialID, true)) {
+						return false;
+					}
+
+					// Only verified authenticators can sign up
+					if (env.VERIFIED_ONLY === 'true') {
+						try {
+							const authenticator = await db.authenticator.findUnique({
+								where: { credentialID: credentialID },
+							});
+
+							if (authenticator?.isVerified) {
+								user.isVerified = true;
+							} else {
+								return false;
+							}
+						} catch (error) {
+							return false;
+						}
+					}
+				} else {
+					// Existing user sign-in logic
+					if (env.VERIFIED_ONLY === 'true') {
+						try {
+							const authenticator = await db.authenticator.findUnique({
+								where: { credentialID: credentialID },
+							});
+
+							if (!authenticator?.isVerified) {
+								return false;
+							} else if (authenticator?.isVerified && Number(env.VERIFIED_EXPIRATION_DAYS) > 0) {
+								const verificationDate = new Date(authenticator.receivedDate);
+								const currentDate = new Date();
+								const expirationDate = new Date(verificationDate);
+								expirationDate.setDate(verificationDate.getDate() + Number(env.VERIFIED_EXPIRATION_DAYS));
+
+								if (currentDate <= expirationDate) {
+									user.isVerified = true;
+								} else {
+									return false;
+								}
+							}
+						} catch (error) {
+							return false;
+						}
+					}
+				}
+
 				return true;
 			},
+
 			async session({ session, user }: { session: Session; user: User }) {
-				if (session.user) {
-					session.user.coreId = user.coreId;
-					session.user.isVerified = user.isVerified;
-				}
+				session.user.authId = user.authId;
+				session.user.isVerified = user.isVerified;
 				return session;
 			},
 		},
-	};
+	} satisfies SvelteKitAuthConfig;
 });
 
-// Export handle, signIn, and signOut separately
 export const { handle, signIn, signOut } = auth;

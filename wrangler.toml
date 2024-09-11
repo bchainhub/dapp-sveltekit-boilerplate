@@ -24,9 +24,7 @@ name = "dapp-sveltekit-boilerplate-production"
 [env.production.vars]
 AUTH_SECRET = "" # Set your secret in the Dashboard or using wrangler secret: npx wrangler secret put <KEY> <VALUE>
 LOGIN_MAX_AGE = 604800
-DB_INIT = false
-DB_CLEAN = false
-DB_CLEAN_TOKEN = "" # Set your token in the Dashboard or using wrangler secret: npx wrangler secret put <KEY> <VALUE>
+DB_INIT = ""
 NODE_VERSION = "^20.9.0"
 
 [env.staging]
@@ -35,7 +33,5 @@ name = "dapp-sveltekit-boilerplate-staging"
 [env.staging.vars]
 AUTH_SECRET = "hzMwfXG2Hmce/7ko7xIh10vANqkY0nAnuJT5ocz4nCYE"
 LOGIN_MAX_AGE = 604800
-DB_INIT = false
-DB_CLEAN = false
-DB_CLEAN_TOKEN = "H1PGHoEbDo6DY/buGMyPhwvY9yoTXiFtQAPAJTfIhFWt"
+DB_INIT = "H1PGHoEbDo6DY/buGMyPhwvY9yoTXiFtQAPAJTfIhFWt"
 NODE_VERSION = "^20.9.0"

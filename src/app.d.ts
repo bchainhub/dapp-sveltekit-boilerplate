@@ -109,15 +109,17 @@ declare namespace App {
 type Env = {
 	ENABLE_API?: string;
 	ENABLE_AUTH?: string;
-	ONLY_ACTIVATED?: string;
+	REG_COREID?: string;
+	VERIFIED_ONLY?: string;
+	VERIFIED_EXIPRATION_DAYS?: string;
 	ENABLE_FILE_ACCESS?: string;
-	DB_TYPE?: string;
-	D1_NAMESPACE?: string;
-	KV_NAMESPACE?: string;
-	R2_NAMESPACE?: string;
-	PRISMA_PROVIDER?: string;
-	PRISMA_API_KEY?: string;
+	KV_NAME?: string;
+	R2_NAME?: string;
 	PASSKEY_DURATION?: string;
 	CAPTURE_COUNTRY?: string;
 	CAPTURE_CITY?: string;
+	DB_TYPE?: string;
+	DB_NAME?: string;
+	PRISMA_PROVIDER?: string;
+	PRISMA_API_KEY?: string;
 };

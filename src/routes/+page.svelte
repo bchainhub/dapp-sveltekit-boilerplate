@@ -14,7 +14,7 @@
 		<li><a href="https://postcss.org/" target="_blank" rel="noopener noreferrer">PostCSS</a></li>
 		<li><a href="https://eslint.org/" target="_blank" rel="noopener noreferrer">ESLint</a></li>
 		<li><a href="https://prettier.io/" target="_blank" rel="noopener noreferrer">Prettier</a></li>
-		<li><a href="https://authjs.dev/" target="_blank" rel="noopener noreferrer">Auth.js</a> + <a href="https://authjs.dev/getting-started/providers/passkey" target="_blank" rel="noopener noreferrer">Passkey</a></li>
+		<li><a href="https://authjs.dev/" target="_blank" rel="noopener noreferrer">Auth.js</a> + Passkey</li>
 		<li><a href="https://hono.dev/" target="_blank" rel="noopener noreferrer">Hono API</a></li>
 		<li><a href="https://lucide.dev/" target="_blank" rel="noopener noreferrer">Lucide Icons</a> + <a href="https://github.com/bchainhub/dapp-sveltekit-boilerplate/blob/master/src/lib/components/Icon.svelte" target="_blank" rel="noopener noreferrer">Custom SVG icons</a></li>
 		<li><a href="https://github.com/bchainhub/blo" target="_blank" rel="noopener noreferrer">blo identicons</a></li>
@@ -35,7 +35,7 @@
 		<li><a href="https://corepass.net" target="_blank" rel="noopener noreferrer">CorePass Login; CorePass KYX print; CorePass passkey</a></li>
 		<li><a href="https://docs.corepass.net/corepass-protocol/#request-blockchain-transaction" target="_blank" rel="noopener noreferrer">CorePass minting</a></li>
 		<li><a href="https://payto.money" target="_blank" rel="noopener noreferrer">PayTo</a></li>
-		<li><a href="https://authjs.dev/getting-started/providers/passkey" target="_blank" rel="noopener noreferrer">Passkey / WebAuthn</a></li>
+		<li><a href="https://github.com/nextauthjs/next-auth/blob/18b5955285bf781008a694a07f10366c408d446a/packages/core/src/providers/webauthn.ts" target="_blank" rel="noopener noreferrer">WebAuthn</a></li>
 	</ul>
 </div>
 <div class="mb-8">

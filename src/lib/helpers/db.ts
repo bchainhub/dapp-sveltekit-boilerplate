@@ -2,8 +2,7 @@ import { env } from '$env/dynamic/private';
 import type { D1Database } from '@cloudflare/workers-types';
 import type { RequestEvent } from '@sveltejs/kit';
 import { PrismaClient } from '@prisma/client';
-import { withAccelerate } from '@prisma/extension-accelerate'
-import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import { withAccelerate } from '@prisma/extension-accelerate';
 
 // Define Prisma and Supabase clients (to be instantiated lazily)
 let prisma: PrismaClient | null = null;
@@ -14,7 +13,7 @@ let prisma: PrismaClient | null = null;
  * @returns The database instance (either D1Database, PrismaClient, or SupabaseClient).
  * @throws Will throw an error if the database type or instance is not found.
  */
-export function getDatabaseInstance(event: RequestEvent): D1Database | PrismaClient | ReturnType<typeof createSupabaseClient> {
+export function getDatabaseInstance(event: RequestEvent): D1Database | PrismaClient {
 	const dbType = env.DB_TYPE;
 
 	if (!dbType) {
@@ -28,7 +27,7 @@ export function getDatabaseInstance(event: RequestEvent): D1Database | PrismaCli
 				throw new Error("Platform is undefined.");
 			}
 
-			const dbName = env.D1_NAMESPACE;
+			const dbName = env.DB_NAME;
 			if (!dbName) {
 				throw new Error("Database name not defined.");
 			}
@@ -55,6 +54,7 @@ export function getDatabaseInstance(event: RequestEvent): D1Database | PrismaCli
 				prisma = new PrismaClient({
 					datasources: {
 						db: {
+							prisma_provider: prisma_provider,
 							url: `prisma://accelerate.prisma-data.net/?api_key=${prisma_api_key}`
 						}
 					}
