@@ -18,7 +18,7 @@ export async function verified(coreId: string): Promise<boolean> {
 
 	// Fetch verification data from the oracle
 	try {
-		const response = await fetch(`${env.VERIFICATION_ORACLE}`, {
+		const response = await fetch(env.VERIFICATION_ORACLE, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

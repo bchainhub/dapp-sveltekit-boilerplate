@@ -5,7 +5,7 @@ import { drizzle } from "drizzle-orm/libsql"
 import type { AdapterAccount } from "next-auth/adapters"
 
 const client = createClient({
-	url: env.DB_URL || "",
+	url: env.DB_URL || "libsql://host/database-name",
 	authToken: env.DB_AUTH_TOKEN || "",
 })
 export const db = drizzle(client)

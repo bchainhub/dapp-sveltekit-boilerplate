@@ -5,6 +5,9 @@ type = "javascript"
 [placement]
 mode = "smart"
 
+[build]
+command = "npm run build"
+
 #[[d1_databases]]
 #binding = "DB1"
 #database_name = "your_database_name"

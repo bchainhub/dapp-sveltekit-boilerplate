@@ -233,6 +233,30 @@ Before first run of your application you need to:
 
 - Initialize Drizzle ORM database.
 
+## KYC Verification oracle
+
+KYC verification oracle is used for verification of users. You can use your own oracle or use the global one. By using the KYC oracle, you are not getting the actual data, but checking if the user can provide the data.
+
+You can set the `VERIFICATION_ORACLE` variable in the `.env` file as URL to the oracle.
+
+### Communicating with the oracle
+
+You can send `POST` request to the oracle with the following data:
+
+```json
+{
+  "coreId": "cb…",
+}
+```
+
+As response the oracle will return:
+
+```json
+{
+  "verified": 1
+}
+```
+
 ## Security
 
 There is difference between access local environment variables and environment variables in Cloudflare.

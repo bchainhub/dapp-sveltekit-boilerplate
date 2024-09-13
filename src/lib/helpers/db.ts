@@ -3,7 +3,7 @@ import { drizzle as drizzlePostgres } from 'drizzle-orm/postgres-js';  // For Po
 import { drizzle as drizzleD1 } from 'drizzle-orm/d1';  // For D1/SQLite
 import { env } from '$env/dynamic/private';
 import type { RequestEvent } from '@sveltejs/kit';
-import { D1Database } from '@cloudflare/workers-types';
+import type { D1Database } from '@cloudflare/workers-types';
 import * as postgresSchema from '../../schemas/postgres'; // Import PostgreSQL schema
 import * as sqliteSchema from '../../schemas/sqlite'; // Import SQLite schema
 import * as bchPostgresSchema from '../../schemas/bch/postgres'; // Import BCH PostgreSQL schema
