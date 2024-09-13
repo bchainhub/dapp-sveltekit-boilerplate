@@ -1,5 +1,6 @@
 name = "dapp-sveltekit-boilerplate"
 type = "javascript"
+compatibility_flags = ["nodejs_compat_v2"]
 #account_id = "your_account_id"
 
 [placement]
