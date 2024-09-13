@@ -1,70 +1,94 @@
+import postgres from 'postgres';
+import { drizzle as drizzlePostgres } from 'drizzle-orm/postgres-js';  // For PostgreSQL
+import { drizzle as drizzleD1 } from 'drizzle-orm/d1';  // For D1/SQLite
 import { env } from '$env/dynamic/private';
-import type { D1Database } from '@cloudflare/workers-types';
 import type { RequestEvent } from '@sveltejs/kit';
-import { PrismaClient } from '@prisma/client';
-import { withAccelerate } from '@prisma/extension-accelerate';
+import { D1Database } from '@cloudflare/workers-types';
+import * as postgresSchema from '../../schemas/postgres'; // Import PostgreSQL schema
+import * as sqliteSchema from '../../schemas/sqlite'; // Import SQLite schema
+import * as bchPostgresSchema from '../../schemas/bch/postgres'; // Import BCH PostgreSQL schema
+import * as bchSqliteSchema from '../../schemas/bch/sqlite'; // Import BCH SQLite schema
 
-// Define Prisma and Supabase clients (to be instantiated lazily)
-let prisma: PrismaClient | null = null;
+// Global variables to cache the database instances
+let dbInstance: any;
+let bchInstance: any;
 
-/**
- * Retrieves and validates the database instance based on the type defined in the environment.
- * @param event - The RequestEvent object provided by SvelteKit.
- * @returns The database instance (either D1Database, PrismaClient, or SupabaseClient).
- * @throws Will throw an error if the database type or instance is not found.
- */
-export function getDatabaseInstance(event: RequestEvent): D1Database | PrismaClient {
-	const dbType = env.DB_TYPE;
-
-	if (!dbType) {
-		throw new Error("Database type is not defined in environment.");
+// Function to initialize and return the main database instance
+export async function getDatabaseInstance(event: RequestEvent) {
+	if (dbInstance) {
+		return dbInstance;  // Return cached instance if it exists
 	}
 
-	switch (dbType.toUpperCase()) {
+	if (!env.DB_TYPE || !env.DB_URL) {
+		throw new Error('Database type or URL is not defined.');
+	}
+
+	const dbType = env.DB_TYPE.toUpperCase();
+	switch (dbType) {
 		case 'D1': {
-			// Handle Cloudflare D1 database
-			if (!event.platform) {
-				throw new Error("Platform is undefined.");
-			}
-
-			const dbName = env.DB_NAME;
-			if (!dbName) {
-				throw new Error("Database name not defined.");
-			}
-
-			const d1 = (event.platform?.env as Record<string, D1Database | undefined>)?.[dbName];
+			const d1DatabaseName = env.DB_URL;  // Get D1 DB name from env
+			const d1 = (event.platform?.env as Record<string, D1Database | undefined>)?.[d1DatabaseName];
 
 			if (!d1) {
 				throw new Error("D1 Database not found.");
 			}
 
-			return d1;
+			dbInstance = drizzleD1(d1, { schema: sqliteSchema });  // Use SQLite schema for D1
+			break;
 		}
 
-		case 'PRISMA': {
-			// Handle Prisma (instantiate the Prisma client if not already done)
-			if (!prisma) {
-				const prisma_provider = env.PRISMA_PROVIDER || 'postgresql';
-				const prisma_api_key = env.PRISMA_API_KEY;
+		case 'POSTGRES': {
+			const sql = postgres(env.DB_URL, {
+				ssl: env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,  // Handle SSL
+			});
 
-				if (!prisma_api_key) {
-					throw new Error("PRISMA_API_KEY is not defined.");
-				}
-
-				prisma = new PrismaClient({
-					datasources: {
-						db: {
-							prisma_provider: prisma_provider,
-							url: `prisma://accelerate.prisma-data.net/?api_key=${prisma_api_key}`
-						}
-					}
-				}).$extends(withAccelerate());
-			}
-			return prisma;
+			dbInstance = drizzlePostgres(sql, { schema: postgresSchema });  // Use PostgreSQL schema
+			break;
 		}
 
-		default: {
+		default:
 			throw new Error(`Unsupported database type: ${dbType}`);
-		}
 	}
+
+	return dbInstance;  // Return the initialized instance
+}
+
+// Function to initialize and return the BCH-related database instance
+export async function getBCHDatabaseInstance(event: RequestEvent) {
+	if (bchInstance) {
+		return bchInstance;  // Return cached instance if it exists
+	}
+
+	if (!env.BCH_DB_TYPE || !env.BCH_DB_URL) {
+		throw new Error('BCH database type or URL is not defined.');
+	}
+
+	const bchDbType = env.BCH_DB_TYPE.toUpperCase();
+	switch (bchDbType) {
+		case 'D1': {
+			const d1DatabaseName = env.BCH_DB_URL;  // Get D1 DB name for BCH from env
+			const d1 = (event.platform?.env as Record<string, D1Database | undefined>)?.[d1DatabaseName];
+
+			if (!d1) {
+				throw new Error("BCH D1 Database not found.");
+			}
+
+			bchInstance = drizzleD1(d1, { schema: bchSqliteSchema });  // Use SQLite schema for BCH
+			break;
+		}
+
+		case 'POSTGRES': {
+			const sql = postgres(env.BCH_DB_URL, {
+				ssl: env.BCH_DB_SSL === 'true' ? { rejectUnauthorized: false } : false,  // Handle SSL for BCH
+			});
+
+			bchInstance = drizzlePostgres(sql, { schema: bchPostgresSchema });  // Use PostgreSQL schema for BCH
+			break;
+		}
+
+		default:
+			throw new Error(`Unsupported BCH database type: ${bchDbType}`);
+	}
+
+	return bchInstance;  // Return the initialized instance
 }

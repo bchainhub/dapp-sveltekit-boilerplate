@@ -28,8 +28,10 @@ Welcome to the SvelteKit Boilerplate! This project provides a solid foundation f
 
 ## Database Support
 
-- **[CloudFlare D1](https://developers.cloudflare.com/d1/)**: Database solution for Cloudflare applications.
-- **[Prisma](https://www.prisma.io/)**: Prisma with Accelerate. Modern database access for TypeScript & Node.js.
+- **[Drizzle ORM](https://orm.drizzle.team)**: Headless TypeScript ORM with a head.
+  - SQLite / CloudFlare D1 database. (Included)
+  - Postgres database. (Included)
+  - and many more... (Can be added)
 
 ## Installation
 
@@ -67,33 +69,40 @@ Update the `site.config.ts` file located in `/src` to customize the project sett
 
 You can customize application settings in `wrangler.toml` file:
 
-- `AUTH_SECRET`: Secret key for authentication.
-- `LOGIN_MAX_AGE`: Login expiration time. Default is 24 hours (86400).
-- `DB_INIT`: Enable the functionality to initialize the database using token value. Append `tk` to the URL to define custom token. (Example: `…?tk=yourtoken`).
 - `NODE_VERSION`: Node.js version.
 
 Environment variables are stored in the `.env` file. You can add your own environment variables to this file.
 
 - `CLOUDFLARE_ACCOUNT_ID`: Cloudflare account ID.
 - `CLOUDFLARE_API_TOKEN`: Cloudflare API token.
+- `AUTH_SECRET`: Secret key for authentication.
+- `LOGIN_MAX_AGE`: Login expiration time. Default is 24 hours (86400).
 - `ENABLE_API`: Enable or disable the API.
 - `ENABLE_AUTH`: Enable or disable authentication.
 - `REG_COREID`: Valid Core ID for WebAuthn provider registration. Default is true.
 - `VERIFIED_ONLY`: Enable or disable only verified users. This prevents not KYC verified users to register.
 - `VERIFIED_EXPIRATION_DAYS`: Verified expiration time. (Value in days).
+- `VERIFICATION_ORACLE`: Verification oracle URL.
 - `ENABLE_FILE_ACCESS`: Enable or disable file access.
 - `KV_NAME`: Cloudflare KV namespace name.
 - `R2_NAME`: Cloudflare R2 namespace name.
 - `PASSKEY_DURATION`: Passkey expiration time. Default is 2 minutes (120000).
-- `CAPTURE_COUNTRY`: Capture country from CF pages, Netlify, Vercel. If enabled.
-- `CAPTURE_CITY`: Capture city from CF pages, Netlify, Vercel. If enabled.
+- `CAPTURE_COUNTRY`: Provide country as a variable from CF pages, Netlify, Vercel. If enabled.
+- `CAPTURE_CITY`: Provide city as a variable from CF pages, Netlify, Vercel. If enabled.
 
 Environment variables for database setup:
 
-- `DB_TYPE`: Database type: D1, PRISMA. Default is no database (empty string).
-- `DB_NAME`: Database name.
-- `PRISMA_PROVIDER`: Prisma provider.
-- `PRISMA_API_KEY`: Prisma API key.
+- `DB_TYPE`: Database type: SQLite, PostgeSQL. Default is no database (empty string).
+- `DB_URL`: Database URL.
+- `DB_AUTH_TOKEN`: Database authentication token.
+- `DB_SSL`: Enable or disable SSL for Postgres database.
+
+Blockchain database setup:
+
+- `BCH_DB_TYPE`: Database type: SQLite, PostgeSQL. Default is no database (empty string).
+- `BCH_DB_URL`: Database URL.
+- `BCH_DB_AUTH_TOKEN`: Database authentication token.
+- `BCH_DB_SSL`: Enable or disable SSL for Postgres database.
 
 Generate the authentication secret key, cleaning token, JWT secret in secure way or using the following command:
 
@@ -116,12 +125,6 @@ The project uses TailwindCSS for styling. You can customize the styles by editin
 Custom styles and variables are defined in the `src/css` directory. You can use [customization tool](https://docusaurus.io/docs/styling-layout#styling-your-site-with-infima) to edit variables. We are using prefix `skc` for custom classes.
 
 You can use tool to generate TailwindCSS colors: [TailwindCSS Color Generator](https://javisperez.github.io/tailwindcolorshades/) or [TailwindCSS Color Shades](https://www.tailwindshades.com/).
-
-## Connection to D1
-
-You can connect your application to Cloudflare D1 by setting the `DB_NAME` variable in the `.env` file. You can find the D1 namespace in the Cloudflare dashboard and bind it with your `DB_NAME` setup.
-
-Make sure the `wrangler.toml` file is properly configured with the correct DB binding information.
 
 ## Connection to KV
 
@@ -188,24 +191,47 @@ For more details on configuring and using Wrangler with Cloudflare Pages, visit 
 3. Configure the build settings.
 4. Deploy the project.
 
+## ORM Database Setup
+
+The project uses Drizzle ORM for database setup. You can find more information in the [Drizzle ORM documentation](https://orm.drizzle.team/).
+
+This step is optional, but required for authentication and blockchain operations.
+
+We are supporting two categories of databases:
+
+- Ordinary databases
+- Blockchain databases
+
+### Ordinary databases
+
+You can use SQLite, Postgres database, or any other supported by Drizzle. The database setup is defined in the `.env` file prefixed with `DB_`.
+
+### Blockchain databases
+
+You can use SQLite, Postgres database, or any other supported by Drizzle. The database setup is defined in the `.env` file prefixed with `BCH_DB_`.
+
+Blockchain data are parsed by oracle, which you can deploy.
+
+### Database setup
+
+Drizzle setup is located in the `drizzle.config.ts` file. Configure it for your database setup.
+
+Schemas are located in the `src/schemas` directory. You can add your own schema files. Blockchain schemas are located in the `src/schemas/bch` directory.
+
 ## Authentication
 
 The project uses Auth.js for authentication together with Passkey & CorePass.
 
 Dependencies:
 
-- Cloudflare D1 database.
-- DB initialization process.
+- ORM database.
+- DB initialization process using Drizzle-kit.
 - Node.js version 20.9.0 or higher.
-- CorePass if you would like to use Pipe - activation model.
+- [CorePass](https://corepass.net) if you would like to use KYC. (Enabled by default)
 
 Before first run of your application you need to:
 
-- Create a new database.
-- Set the DB name `DB_NAME` in the `wrangler.toml` file or dashboard.
-- Initialize the database with enabling `DB_INIT=yourtoken` in the `wrangler.toml` file or dashboard.
-- Load the url: `yoururl.com/db/init?tk=yourtoken` to initialize the seeding.
-- Set the `DB_INIT=false` in the `wrangler.toml` file or dashboard. This is important to disable db initialization.
+- Initialize Drizzle ORM database.
 
 ## Security
 
@@ -241,14 +267,6 @@ We have helper function `genv` to read Cloudflare's environment variables. This 
 import { genv } from from '$lib/helpers/genv';
 const secret = genv(platform).SECRET;
 ```
-
-## Management API
-
-### DB / Initialize
-
-- Initialize the database.
-
-`GET /db/init`
 
 ## Error codes (WIP)
 

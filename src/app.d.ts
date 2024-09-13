@@ -1,6 +1,7 @@
-type D1Database = import('@cloudflare/workers-types').D1Database;
 type KVNamespace = import('@cloudflare/workers-types').KVNamespace;
 type R2Bucket = import('@cloudflare/workers-types').R2Bucket;
+type AuthSession = import("@auth/core/types").Session;
+type AuthUser = import("@auth/core/types").User;
 
 interface Config {
 	title: string;
@@ -58,27 +59,19 @@ type MenuItem = NavbarItem & {
 	action?: () => void;
 };
 
-interface User { // TODO: Review and update as needed
-	name?: string | null;
-	email?: string | null;
-	image?: string | null;
-	id?: string | null;      // Optional user ID (can be from OAuth provider or internal)
-	role?: string | null;     // Optional role for authorization
-	[key: string]: any;       // Allow other properties as needed for flexibility
+interface User extends AuthUser {
+	authId?: string;
+	isVerified?: boolean;
 }
 
-// Define the session type to include user and session-specific properties
-interface Session { // TODO: Review and update as needed
-	user?: User | null;       // User information associated with the session
-	expires: string;          // Expiration date as an ISO string
-	accessToken?: string;     // Optional access token for OAuth/JWT providers
-	refreshToken?: string;    // Optional refresh token for OAuth/JWT providers
-	[key: string]: any;       // Allow extensions for future changes or addons
+interface Session extends AuthSession {
+	user: User;
 }
 
 declare namespace App {
 	interface Locals {
-		db?: D1Database;
+		db?: any;
+		bchdb?: any;
 		kv?: KVNamespace;
 		bucket?: R2Bucket;
 		session?: {
@@ -99,7 +92,6 @@ declare namespace App {
 			waitUntil(promise: Promise<any>): void;
 		};
 		env?: Env;
-		// Cloudflare-specific properties
 		cf?: {
 			[key: string]: string | undefined;
 		};
@@ -107,6 +99,8 @@ declare namespace App {
 }
 
 type Env = {
+	AUTH_SECRET?: string;
+	LOGIN_MAX_AGE?: string;
 	ENABLE_API?: string;
 	ENABLE_AUTH?: string;
 	REG_COREID?: string;
@@ -119,7 +113,12 @@ type Env = {
 	CAPTURE_COUNTRY?: string;
 	CAPTURE_CITY?: string;
 	DB_TYPE?: string;
-	DB_NAME?: string;
-	PRISMA_PROVIDER?: string;
-	PRISMA_API_KEY?: string;
+	DB_URL?: string;
+	DB_AUTH_TOKEN?: string;
+	DB_SSL?: string;
+	BCH_DB_TYPE?: string;
+	BCH_DB_URL?: string;
+	BCH_DB_AUTH_TOKEN?: string;
+	BCH_DB_SSL?: string;
+	[key: string]: string | undefined;
 };
