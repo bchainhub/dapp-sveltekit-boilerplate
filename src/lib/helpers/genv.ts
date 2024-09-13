@@ -1,18 +1,15 @@
-/**
- * Retrieves and processes all environment variables from the Cloudflare environment.
- * @param platform - The platform object provided by Cloudflare Workers.
- * @returns An object containing all environment variables with 'true'/'false' strings converted to boolean values.
- * @throws Will throw an error if the platform or platform.env is not defined.
- */
-export function genv(platform: any): { [key: string]: string | boolean } {
-	if (!platform || !platform.env) {
-		throw new Error("Platform or environment configuration missing.");
-	}
+import { env } from '$env/dynamic/private';
 
+/**
+ * Retrieves and processes all environment variables.
+ * @returns An object containing all environment variables with 'true'/'false' strings converted to boolean values.
+ */
+export const genv = (): { [key: string]: string | boolean } => {
 	const envVars: { [key: string]: string | boolean } = {};
-	for (const key in platform.env) {
-		if (Object.prototype.hasOwnProperty.call(platform.env, key)) {
-			let value = platform.env[key];
+
+	for (const key in env) {
+		if (Object.prototype.hasOwnProperty.call(env, key)) {
+			let value = env[key];
 
 			if (typeof value === 'string') {
 				value = value.trim();
@@ -27,4 +24,4 @@ export function genv(platform: any): { [key: string]: string | boolean } {
 		}
 	}
 	return envVars;
-}
+};

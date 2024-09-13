@@ -24,12 +24,14 @@ command = "npm run build"
 
 [env.production]
 name = "dapp-sveltekit-boilerplate-production"
+compatibility_date = "2024-09-13"
 
 [env.production.vars]
 NODE_VERSION = "^20.9.0"
 
 [env.staging]
 name = "dapp-sveltekit-boilerplate-staging"
+compatibility_date = "2024-09-13"
 
 [env.staging.vars]
 NODE_VERSION = "^20.9.0"

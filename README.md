@@ -259,14 +259,6 @@ As response the oracle will return:
 
 ## Security
 
-There is difference between access local environment variables and environment variables in Cloudflare.
-
-Key points:
-
-- Separate Management Systems: The environment variables for Cloudflare Workers and SvelteKit are managed separately and do not overlap. `platform.env` in Cloudflare Workers is not directly accessible to SvelteKit components or server-side logic.
-- Deployment Context: When using SvelteKit, the environment variables accessed via `import { env } from '$env/dynamic/private';` are provided by the deployment environment's configuration. These could come from services like Vercel, Netlify, or other hosting providers that support environment variable management.
-- No Cross-Access: SvelteKit does not have a built-in mechanism to directly access Cloudflare Workers' environment variables set via `wrangler.toml`. Similarly, Cloudflare Workers cannot directly access environment variables set up for a SvelteKit deployment.
-
 About Platform Environment Variables:
 
 - Platform environment variables are stored in the `wrangler.toml` file.
@@ -283,13 +275,13 @@ const secret = env.SECRET;
 
 This is SvelteKit way of reading the environment variables.
 
-### Cloudflare environment variables
+### Env variables reader function
 
 We have helper function `genv` to read Cloudflare's environment variables. This function is used to read the environment variables directly from Cloudflare instead of the classic `.env` variables. `true` and `false` (not case sensitive) is returned as boolean value, all other values are returned as `string`.
 
 ```ts
 import { genv } from from '$lib/helpers/genv';
-const secret = genv(platform).SECRET;
+const variableName = genv().VARIABLE_NAME;
 ```
 
 ## Error codes (WIP)
