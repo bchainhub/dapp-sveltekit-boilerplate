@@ -11,7 +11,7 @@ import postgres from "postgres"
 import { drizzle } from "drizzle-orm/postgres-js"
 import type { AdapterAccount } from "next-auth/adapters"
 
-const connectionString = env.DB_URL || "postgresql://username:password@host:port/database";
+const connectionString = env.DB_URL || "";
 const pool = postgres(connectionString, { max: 1 })
 
 export const db = drizzle(pool)

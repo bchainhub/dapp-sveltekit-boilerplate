@@ -72,7 +72,7 @@
 		"@auth/drizzle-adapter": "^1.4.2",
 		"@auth/sveltekit": "^1.4.2",
 		"@blockchainhub/ican": "^0.4.1",
-		"@libsql/client": "^0.10.0",
+		"@libsql/client": "^0.11.0",
 		"@simplewebauthn/browser": "9.0.1",
 		"@simplewebauthn/server": "9.0.3",
 		"autoprefixer": "^10.4.20",
