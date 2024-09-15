@@ -191,7 +191,20 @@ For more details on configuring and using Wrangler with Cloudflare Pages, visit 
 3. Configure the build settings.
 4. Deploy the project.
 
-## ORM Database Setup
+## Database setup
+
+Cloudflare offers two types of databases:
+
+- [D1 database](https://developers.cloudflare.com/d1/) (free)
+- [Hyperdrive connector](https://developers.cloudflare.com/hyperdrive/) (paid)
+
+We are recommending purchasing the Hyperdrive connector for production use. There are many advantages and you can bind plenty of databases.
+
+You can use SQLite, Postgres database, or any other supported by Drizzle. Supported drivers by Cloudflare are listed [here](https://developers.cloudflare.com/hyperdrive/configuration/connect-to-postgres/#supported-drivers). The database setup is defined in the `.env` file prefixed with `DB_`.
+
+Database requires Cloudflare flag `compatibility_flags = [ "nodejs_compat" ]` which is indicationg of using [Node.js compatibility mode](https://developers.cloudflare.com/workers/runtime-apis/nodejs/#enable-nodejs-with-workers). You can consider to use `nodejs_compat_v2` if you need additional functionality.
+
+### ORM Database Setup
 
 The project uses Drizzle ORM for database setup. You can find more information in the [Drizzle ORM documentation](https://orm.drizzle.team/).
 
@@ -202,21 +215,17 @@ We are supporting two categories of databases:
 - Ordinary databases
 - Blockchain databases
 
-### Ordinary databases
+### Drizzle setup
 
-You can use SQLite, Postgres database, or any other supported by Drizzle. The database setup is defined in the `.env` file prefixed with `DB_`.
+Drizzle setup is located in the `drizzle.config.ts` file. Configure it for your database setup.
+
+Schemas are located in the `src/schemas` directory. You can add your own schema files. Blockchain schemas are located in the `src/schemas/bch` directory.
 
 ### Blockchain databases
 
 You can use SQLite, Postgres database, or any other supported by Drizzle. The database setup is defined in the `.env` file prefixed with `BCH_DB_`.
 
 Blockchain data are parsed by oracle, which you can deploy.
-
-### Database setup
-
-Drizzle setup is located in the `drizzle.config.ts` file. Configure it for your database setup.
-
-Schemas are located in the `src/schemas` directory. You can add your own schema files. Blockchain schemas are located in the `src/schemas/bch` directory.
 
 ## Authentication
 

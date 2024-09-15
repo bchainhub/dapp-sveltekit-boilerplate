@@ -1,6 +1,6 @@
 name = "dapp-sveltekit-boilerplate"
 type = "javascript"
-compatibility_flags = ["nodejs_compat_v2"]
+compatibility_flags = [ "nodejs_compat" ]
 #account_id = "your_account_id"
 
 [placement]
@@ -9,10 +9,16 @@ mode = "smart"
 [build]
 command = "npm run build"
 
+# Internal Cloudflare database bindings
 #[[d1_databases]]
 #binding = "DB1"
 #database_name = "your_database_name"
 #database_id = "your_database_id"
+
+# External database bindings
+#[[hyperdrive]]
+#binding = "HYPERDRIVE"
+#id = "your_database_id"
 
 #[[kv_namespaces]]
 #binding = "KV"
@@ -26,12 +32,6 @@ command = "npm run build"
 name = "dapp-sveltekit-boilerplate-production"
 compatibility_date = "2024-09-13"
 
-[env.production.vars]
-NODE_VERSION = "^20.9.0"
-
 [env.staging]
 name = "dapp-sveltekit-boilerplate-staging"
 compatibility_date = "2024-09-13"
-
-[env.staging.vars]
-NODE_VERSION = "^20.9.0"
