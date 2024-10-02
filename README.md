@@ -26,12 +26,20 @@ Welcome to the SvelteKit Boilerplate! This project provides a solid foundation f
 - **[CloudFlare KV](https://developers.cloudflare.com/workers/runtime-apis/kv/)**: Key-Value storage for serverless applications.
 - **[Cloudflare R2](https://developers.cloudflare.com/r2/)**: Cloudflare R2 Storage allows developers to store large amounts of unstructured data.
 
-## Database Support
+## Databases
 
 - **[Drizzle ORM](https://orm.drizzle.team)**: Headless TypeScript ORM with a head.
-  - SQLite / CloudFlare D1 database. (Included)
-  - Postgres database. (Included)
-  - and many more... (Can be added)
+  - SQLite / CloudFlare D1 database.
+  - Postgres database.
+  - Hyperdrive connector.
+  - ORB i2 devices.
+  - and many more... (write your own connector in the `src/db` directory)
+
+### Database connectors
+
+- [Postgres.js](https://github.com/porsager/postgres) for Postgres database.
+- [libSQL](https://github.com/tursodatabase/libsql) for SQLite and Orb database.
+- [Hyperdrive](https://developers.cloudflare.com/hyperdrive/) connector for Cloudflare (paid plan).
 
 ## Installation
 
@@ -103,6 +111,8 @@ Blockchain database setup:
 - `BCH_DB_URL`: Database URL.
 - `BCH_DB_AUTH_TOKEN`: Database authentication token.
 - `BCH_DB_SSL`: Enable or disable SSL for Postgres database.
+- `ORB_ENABLE`: Enable or disable Orb blockchain. Default is true (enabled).
+- `ORB_URL`: Orb blockchain URL for static use. Keep it undefined to use dynamic structure.
 
 Generate the authentication secret key, cleaning token, JWT secret in secure way or using the following command:
 
@@ -193,10 +203,11 @@ For more details on configuring and using Wrangler with Cloudflare Pages, visit 
 
 ## Database setup
 
-Cloudflare offers two types of databases:
+Types of connectors:
 
-- [D1 database](https://developers.cloudflare.com/d1/) (free)
-- [Hyperdrive connector](https://developers.cloudflare.com/hyperdrive/) (paid)
+- [D1 database](https://developers.cloudflare.com/d1/) Cloudflare's free plan
+- [Hyperdrive connector](https://developers.cloudflare.com/hyperdrive/) Cloudflare's paid plan
+- [ORB i2 devices](https://medium.com/codetech/codetech-introduces-orb-i2-7b12b3a4e8c5) DePIN local blockchain - SQLite based
 
 We are recommending purchasing the Hyperdrive connector for production use. There are many advantages and you can bind plenty of databases.
 
@@ -210,10 +221,11 @@ The project uses Drizzle ORM for database setup. You can find more information i
 
 This step is optional, but required for authentication and blockchain operations.
 
-We are supporting two categories of databases:
+We are supporting three categories of databases:
 
 - Ordinary databases
 - Blockchain databases
+- Local Blockchain databases on the ORB i2 (or any other) device
 
 ### Drizzle setup
 
@@ -226,6 +238,16 @@ Schemas are located in the `src/schemas` directory. You can add your own schema 
 You can use SQLite, Postgres database, or any other supported by Drizzle. The database setup is defined in the `.env` file prefixed with `BCH_DB_`.
 
 Blockchain data are parsed by oracle, which you can deploy.
+
+### Recommended database setup
+
+We are recommending to use the following setup:
+
+If you own the Orb i2 device, you can use it for blockchain operations. You can use the D1 database for ordinary operations. You can use the Hyperdrive connector for production use - for Apps they need the heavy load.
+
+- Small applications: D1 database + Blockchain database on Orb i2 device or D1.
+- Medium applications: Hyperdrive connector + Blockchain database on Orb i2 device.
+- Large applications: Hyperdrive connector + Blockchain database on Orb i2 device or another Hyperdrive instance.
 
 ## Authentication
 

@@ -98,7 +98,11 @@ declare namespace App {
 	}
 }
 
-type Env = {
+type dbType = 'd1' | 'sqlite' | 'orb' | 'postgres';
+
+interface Env {
+	CLOUDFLARE_ACCOUNT_ID?: string;
+	CLOUDFLARE_API_TOKEN?: string;
 	AUTH_SECRET?: string;
 	LOGIN_MAX_AGE?: string;
 	ENABLE_API?: string;
@@ -112,7 +116,7 @@ type Env = {
 	PASSKEY_DURATION?: string;
 	CAPTURE_COUNTRY?: string;
 	CAPTURE_CITY?: string;
-	DB_TYPE?: string;
+	DB_TYPE?: dbType;
 	DB_URL?: string;
 	DB_AUTH_TOKEN?: string;
 	DB_SSL?: string;
@@ -120,5 +124,10 @@ type Env = {
 	BCH_DB_URL?: string;
 	BCH_DB_AUTH_TOKEN?: string;
 	BCH_DB_SSL?: string;
+	D1_DB?: string;
+	HYPERDRIVE?: string;
+	BCH_HYPERDRIVE?: string;
+	ORB_ENABLE?: string;
+	ORB_URL?: string;
 	[key: string]: string | undefined;
-};
+  }

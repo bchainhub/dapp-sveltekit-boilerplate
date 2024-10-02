@@ -2,8 +2,10 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { Icon } from '$lib/components';
 	import { ChevronDown, ChevronUp, ArrowUpRight } from 'lucide-svelte';
+	import ICAN from '@blockchainhub/ican';
+	import { blo } from '@blockchainhub/blo';
 
-	export let title: string = 'Menu';
+	export let title: string | undefined;
 	export let items: MenuItem[] = [];
 	export let open: boolean = false;
 	export let position: 'left' | 'right' = 'left';
@@ -49,7 +51,16 @@
 <div class={`relative inline-block ${isSmall ? 'w-full' : 'text-left'}`} bind:this={dropdownRef}>
 	<div>
 		<button type="button" class="inline-flex justify-between items-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" on:click={handleToggle}>
-			{title}
+			{#if title}
+				<img
+					alt={title}
+					src={blo(title)}
+					class="w-32 h-32 rounded-lg"
+				/>
+				<span class="ml-2">{ICAN.shortFormat(title)}</span>
+			{:else}
+				<span>Menu</span>
+			{/if}
 			{#if open}
 				<ChevronUp class="ml-2 h-5 w-5" />
 			{:else}
