@@ -10,11 +10,22 @@ import {
 import postgres from "postgres"
 import { drizzle } from "drizzle-orm/postgres-js"
 import type { AdapterAccount } from "next-auth/adapters"
+import type { Hyperdrive } from '@cloudflare/workers-types'
 
-const connectionString = env.DB_URL || env.HYPERDRIVE!.connectionString;
+let hyperdrive: Hyperdrive | undefined = undefined
+if (env.HYPERDRIVE) {
+	hyperdrive = JSON.parse(env.HYPERDRIVE) as Hyperdrive
+}
+
+const connectionString = hyperdrive?.connectionString || env.DB_URL
+
+if (!connectionString) {
+	throw new Error("Connection string is undefined.")
+}
+
 const pool = postgres(connectionString, {
 	ssl: env.DB_SSL ? 'require' : false,
-})
+});
 
 export const db = drizzle(pool)
 

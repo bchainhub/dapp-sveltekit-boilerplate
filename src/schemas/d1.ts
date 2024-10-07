@@ -3,12 +3,15 @@ import { integer, sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core"
 import { createClient } from "@libsql/client"
 import { drizzle } from "drizzle-orm/d1"
 import type { AdapterAccount } from "next-auth/adapters"
+import type { D1Database } from '@cloudflare/workers-types'
 
-const client = createClient({
-	url: env.DB_URL || "libsql://host/database-name",
-	authToken: env.DB_AUTH_TOKEN || "",
-})
-export const db = drizzle(env.D1)
+const d1: D1Database | undefined = env.D1_DB as D1Database | undefined
+
+if (!d1) {
+	throw new Error("D1 database is not defined.")
+}
+
+export const db = drizzle(d1)
 
 export const users = sqliteTable("user", {
 	id: text("id")
