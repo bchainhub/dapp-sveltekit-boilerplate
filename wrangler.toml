@@ -1,14 +1,27 @@
 name = "dapp-sveltekit-boilerplate"
 type = "javascript"
+compatibility_date = "2024-09-30"
+node_compat = true
+compatibility_flags = [ "nodejs_compat" ]
 #account_id = "your_account_id"
 
 [placement]
 mode = "smart"
 
+[build]
+command = "npm run build"
+
+# Internal Cloudflare database bindings
 #[[d1_databases]]
-#binding = "DB1"
+#binding = "DB"
 #database_name = "your_database_name"
 #database_id = "your_database_id"
+#migrations_dir = "drizzle/migrations"
+
+# External database bindings
+#[[hyperdrive]]
+#binding = "HYPERDRIVE"
+#id = "your_database_id"
 
 #[[kv_namespaces]]
 #binding = "KV"
@@ -21,17 +34,5 @@ mode = "smart"
 [env.production]
 name = "dapp-sveltekit-boilerplate-production"
 
-[env.production.vars]
-AUTH_SECRET = "" # Set your secret in the Dashboard or using wrangler secret: npx wrangler secret put <KEY> <VALUE>
-LOGIN_MAX_AGE = 604800
-DB_INIT = ""
-NODE_VERSION = "^20.9.0"
-
 [env.staging]
 name = "dapp-sveltekit-boilerplate-staging"
-
-[env.staging.vars]
-AUTH_SECRET = "hzMwfXG2Hmce/7ko7xIh10vANqkY0nAnuJT5ocz4nCYE"
-LOGIN_MAX_AGE = 604800
-DB_INIT = "H1PGHoEbDo6DY/buGMyPhwvY9yoTXiFtQAPAJTfIhFWt"
-NODE_VERSION = "^20.9.0"

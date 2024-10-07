@@ -11,7 +11,6 @@ export function getGeoData(event: RequestEvent): void {
 	if (!event.platform && !event.request) {
 		return;
 	}
-	// TODO: Check capturing of country and city
 	// Cloudflare Workers: Access geographical data via platform.cf
 	if (event.platform?.cf) {
 		if (env.CAPTURE_COUNTRY && event.platform.cf.country) {

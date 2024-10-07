@@ -185,7 +185,7 @@
 					{/each}
 					{#if $page.data.session}
 						<ActionsDropdown
-							title={$page.data.session.user?.name ?? "User"}
+							title={$page.data.session.user.authId}
 							bind:open={dropdownOpen}
 							items={menuItems}
 							position="left"

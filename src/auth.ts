@@ -1,44 +1,20 @@
 import { SvelteKitAuth, type SvelteKitAuthConfig } from "@auth/sveltekit";
 import WebAuthn from "@auth/core/providers/webauthn";
-import { D1Adapter } from "@auth/d1-adapter";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { PrismaClient } from '@prisma/client';
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { env } from '$env/dynamic/private';
-import { genv } from '$lib/helpers/genv';
+import { getDatabaseInstance } from '$lib/helpers/db';
+import { verified } from '$lib/helpers/verification';
 import { config } from './site.config';
 import Ican from '@blockchainhub/ican';
-import type { Session as AuthSession, User as AuthUser } from "@auth/core/types";
-
-// TODO: Define User and Session interfaces; Move to a shared file if needed
-interface User extends AuthUser {
-	authId?: string;
-	isVerified?: boolean;
-}
-
-interface Session extends AuthSession {
-	user: User;
-}
-
-// Define Prisma client globally to reuse the instance
-let prisma: PrismaClient | null = null;
 
 const auth = SvelteKitAuth(async (event) => {
-	const db = event.locals.db;
+	const db = await getDatabaseInstance(event);
 	if (!db) throw new Error('Database instance not found. Authentication cannot proceed.');
 
-	const authSecret = genv(event.platform).AUTH_SECRET as string;
-	const maxAge = Number(genv(event.platform).LOGIN_MAX_AGE) || 86400; // Default to 24 hours
+	const authSecret = env.AUTH_SECRET as string;
+	const maxAge = Number(env.LOGIN_MAX_AGE) || 86400; // Default to 24 hours
 	const bareUrl = config.url.replace(/(^\w+:|^)\/\//, '');
 	const passkeyDuration = Number(env.PASSKEY_DURATION) || 120000; // 2 minutes
-
-	let adapter;
-	if (db instanceof PrismaClient) {
-		adapter = PrismaAdapter(db);
-	} else if (db instanceof D1Adapter) {
-		adapter = D1Adapter(db);
-	} else {
-		throw new Error('Unsupported database type.');
-	}
 
 	return {
 		providers: [
@@ -73,7 +49,7 @@ const auth = SvelteKitAuth(async (event) => {
 				},
 			}),
 		],
-		adapter,
+		adapter: DrizzleAdapter(db),
 		secret: authSecret,
 		session: {
 			maxAge: maxAge,
@@ -88,55 +64,30 @@ const auth = SvelteKitAuth(async (event) => {
 				} else {
 					return false;
 				}
+				const regCoreId = env.REG_COREID === undefined ? true : (env.REG_COREID === 'true');
 
 				// For new users, handle registration logic
 				if (isNewUser) {
-					const regCoreId = env.REG_COREID === undefined ? true : (env.REG_COREID === 'true');
-
 					// Only Apps with valid Core ID can sign up
 					if (regCoreId && !Ican.isValid(credentialID, true)) {
 						return false;
 					}
 
-					// Only verified authenticators can sign up
-					if (env.VERIFIED_ONLY === 'true') {
-						try {
-							const authenticator = await db.authenticator.findUnique({
-								where: { credentialID: credentialID },
-							});
-
-							if (authenticator?.isVerified) {
-								user.isVerified = true;
-							} else {
-								return false;
-							}
-						} catch (error) {
+					// Only verified Core ID can sign up
+					if (regCoreId && env.VERIFIED_ONLY === 'true') {
+						const verif = await verified(credentialID);
+						if (!verif) {
 							return false;
 						}
 					}
 				} else {
 					// Existing user sign-in logic
-					if (env.VERIFIED_ONLY === 'true') {
-						try {
-							const authenticator = await db.authenticator.findUnique({
-								where: { credentialID: credentialID },
-							});
-
-							if (!authenticator?.isVerified) {
-								return false;
-							} else if (authenticator?.isVerified && Number(env.VERIFIED_EXPIRATION_DAYS) > 0) {
-								const verificationDate = new Date(authenticator.receivedDate);
-								const currentDate = new Date();
-								const expirationDate = new Date(verificationDate);
-								expirationDate.setDate(verificationDate.getDate() + Number(env.VERIFIED_EXPIRATION_DAYS));
-
-								if (currentDate <= expirationDate) {
-									user.isVerified = true;
-								} else {
-									return false;
-								}
-							}
-						} catch (error) {
+					// Only verified Core ID can sign in
+					if (regCoreId && Ican.isValid(credentialID, true) && env.VERIFIED_ONLY === 'true') {
+						const verif = await verified(credentialID);
+						if (verif) {
+							user.isVerified = true;
+						} else {
 							return false;
 						}
 					}

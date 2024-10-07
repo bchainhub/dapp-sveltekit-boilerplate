@@ -1,8 +1,6 @@
 import { env } from '$env/dynamic/private';
 import { handle as authHandle } from './auth';
-import { getDatabaseInstance } from '$lib/helpers/db';
-import { getKVNamespace } from '$lib/helpers/kv';
-import { getR2Bucket } from '$lib/helpers/r2';
+import { getDatabaseInstance, getBCHDatabaseInstance } from '$lib/helpers/db';
 import { getGeoData } from '$lib/helpers/geo';
 import type { Handle } from '@sveltejs/kit';
 
@@ -11,15 +9,25 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// Initialize the database
 		if (env.DB_TYPE) {
 			try {
-				const db = getDatabaseInstance(event);
-				event.locals.db = db;
+				const db = await getDatabaseInstance(event);  // Await the database initialization
+				event.locals.db = db;  // Attach the db to the request locals
 			} catch (error) {
-				console.error('Failed to initialize database:', error);
+				console.error('Failed to initialize database: ', error);
+			}
+		}
+
+		// Initialize the Bch database
+		if (env.BCH_DB_TYPE) {
+			try {
+				const bchdb = await getBCHDatabaseInstance(event);  // Await the database initialization
+				event.locals.bchdb = bchdb;  // Attach the db to the request locals
+			} catch (error) {
+				console.error('Failed to initialize Bch database: ', error);
 			}
 		}
 
 		if (!event.platform) {
-			return resolve(event); // Continue without initializing services
+			return resolve(event);  // Continue without initializing services
 		}
 
 		// Check if authentication is enabled via the environment variable (DB required)
@@ -28,30 +36,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 			return await authHandle({ event, resolve });
 		}
 
-		// Initialize the KV namespace if KV_NAME is provided
-		if (env.KV_NAME && event.platform) {
-			try {
-				const kv = getKVNamespace(event);
-				event.locals.kv = kv;
-			} catch (error) {
-				console.error('Failed to initialize KV:', error);
-			}
-		}
-
-		// Initialize the R2 bucket if R2_NAME is provided
-		if (env.R2_NAME && event.platform) {
-			try {
-				const bucket = getR2Bucket(event);
-				event.locals.bucket = bucket;
-			} catch (error) {
-				console.error('Failed to initialize R2 bucket:', error);
-			}
-		}
-
-		// Capture geo if enabled
+		// Provide geo (country, city) as variable if enabled
 		getGeoData(event);
 	} catch (generalError) {
-		console.error('General error in handle function:', generalError);
+		console.error('General error in handle function: ', generalError);
 	}
 
 	// If authentication is disabled or no errors occurred, proceed with the default request handling

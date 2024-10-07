@@ -22,7 +22,6 @@
 		<li><a href="https://github.com/bchainhub/exchange-rounding" target="_blank" rel="noopener noreferrer">Exchange Number Format</a></li>
 		<li><a href="https://github.com/bchainhub/payto-rl" target="_blank" rel="noopener noreferrer">PayTo resource locators</a></li>
 		<li><a href="https://txms.info" target="_blank" rel="noopener noreferrer">TxMS - 0G connectivity for transaction transmission</a></li>
-		<li><a href="https://github.com/uuidjs/uuid" target="_blank" rel="noopener noreferrer">UUID</a></li>
 	</ul>
 </div>
 <div class="mb-8">
@@ -39,9 +38,9 @@
 	</ul>
 </div>
 <div class="mb-8">
-	<h2 class="text-2xl font-semibold mb-4">💾 Supported Databases</h2>
+	<h2 class="text-2xl font-semibold mb-4">♾️ Databases</h2>
 	<ul class="list-disc list-inside pl-4 space-y-2">
-		<li><a href="https://developers.cloudflare.com/d1/" target="_blank" rel="noopener noreferrer">Cloudflare D1</a></li>
-		<li><a href="https://prisma.io" target="_blank" rel="noopener noreferrer">Prisma Accelerate</a></li>
+		<li><a href="https://orm.drizzle.team" target="_blank" rel="noopener noreferrer">Drizzle ORM</a></li>
+		<li>PostgreSQL and SQLite included by default.</li>
 	</ul>
 </div>
