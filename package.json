@@ -11,8 +11,6 @@
 		"dapp",
 		"starter",
 		"starterpack",
-		"auth.js",
-		"passkey",
 		"tailwindcss",
 		"autoprefixer",
 		"postcss",
