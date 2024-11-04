@@ -1,7 +1,6 @@
 name = "dapp-sveltekit-boilerplate"
-type = "javascript"
 compatibility_date = "2024-11-04"
-node_compat = true
+compatibility_flags = [ "nodejs_compat" ]
 pages_build_output_dir = ".svelte-kit/cloudflare"
 #account_id = "your_account_id"
 
