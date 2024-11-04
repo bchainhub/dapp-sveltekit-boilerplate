@@ -71,6 +71,7 @@
 		"@libsql/client": "^0.14.0",
 		"@simplewebauthn/browser": "9.0.1",
 		"@simplewebauthn/server": "9.0.3",
+		"@sveltejs/adapter-cloudflare": "^4.7.4",
 		"autoprefixer": "^10.4.20",
 		"drizzle-orm": "^0.33.0",
 		"exchange-rounding": "^1.1.3",
