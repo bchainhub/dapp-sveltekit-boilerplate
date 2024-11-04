@@ -194,15 +194,10 @@
 							on:select={handleSelect} />
 					{:else}
 						<li>
-							<SignIn action="register" className="block vertical-menu left p-2">
-								<div slot="submitButton">Register</div>
-							</SignIn>
-						</li>
-						<li>
 							<SignIn className="block vertical-menu left p-2">
 								<div slot="submitButton" class="flex items-center whitespace-nowrap">
 									<Icon name="corepass" className="w-5 h-5 mr-1.5" color="#1066df" />
-									CorePass SignIn
+									Connect
 								</div>
 							</SignIn>
 						</li>

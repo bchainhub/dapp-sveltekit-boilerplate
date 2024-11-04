@@ -18,12 +18,7 @@
 		"exchange-rounding",
 		"hono",
 		"api",
-		"hono-api",
-		"cloudflare",
-		"cf-pages",
-		"cf-d1",
-		"cf-workers",
-		"cf-kv"
+		"hono-api"
 	],
 	"author": "@rastislavcore",
 	"license": "CORE",
