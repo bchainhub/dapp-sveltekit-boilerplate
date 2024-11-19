@@ -68,7 +68,6 @@ declare namespace App {
 	}
 
 	interface PageData {
-		session: Session | null;
 		config?: Config;
 	}
 
@@ -89,17 +88,9 @@ type dbType = 'd1' | 'sqlite' | 'orb' | 'postgres';
 interface Env {
 	CLOUDFLARE_ACCOUNT_ID?: string;
 	CLOUDFLARE_API_TOKEN?: string;
-	AUTH_SECRET?: string;
-	LOGIN_MAX_AGE?: string;
-	ENABLE_API?: string;
-	ENABLE_AUTH?: string;
-	REG_COREID?: string;
-	VERIFIED_ONLY?: string;
-	VERIFIED_EXIPRATION_DAYS?: string;
 	ENABLE_FILE_ACCESS?: string;
 	KV_NAME?: string;
 	R2_NAME?: string;
-	PASSKEY_DURATION?: string;
 	CAPTURE_COUNTRY?: string;
 	CAPTURE_CITY?: string;
 	DB_TYPE?: dbType;
@@ -115,5 +106,7 @@ interface Env {
 	BCH_HYPERDRIVE?: string;
 	ORB_ENABLE?: string;
 	ORB_URL?: string;
+	PUBLIC_ENABLE_AUTH?: string;
+	PUBLIC_WALLET_PRIORITY?: string;
 	[key: string]: string | undefined;
   }

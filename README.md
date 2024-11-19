@@ -12,8 +12,8 @@ Welcome to the SvelteKit Boilerplate! This project provides a solid foundation f
 - **[PostCSS](https://postcss.org/)**: Transform CSS with JavaScript plugins.
 - **[ESLint](https://eslint.org/)**: Linting utility for identifying and reporting on patterns in JavaScript.
 - **[Prettier](https://prettier.io/)**: Code formatter for maintaining consistent style.
-- **[Auth.js](https://authjs.dev/)**: Authentication library for secure login functionality.
 - **[Lucide icons](https://lucide.dev/)**: Beautiful and customizable icon set.
+- **[Wallet Connect](https://walletconnect.network/)**: Connect to decentralized applications using WalletConnect.
 - **[blo identicons](https://github.com/bchainhub/blo)**: blo is a small and fast library to generate Blockchain identicons.
 - **[ICAN / IBAN validation](https://github.com/bchainhub/ican.js)**: Validate international bank account numbers.
 - **[Exchange Number Format](https://github.com/bchainhub/exchange-rounding)**: Utility for formatting and rounding exchange numbers.
@@ -24,7 +24,7 @@ Welcome to the SvelteKit Boilerplate! This project provides a solid foundation f
   - SQLite / CloudFlare D1 database.
   - Postgres database.
   - Hyperdrive connector.
-  - ORB i2 devices.
+  - ORB devices.
   - and many more... (write your own connector in the `src/db` directory)
 
 ### Database connectors
@@ -75,20 +75,16 @@ Environment variables are stored in the `.env` file. You can add your own enviro
 
 - `CLOUDFLARE_ACCOUNT_ID`: Cloudflare account ID.
 - `CLOUDFLARE_API_TOKEN`: Cloudflare API token.
-- `AUTH_SECRET`: Secret key for authentication.
-- `LOGIN_MAX_AGE`: Login expiration time. Default is 24 hours (86400).
-- `ENABLE_API`: Enable or disable the API.
-- `ENABLE_AUTH`: Enable or disable authentication.
-- `REG_COREID`: Valid Core ID for WebAuthn provider registration. Default is true.
-- `VERIFIED_ONLY`: Enable or disable only verified users. This prevents not KYC verified users to register.
-- `VERIFIED_EXPIRATION_DAYS`: Verified expiration time. (Value in days).
-- `VERIFICATION_ORACLE`: Verification oracle URL.
 - `ENABLE_FILE_ACCESS`: Enable or disable file access.
 - `KV_NAME`: Cloudflare KV namespace name.
 - `R2_NAME`: Cloudflare R2 namespace name.
-- `PASSKEY_DURATION`: Passkey expiration time. Default is 2 minutes (120000).
 - `CAPTURE_COUNTRY`: Provide country as a variable from CF pages, Netlify, Vercel. If enabled.
 - `CAPTURE_CITY`: Provide city as a variable from CF pages, Netlify, Vercel. If enabled.
+
+Public variables:
+
+- `PUBLIC_ENABLE_AUTH`: Enable or disable authentication.
+- `PUBLIC_WALLET_PRIORITY`: Wallet names delimited with `,` for priority. Default is `metamask,trustwallet,coinbase`.
 
 Environment variables for database setup:
 
@@ -319,4 +315,4 @@ Contributions are welcome! For feature requests, bug reports, or questions, plea
 
 ## License
 
-This project is open source and available under the [Core License](LICENSE).
+This project is open source and available under the [CORE License](LICENSE).

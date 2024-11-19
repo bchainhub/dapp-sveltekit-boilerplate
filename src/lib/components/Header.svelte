@@ -5,7 +5,7 @@
 	import { Icon } from '$lib/components';
 	import { config } from '../../site.config';
 	import { ActionsDropdown, WalletSwitcher } from '$lib/components';
-	import { env } from '$env/dynamic/private';
+	import { PUBLIC_ENABLE_AUTH } from '$env/dynamic/public';
 	import { walletConnected, walletsList, walletAddress, autoLogin, connectWallet, disconnectWallet } from '$lib/helpers/wallet';
 
 	const { logo, items = [], hideOnScroll, orientation = 'horizontal', style = 'auto', iconExternal } = config?.themeConfig?.navbar || {};
@@ -16,16 +16,21 @@
 	let isNavHidden: boolean = false;
 	let dropdownOpen: boolean = false;
 	let theme: 'light' | 'dark' | 'system' = respectPrefersColorScheme ? 'system' : (defaultMode ?? 'light');
-	let enableAuth = env.ENABLE_AUTH === 'true';
+	let enableAuth = PUBLIC_ENABLE_AUTH === 'true';
 	let availableWallets: string[] = [];
 	let showWalletSwitcher = writable(false);
 	let hasOtherWallets = writable(false);
 
-	const menuItems = [
-		...(config?.themeConfig?.navbar?.authItems ?? []),
-		$hasOtherWallets ? { label: 'Switch Wallet', action: () => showWalletSwitcher.set(true) } : null,
-		{ label: 'Logout', action: () => disconnectWallet }
-	].filter(item => item !== null);
+	const menuItems = writable([
+		{ label: 'Logout', action: () => disconnectWallet() },
+	]);
+
+	if ($hasOtherWallets) {
+		menuItems.update(items => [
+			{ label: 'Switch Wallet', action: () => showWalletSwitcher.set(true) },
+			...items
+		]);
+	}
 
 	const handleSelect = (event: CustomEvent<{ label: string; action: () => void; }>) => {
 		event.detail.action();
@@ -96,13 +101,18 @@
 		if (enableAuth) {
 			autoLogin();
 			(async () => {
-				availableWallets = await walletsList();
-				hasOtherWallets.set(availableWallets.length > 0);
+				if ($walletConnected) {
+					availableWallets = await walletsList();
+					hasOtherWallets.set(availableWallets.length > 0);
+				}
+				$hasOtherWallets && menuItems.update(items => [
+					{ label: 'Switch Wallet', action: () => showWalletSwitcher.set(true) },
+					...items,
+				]);
 			})();
 		}
 
 		const storedTheme = localStorage.getItem('theme') as string | null;
-
 		if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'system') {
 			theme = storedTheme;
 		} else {
@@ -183,16 +193,15 @@
 						<ActionsDropdown
 							title={$walletAddress}
 							bind:open={dropdownOpen}
-							items={menuItems}
+							items={$menuItems}
 							position="left"
 							isSmall={true}
 							iconExternal={iconExternal}
 							on:change={handleSelect} />
-					{:else}
+					{:else if enableAuth}
 						<li>
 							<div class="block vertical-menu left p-2">
 								<div  class="flex items-center whitespace-nowrap">
-									<Icon name="corepass" className="w-5 h-5 mr-1.5" color="#1066df" />
 									<button on:click={manualConnect}>Connect</button>
 								</div>
 							</div>
@@ -280,16 +289,15 @@
 							<ActionsDropdown
 								title={$walletAddress}
 								bind:open={dropdownOpen}
-								items={menuItems}
+								items={$menuItems}
 								position="right"
 								iconExternal={iconExternal}
 								on:change={handleSelect} />
 						</li>
-					{:else}
+					{:else if enableAuth}
 						<li class="flex items-center">
 							<div class="block horizontal-menu neon">
 								<div  class="flex items-center whitespace-nowrap">
-									<Icon name="corepass" className="w-5 h-5 mr-1.5" color="#1066df" />
 									<button on:click={manualConnect}>Connect</button>
 								</div>
 							</div>
@@ -329,16 +337,15 @@
 					<ActionsDropdown
 						title={$walletAddress}
 						bind:open={dropdownOpen}
-						items={menuItems}
+						items={$menuItems}
 						position="left"
 						isSmall={true}
 						iconExternal={iconExternal}
 						on:change={handleSelect} />
-				{:else}
+				{:else if enableAuth}
 					<li>
 						<div class="block horizontal-menu left">
 							<div class="flex items-center whitespace-nowrap">
-								<Icon name="corepass" className="w-5 h-5 mr-1.5" color="#1066df" />
 								<button on:click={manualConnect}>Connect</button>
 							</div>
 						</div>

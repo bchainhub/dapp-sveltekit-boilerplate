@@ -1,6 +1,6 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { writable, get } from 'svelte/store';
-import { env } from '$env/dynamic/private';
+import { PUBLIC_WALLET_PRIORITY } from '$env/dynamic/public';
 
 // Svelte stores for wallet state
 export const walletConnected = writable(false);
@@ -11,21 +11,7 @@ export const availableWallets = writable<string[]>([]);
 let provider: WalletConnectProvider | null = null;
 
 // Get wallet priority from environment variables
-let walletPriority: string[] = env.WALLET_PRIORITY?.split(',') ?? [];
-
-// Helper function to extract RPC URLs from environment variables
-function getRpcUrls(): Record<number, string> {
-	const rpcUrls: Record<number, string> = {};
-	Object.entries(env).forEach(([key, value]) => {
-		if (key.startsWith('RPC_')) {
-			const chainId = parseInt(key.replace('RPC_', ''), 10);
-			if (!isNaN(chainId) && value) {
-				rpcUrls[chainId] = value;
-			}
-		}
-	});
-	return rpcUrls;
-}
+let walletPriority: string[] = PUBLIC_WALLET_PRIORITY?.split(',') ?? [];
 
 // Automatically login and connect wallet
 export async function autoLogin() {
@@ -37,14 +23,12 @@ export async function connectWallet(wallet?: string) {
 	try {
 		if (!provider) {
 			provider = new WalletConnectProvider({
-				rpc: getRpcUrls(),
 				qrcodeModalOptions: {
 					mobileLinks: walletPriority,
 				},
 			});
 		}
 
-		// Ensure qrcodeModalOptions exists before modifying it
 		if (wallet && provider.qrcodeModalOptions?.mobileLinks) {
 			console.log(`Attempting to connect to ${wallet}`);
 			provider.qrcodeModalOptions.mobileLinks = [wallet];
