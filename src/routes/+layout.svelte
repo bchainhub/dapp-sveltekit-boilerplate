@@ -2,6 +2,7 @@
 	import "../css/app.css";
 	import { Header, Footer } from '$lib/components';
 	import { config } from '../site.config';
+
 	const { title, themeConfig: { metadata, navbar, footer }, favicon } = config;
 </script>
 

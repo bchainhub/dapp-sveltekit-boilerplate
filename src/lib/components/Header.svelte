@@ -1,25 +1,31 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
+	import { writable } from 'svelte/store';
 	import { ArrowUpRight, Haze, Menu, Moon, Sun } from 'lucide-svelte';
 	import { Icon } from '$lib/components';
 	import { config } from '../../site.config';
-	import { ActionsDropdown } from '$lib/components';
-	import { page } from "$app/stores";
-	import { SignIn, SignOut } from "@auth/sveltekit/components";
+	import { ActionsDropdown, WalletSwitcher } from '$lib/components';
+	import { env } from '$env/dynamic/private';
+	import { walletConnected, walletsList, walletAddress, autoLogin, connectWallet, disconnectWallet } from '$lib/helpers/wallet';
 
 	const { logo, items = [], hideOnScroll, orientation = 'horizontal', style = 'auto', iconExternal } = config?.themeConfig?.navbar || {};
 	const { disableSwitch, defaultMode, respectPrefersColorScheme } = config?.themeConfig?.colorMode || {};
 
-	let isOpen = false;
+	let isOpen: boolean = false;
 	let lastScrollTop = 0;
-	let isNavHidden = false;
-	let dropdownOpen = false;
-	let theme = respectPrefersColorScheme ? 'system' : defaultMode;
+	let isNavHidden: boolean = false;
+	let dropdownOpen: boolean = false;
+	let theme: 'light' | 'dark' | 'system' = respectPrefersColorScheme ? 'system' : (defaultMode ?? 'light');
+	let enableAuth = env.ENABLE_AUTH === 'true';
+	let availableWallets: string[] = [];
+	let showWalletSwitcher = writable(false);
+	let hasOtherWallets = writable(false);
 
 	const menuItems = [
 		...(config?.themeConfig?.navbar?.authItems ?? []),
-		{ label: 'Logout', action: () => SignOut }
-	];
+		$hasOtherWallets ? { label: 'Switch Wallet', action: () => showWalletSwitcher.set(true) } : null,
+		{ label: 'Logout', action: () => disconnectWallet }
+	].filter(item => item !== null);
 
 	const handleSelect = (event: CustomEvent<{ label: string; action: () => void; }>) => {
 		event.detail.action();
@@ -36,45 +42,22 @@
 	const handleClickOutside = (event: MouseEvent) => {
 		const menuElement = document.getElementById('dropdown-menu');
 		const hamburgerButton = document.getElementById('hamburger-button');
-		if (
-			menuElement && !menuElement.contains(event.target as Node) &&
-			hamburgerButton && !hamburgerButton.contains(event.target as Node)
-		) {
+		if (menuElement && !menuElement.contains(event.target as Node) &&
+			hamburgerButton && !hamburgerButton.contains(event.target as Node)) {
 			closeMenu();
 		}
 	};
 
 	const rotateTheme = () => {
-		let prefersDark = defaultMode === 'dark' ? true : false;
+		let prefersDark = defaultMode === 'dark';
 		if (typeof window !== 'undefined') {
 			prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 		}
 
 		if (!respectPrefersColorScheme) {
-			switch (theme) {
-				case 'light':
-					theme = 'dark';
-					break;
-				case 'dark':
-					theme = 'light';
-					break;
-				default:
-					theme = defaultMode === 'dark' ? 'dark' : 'light';
-			}
+			theme = theme === 'light' ? 'dark' : 'light';
 		} else {
-			switch (theme) {
-				case 'system':
-					theme = prefersDark ? 'light' : 'dark';
-					break;
-				case 'light':
-					theme = 'dark';
-					break;
-				case 'dark':
-					theme = 'system';
-					break;
-				default:
-					theme = 'system';
-			}
+			theme = theme === 'system' ? (prefersDark ? 'light' : 'dark') : theme === 'dark' ? 'system' : 'dark';
 		}
 
 		applyTheme();
@@ -82,37 +65,50 @@
 
 	const applyTheme = () => {
 		if (typeof window !== 'undefined') {
-			if (theme === 'system' && respectPrefersColorScheme) {
-				const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-				document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-			} else {
-				document.documentElement.setAttribute('data-theme', theme ?? '');
-			}
-			localStorage.setItem('theme', theme ?? '');
-		} else {
-			localStorage.setItem('theme', theme ?? '');
+			const themeToApply = theme === 'system' && respectPrefersColorScheme
+				? window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+				: theme;
+			document.documentElement.setAttribute('data-theme', themeToApply);
+			localStorage.setItem('theme', themeToApply);
 		}
 	};
+
+	const manualConnect = () => {
+		if(enableAuth) connectWallet();
+	}
+
+	const closeWalletSwitcher = () => {
+		showWalletSwitcher.set(false);
+	}
 
 	const handleScroll = () => {
 		if (typeof window !== 'undefined') {
 			const currentScrollTop = window.scrollY || document.documentElement.scrollTop;
-			if (isOpen) {
-				closeMenu();
-			}
+			if (isOpen) closeMenu();
 			if (hideOnScroll) {
-				isNavHidden = currentScrollTop > lastScrollTop;
-				if (currentScrollTop === 0) {
-					isNavHidden = false;
-				}
+				isNavHidden = currentScrollTop > lastScrollTop && currentScrollTop > 0;
 			}
 			lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
 		}
 	};
 
 	onMount(() => {
-		const storedTheme = localStorage.getItem('theme') || (respectPrefersColorScheme ? 'system' : defaultMode);
-		theme = storedTheme;
+		if (enableAuth) {
+			autoLogin();
+			(async () => {
+				availableWallets = await walletsList();
+				hasOtherWallets.set(availableWallets.length > 0);
+			})();
+		}
+
+		const storedTheme = localStorage.getItem('theme') as string | null;
+
+		if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'system') {
+			theme = storedTheme;
+		} else {
+			theme = respectPrefersColorScheme ? 'system' : (defaultMode ?? 'light');
+		}
+
 		applyTheme();
 
 		if (typeof window !== 'undefined') {
@@ -183,23 +179,23 @@
 							{/if}
 						</li>
 					{/each}
-					{#if $page.data.session}
+					{#if $walletConnected}
 						<ActionsDropdown
-							title={$page.data.session.user.authId}
+							title={$walletAddress}
 							bind:open={dropdownOpen}
 							items={menuItems}
 							position="left"
 							isSmall={true}
 							iconExternal={iconExternal}
-							on:select={handleSelect} />
+							on:change={handleSelect} />
 					{:else}
 						<li>
-							<SignIn className="block vertical-menu left p-2">
-								<div slot="submitButton" class="flex items-center whitespace-nowrap">
+							<div class="block vertical-menu left p-2">
+								<div  class="flex items-center whitespace-nowrap">
 									<Icon name="corepass" className="w-5 h-5 mr-1.5" color="#1066df" />
-									Connect
+									<button on:click={manualConnect}>Connect</button>
 								</div>
-							</SignIn>
+							</div>
 						</li>
 					{/if}
 					<li class="hidden md:flex items-center">
@@ -279,29 +275,24 @@
 							{/if}
 						</button>
 					{/if}
-					{#if $page.data.session}
+					{#if $walletConnected}
 						<li class="flex items-center">
 							<ActionsDropdown
-								title={$page.data.session.user?.name ?? "User"}
+								title={$walletAddress}
 								bind:open={dropdownOpen}
 								items={menuItems}
 								position="right"
 								iconExternal={iconExternal}
-								on:select={handleSelect} />
+								on:change={handleSelect} />
 						</li>
 					{:else}
 						<li class="flex items-center">
-							<SignIn action="register" className="block horizontal-menu">
-								<div slot="submitButton">Register</div>
-							</SignIn>
-						</li>
-						<li class="flex items-center">
-							<SignIn className="block horizontal-menu neon">
-								<div slot="submitButton" class="flex items-center whitespace-nowrap">
+							<div class="block horizontal-menu neon">
+								<div  class="flex items-center whitespace-nowrap">
 									<Icon name="corepass" className="w-5 h-5 mr-1.5" color="#1066df" />
-									CorePass SignIn
+									<button on:click={manualConnect}>Connect</button>
 								</div>
-							</SignIn>
+							</div>
 						</li>
 					{/if}
 				</ul>
@@ -334,31 +325,27 @@
 						{/if}
 					</li>
 				{/each}
-				{#if $page.data.session}
+				{#if $walletConnected}
 					<ActionsDropdown
-						title={$page.data.session.user?.name ?? "User"}
+						title={$walletAddress}
 						bind:open={dropdownOpen}
 						items={menuItems}
 						position="left"
 						isSmall={true}
 						iconExternal={iconExternal}
-						on:select={handleSelect} />
+						on:change={handleSelect} />
 				{:else}
 					<li>
-						<SignIn action="register" className="block horizontal-menu left">
-							<div slot="submitButton">Register</div>
-						</SignIn>
-					</li>
-					<li>
-						<SignIn className="block horizontal-menu left">
-							<div slot="submitButton" class="flex items-center whitespace-nowrap">
+						<div class="block horizontal-menu left">
+							<div class="flex items-center whitespace-nowrap">
 								<Icon name="corepass" className="w-5 h-5 mr-1.5" color="#1066df" />
-								CorePass SignIn
+								<button on:click={manualConnect}>Connect</button>
 							</div>
-						</SignIn>
+						</div>
 					</li>
 				{/if}
 			</ul>
 		</nav>
 	{/if}
+	<WalletSwitcher bind:isOpen={$showWalletSwitcher} onClose={closeWalletSwitcher} />
 </header>

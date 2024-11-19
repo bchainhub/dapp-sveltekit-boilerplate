@@ -13,18 +13,10 @@ Welcome to the SvelteKit Boilerplate! This project provides a solid foundation f
 - **[ESLint](https://eslint.org/)**: Linting utility for identifying and reporting on patterns in JavaScript.
 - **[Prettier](https://prettier.io/)**: Code formatter for maintaining consistent style.
 - **[Auth.js](https://authjs.dev/)**: Authentication library for secure login functionality.
-- **[Hono API](https://hono.dev/)**: Web framework for building fast web applications and APIs.
 - **[Lucide icons](https://lucide.dev/)**: Beautiful and customizable icon set.
 - **[blo identicons](https://github.com/bchainhub/blo)**: blo is a small and fast library to generate Blockchain identicons.
 - **[ICAN / IBAN validation](https://github.com/bchainhub/ican.js)**: Validate international bank account numbers.
 - **[Exchange Number Format](https://github.com/bchainhub/exchange-rounding)**: Utility for formatting and rounding exchange numbers.
-
-## Compatibility
-
-- **[CloudFlare Pages](https://developers.cloudflare.com/pages/)**: Deploy web applications directly to Cloudflare's global network.
-- **[CloudFlare Functions API](https://developers.cloudflare.com/workers/)**: Build and deploy serverless functions.
-- **[CloudFlare KV](https://developers.cloudflare.com/workers/runtime-apis/kv/)**: Key-Value storage for serverless applications.
-- **[Cloudflare R2](https://developers.cloudflare.com/r2/)**: Cloudflare R2 Storage allows developers to store large amounts of unstructured data.
 
 ## Databases
 

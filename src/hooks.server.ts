@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/private';
-import { handle as authHandle } from './auth';
 import { getDatabaseInstance, getBCHDatabaseInstance } from '$lib/helpers/db';
 import { getGeoData } from '$lib/helpers/geo';
+import { connectWalletServer, disconnectWalletServer } from '$lib/server/auth';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -9,39 +9,40 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// Initialize the database
 		if (env.DB_TYPE) {
 			try {
-				const db = await getDatabaseInstance(event);  // Await the database initialization
-				event.locals.db = db;  // Attach the db to the request locals
+				const db = await getDatabaseInstance(event);
+				event.locals.db = db;
 			} catch (error) {
 				console.error('Failed to initialize database: ', error);
 			}
 		}
 
-		// Initialize the Bch database
 		if (env.BCH_DB_TYPE) {
 			try {
-				const bchdb = await getBCHDatabaseInstance(event);  // Await the database initialization
-				event.locals.bchdb = bchdb;  // Attach the db to the request locals
+				const bchdb = await getBCHDatabaseInstance(event);
+				event.locals.bchdb = bchdb;
 			} catch (error) {
-				console.error('Failed to initialize Bch database: ', error);
+				console.error('Failed to initialize BCH database: ', error);
 			}
 		}
 
-		if (!event.platform) {
-			return resolve(event);  // Continue without initializing services
+		// Initialize wallet if authentication is enabled
+		if (env.ENABLE_AUTH === 'true') {
+			try {
+				const result = await connectWalletServer(); // Assuming connectWalletServer returns wallet info
+				event.locals.wallet = {
+					address: result.accounts[0],
+					type: result.type
+				};
+			} catch (error) {
+				console.error('Wallet initialization failed:', error);
+			}
 		}
 
-		// Check if authentication is enabled via the environment variable (DB required)
-		if (env.ENABLE_AUTH === 'true' && event.locals.db) {
-			// Use the authHandle for authentication
-			return await authHandle({ event, resolve });
-		}
-
-		// Provide geo (country, city) as variable if enabled
+		// Provide geo data if enabled
 		getGeoData(event);
 	} catch (generalError) {
-		console.error('General error in handle function: ', generalError);
+		console.error('General error in handle function:', generalError);
 	}
 
-	// If authentication is disabled or no errors occurred, proceed with the default request handling
 	return resolve(event);
 };

@@ -11,7 +11,7 @@
 	};
 
 	const IconComponent = typeof icons[name] === 'string' ? null : icons[name];
-	let iconInsertion = typeof icons[name] === 'string' ? icons[name] : null;
+	let iconInsertion: string | null = typeof icons[name] === 'string' ? icons[name] : null;
 
 	if (iconInsertion && color) {
 		iconInsertion = iconInsertion.replace('<svg ', `<svg style="fill: ${color || '#000'};" `);

@@ -1,7 +1,5 @@
 type KVNamespace = import('@cloudflare/workers-types').KVNamespace;
 type R2Bucket = import('@cloudflare/workers-types').R2Bucket;
-type AuthSession = import("@auth/core/types").Session;
-type AuthUser = import("@auth/core/types").User;
 
 interface Config {
 	title: string;
@@ -59,24 +57,12 @@ type MenuItem = NavbarItem & {
 	action?: () => void;
 };
 
-interface User extends AuthUser {
-	authId?: string;
-	isVerified?: boolean;
-}
-
-interface Session extends AuthSession {
-	user: User;
-}
-
 declare namespace App {
 	interface Locals {
 		db?: any;
 		bchdb?: any;
 		kv?: KVNamespace;
 		bucket?: R2Bucket;
-		session?: {
-			challenge: string;
-		};
 		country?: string;
 		city?: string;
 	}
