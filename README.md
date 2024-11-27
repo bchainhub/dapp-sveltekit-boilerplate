@@ -24,13 +24,13 @@ Welcome to the SvelteKit Boilerplate! This project provides a solid foundation f
   - SQLite / CloudFlare D1 database.
   - Postgres database.
   - Hyperdrive connector.
-  - ORB devices.
+  - Web4 devices.
   - and many more... (write your own connector in the `src/db` directory)
 
 ### Database connectors
 
 - [Postgres.js](https://github.com/porsager/postgres) for Postgres database.
-- [libSQL](https://github.com/tursodatabase/libsql) for SQLite and Orb database.
+- [libSQL](https://github.com/tursodatabase/libsql) for SQLite and Web4 database.
 - [Hyperdrive](https://developers.cloudflare.com/hyperdrive/) connector for Cloudflare (paid plan).
 
 ## Installation
@@ -85,6 +85,7 @@ Public variables:
 
 - `PUBLIC_ENABLE_AUTH`: Enable or disable authentication.
 - `PUBLIC_WALLET_PRIORITY`: Wallet names delimited with `,` for priority. Default is `metamask,trustwallet,coinbase`.
+- `PUBLIC_WEB4_ENABLE`: Enable or disable Web4 blockchain. Default is true (enabled).
 
 Environment variables for database setup:
 
@@ -99,22 +100,24 @@ Blockchain database setup:
 - `BCH_DB_URL`: Database URL.
 - `BCH_DB_AUTH_TOKEN`: Database authentication token.
 - `BCH_DB_SSL`: Enable or disable SSL for Postgres database.
-- `ORB_ENABLE`: Enable or disable Orb blockchain. Default is true (enabled).
-- `ORB_URL`: Orb blockchain URL for static use. Keep it undefined to use dynamic structure.
+- `WEB4_URL`: Web4 blockchain URL if differs from default.
 
-Generate the authentication secret key, cleaning token, JWT secret in secure way or using the following command:
+## Web4
 
-```bash
-openssl rand -base64 33
-```
+Web4 is the tool for connecting to the offline blockchain data and ecosystem using specialized devices. You can use it for blockchain operations and interaction using radio frequencies. Native support for Web4 is included in the project.
 
-## API
+Currently, we are supporting the following functionality:
 
-Api is disabled by default. You can enable it by setting `ENABLE_API=true` in the `.env` filed. If you don't need the API, you can remove the `functions/` directory. It is good practice to disable the API in production environment if you don't need it as well as removing the folder.
+- Read-only data from the blockchain ETL service.
+- TxMS transactions.
 
-Api is using Hono API framework. You can find more information in the [Hono API documentation](https://hono.dev/).
+Why do you need Web4?
 
-Api is versioned and the version is defined in the `functions/api/${version}/` folder, where `${version}` is the number of version. It is good practice to divide the versions in the folders.
+In some cases you need to interact with the blockchain data offline. You can use Web4 for this purpose. It is a secure and reliable way to interact with the blockchain data. You can use it for blockchain operations and interaction using radio frequencies as well as 0G connectivity.
+
+## PWA
+
+The project is a Progressive Web Application (PWA) by default. You can customize the PWA settings in the `site.config.ts` file.
 
 ## Styling
 
@@ -195,7 +198,8 @@ Types of connectors:
 
 - [D1 database](https://developers.cloudflare.com/d1/) Cloudflare's free plan
 - [Hyperdrive connector](https://developers.cloudflare.com/hyperdrive/) Cloudflare's paid plan
-- [ORB i2 devices](https://medium.com/codetech/codetech-introduces-orb-i2-7b12b3a4e8c5) DePIN local blockchain - SQLite based
+- ORB Web4 devices - local blockchain - SQLite based
+- DePIN connector for ORB devices
 
 We are recommending purchasing the Hyperdrive connector for production use. There are many advantages and you can bind plenty of databases.
 
@@ -213,7 +217,7 @@ We are supporting three categories of databases:
 
 - Ordinary databases
 - Blockchain databases
-- Local Blockchain databases on the ORB i2 (or any other) device
+- Local Blockchain databases on the ORB (or any other) device
 
 ### Drizzle setup
 
@@ -231,50 +235,20 @@ Blockchain data are parsed by oracle, which you can deploy.
 
 We are recommending to use the following setup:
 
-If you own the Orb i2 device, you can use it for blockchain operations. You can use the D1 database for ordinary operations. You can use the Hyperdrive connector for production use - for Apps they need the heavy load.
+If you own the Orb device, you can use it for blockchain operations. You can use the D1 database for ordinary operations. You can use the Hyperdrive connector for production use - for Apps they need the heavy load.
 
-- Small applications: D1 database + Blockchain database on Orb i2 device or D1.
-- Medium applications: Hyperdrive connector + Blockchain database on Orb i2 device.
-- Large applications: Hyperdrive connector + Blockchain database on Orb i2 device or another Hyperdrive instance.
+- Small applications: D1 database + Blockchain database on Orb device or D1.
+- Medium applications: Hyperdrive connector + Blockchain database on Orb device.
+- Large applications: Hyperdrive connector + Blockchain database on Orb device or another Hyperdrive instance.
 
 ## Authentication
 
-The project uses Auth.js for authentication together with Passkey & CorePass.
+The project uses CorePass Extension for authentication but Passkey is possible to build also.
 
 Dependencies:
 
-- ORM database.
-- DB initialization process using Drizzle-kit.
-- Node.js version 20.9.0 or higher.
-- [CorePass](https://corepass.net) if you would like to use KYC. (Enabled by default)
-
-Before first run of your application you need to:
-
-- Initialize Drizzle ORM database.
-
-## KYC Verification oracle
-
-KYC verification oracle is used for verification of users. You can use your own oracle or use the global one. By using the KYC oracle, you are not getting the actual data, but checking if the user can provide the data.
-
-You can set the `VERIFICATION_ORACLE` variable in the `.env` file as URL to the oracle.
-
-### Communicating with the oracle
-
-You can send `POST` request to the oracle with the following data:
-
-```json
-{
-  "coreId": "cb…",
-}
-```
-
-As response the oracle will return:
-
-```json
-{
-  "verified": 1
-}
-```
+- CorePass Extension
+- Node.js version 22 or higher.
 
 ## Security
 
@@ -286,28 +260,6 @@ About Platform Environment Variables:
 ### Local environment variables
 
 We can access local environment variables using the `env` function. This function is used to read the environment variables from the `.env` file. Any value is returned as `string`.
-
-```ts
-import { env } from '$env/dynamic/private';
-const secret = env.SECRET;
-```
-
-This is SvelteKit way of reading the environment variables.
-
-### Env variables reader function
-
-We have helper function `genv` to read Cloudflare's environment variables. This function is used to read the environment variables directly from Cloudflare instead of the classic `.env` variables. `true` and `false` (not case sensitive) is returned as boolean value, all other values are returned as `string`.
-
-```ts
-import { genv } from from '$lib/helpers/genv';
-const variableName = genv().VARIABLE_NAME;
-```
-
-## Error codes (WIP)
-
-Err ID | Err Code | Category | Description
---- | --- | --- | ---
-400 | 400.01 | Validation | Invalid request
 
 ## Contributing
 

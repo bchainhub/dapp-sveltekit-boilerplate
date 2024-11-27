@@ -1,4 +1,4 @@
-import { env } from '$env/dynamic/private';
+import { HYPERDRIVE, DB_URL, DB_SSL } from '$env/static/private';
 import {
 	boolean,
 	timestamp,
@@ -13,18 +13,18 @@ import type { AdapterAccount } from "next-auth/adapters"
 import type { Hyperdrive } from '@cloudflare/workers-types'
 
 let hyperdrive: Hyperdrive | undefined = undefined
-if (env.HYPERDRIVE) {
-	hyperdrive = JSON.parse(env.HYPERDRIVE) as Hyperdrive
+if (HYPERDRIVE) {
+	hyperdrive = JSON.parse(HYPERDRIVE) as Hyperdrive
 }
 
-const connectionString = hyperdrive?.connectionString || env.DB_URL
+const connectionString = hyperdrive?.connectionString || DB_URL
 
 if (!connectionString) {
 	throw new Error("Connection string is undefined.")
 }
 
 const pool = postgres(connectionString, {
-	ssl: env.DB_SSL ? 'require' : false,
+	ssl: DB_SSL ? 'require' : false,
 });
 
 export const db = drizzle(pool)

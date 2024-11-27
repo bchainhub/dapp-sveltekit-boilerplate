@@ -1,5 +1,15 @@
-import { env } from '$env/dynamic/private';
-import { loadOrbUrl } from '$lib/helpers/connectOrb';
+import {
+	DB_TYPE,
+	DB_URL,
+	DB_D1,
+	HYPERDRIVE,
+	BCH_DB_TYPE,
+	BCH_DB_URL,
+	BCH_HYPERDRIVE,
+	WEB4_URL
+} from '$env/static/private';
+import { PUBLIC_ENABLE_WEB4 } from '$env/dynamic/public';
+import { loadWeb4Loc } from '$lib/helpers/connectWeb4';
 import type { RequestEvent } from '@sveltejs/kit';
 
 // Global variables to cache the database instances
@@ -12,7 +22,7 @@ async function loadDbEngine(dbType: string) {
 		case 'd1':
 			return await import('./dbD1');
 		case 'sqlite':
-		case 'orb':
+		case 'web4':
 			return await import('./dbSqlite');
 		case 'postgres':
 			return await import('./dbPostgres');
@@ -24,16 +34,23 @@ async function loadDbEngine(dbType: string) {
 // Function to initialize and return the main database instance
 export async function getDatabaseInstance(event: RequestEvent) {
 	if (dbInstance) {
-		return dbInstance;  // Return cached instance if it exists
+		return dbInstance; // Return cached instance if it exists
 	}
 
-	if (!env.DB_TYPE || (!env.DB_URL && !env.D1 && !env.HYPERDRIVE)) {
-		throw new Error('Database or type is not defined.');
+	// Handle optional DB_TYPE
+	const dbType = DB_TYPE?.toLowerCase();
+	if (!dbType) {
+		throw new Error('DB_TYPE is not defined.');
 	}
 
-	const dbType = env.DB_TYPE.toLowerCase();
+	if (!DB_URL && !DB_D1 && !HYPERDRIVE) {
+		throw new Error('No database connection details are defined.');
+	}
+
+	// Dynamically load the appropriate database engine
 	const { initDb } = await loadDbEngine(dbType);
 
+	// Initialize and cache the database instance
 	dbInstance = await initDb();
 	return dbInstance;
 }
@@ -41,23 +58,31 @@ export async function getDatabaseInstance(event: RequestEvent) {
 // Function to initialize and return the BCH-related database instance
 export async function getBCHDatabaseInstance(event: RequestEvent) {
 	if (bchInstance) {
-		return bchInstance;  // Return cached instance if it exists
+		return bchInstance; // Return cached instance if it exists
 	}
 
-	if (!env.BCH_DB_TYPE || (!env.BCH_DB_URL && !env.BCH_D1 && !env.BCH_HYPERDRIVE)) {
-		throw new Error('BCH database type or URL is not defined.');
+	// Handle optional BCH_DB_TYPE
+	const bchDbType = BCH_DB_TYPE?.toLowerCase();
+	if (!bchDbType) {
+		throw new Error('BCH_DB_TYPE is not defined.');
 	}
 
+	if (!BCH_DB_URL && !BCH_HYPERDRIVE) {
+		throw new Error('No BCH database connection details are defined.');
+	}
+
+	// Handle WEB4_URL and PUBLIC_ENABLE_WEB4 for BCH
 	let bchDbUrl: string | null = null;
-	if (env.ORB_ENABLE !== 'false' && env.ORB_URL) {
-		bchDbUrl = env.ORB_URL;  // Load the the static Orb device URL
-	} else if (env.ORB_ENABLE !== 'false') {
-		bchDbUrl = loadOrbUrl();  // Load the dynamic Orb device URL
+	if (PUBLIC_ENABLE_WEB4 !== 'false' && WEB4_URL) {
+		bchDbUrl = WEB4_URL; // Static Web4 URL
+	} else if (PUBLIC_ENABLE_WEB4 !== 'false') {
+		bchDbUrl = loadWeb4Loc(); // Dynamic Web4 URL
 	}
 
-	const bchDbType = env.BCH_DB_TYPE.toLowerCase();
+	// Dynamically load the appropriate database engine
 	const { initDb } = await loadDbEngine(bchDbType);
 
+	// Initialize and cache the BCH database instance
 	bchInstance = await initDb('bch');
 	return bchInstance;
 }

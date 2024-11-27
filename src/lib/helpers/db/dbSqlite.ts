@@ -1,11 +1,11 @@
-import { env } from '$env/dynamic/private';
+import { DB_URL, BCH_DB_URL, HYPERDRIVE, BCH_HYPERDRIVE, DB_AUTH_TOKEN, BCH_DB_AUTH_TOKEN } from '$env/static/private';
 import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 import type { Hyperdrive } from '@cloudflare/workers-types';
 
 export async function initDb($type?: string) {
-	let sqliteDatabase = ($type === 'bch') ? env.BCH_DB_URL : env.DB_URL;
-	const hdenv = ($type === 'bch') ? env.BCH_HYPERDRIVE : env.HYPERDRIVE;
+	let sqliteDatabase = ($type === 'bch') ? BCH_DB_URL : DB_URL;
+	const hdenv = ($type === 'bch') ? BCH_HYPERDRIVE : HYPERDRIVE;
 
 	let hyperdrive: Hyperdrive | undefined = undefined;
 
@@ -25,10 +25,10 @@ export async function initDb($type?: string) {
 		throw new Error("SQLite Database not found!");
 	}
 
-	if ($type === 'bch' && env.BCH_AUTH_TOKEN) {
-		return drizzle(createClient({ url: sqliteDatabase, authToken: env.BCH_AUTH_TOKEN }));
-	} else if (env.DB_AUTH_TOKEN) {
-		return drizzle(createClient({ url: sqliteDatabase, authToken: env.DB_AUTH_TOKEN }));
+	if ($type === 'bch' && BCH_DB_AUTH_TOKEN) {
+		return drizzle(createClient({ url: sqliteDatabase, authToken: BCH_DB_AUTH_TOKEN }));
+	} else if (DB_AUTH_TOKEN) {
+		return drizzle(createClient({ url: sqliteDatabase, authToken: DB_AUTH_TOKEN }));
 	} else {
 		return drizzle(createClient({ url: sqliteDatabase }));
 	}

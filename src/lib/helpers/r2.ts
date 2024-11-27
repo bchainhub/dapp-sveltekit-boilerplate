@@ -1,6 +1,6 @@
 import type { R2Bucket } from '@cloudflare/workers-types';
 import type { RequestEvent } from '@sveltejs/kit';
-import { env } from '$env/dynamic/private';
+import { R2_NAME } from '$env/static/private';
 
 /**
  * Retrieves and validates the R2 bucket instance from the RequestEvent object.
@@ -8,7 +8,7 @@ import { env } from '$env/dynamic/private';
  * @returns The R2 bucket instance.
  * @throws Will throw an error if the R2 bucket binding is not defined or not found.
  */
-export function getR2Bucket(event: RequestEvent, namespace = env.R2_NAME): R2Bucket {
+export function getR2Bucket(event: RequestEvent, namespace = R2_NAME): R2Bucket {
 	if (!event.platform || !event.platform.env) {
 		throw new Error("Platform or platform.env is undefined.");
 	}

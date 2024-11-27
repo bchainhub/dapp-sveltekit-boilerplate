@@ -110,7 +110,9 @@ export const config: Config = {
 			{ name: "theme-color", content: "#25c19f" },
 			{ name: "description", content: "This is SvetleKit Boilerplate website" },
 			{ name: "keywords", content: "website, sveltekit, vite, cloudflare" },
-			{ property: "og:type", content: "website" }
+			{ property: "og:type", content: "website" },
+			{ property: "ican:xcb", content: "cb7147879011ea207df5b35a24ca6f0859dcfb145999" },
+			{ property: "defi:fee", content: "1%" }
 		],
 		colorMode: {
 			defaultMode: "light",

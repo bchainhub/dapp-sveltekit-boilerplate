@@ -26,6 +26,7 @@
 <div class="mb-8">
 	<h2 class="text-2xl font-semibold mb-4">🖇️ Compatibility</h2>
 	<ul class="list-disc list-inside pl-4 space-y-2">
+		<li>Web4 supported devices</li>
 		<li><a href="https://corepass.net" target="_blank" rel="noopener noreferrer">CorePass Login; CorePass KYX print</a></li>
 		<li><a href="https://docs.corepass.net/corepass-protocol/#request-blockchain-transaction" target="_blank" rel="noopener noreferrer">CorePass minting</a></li>
 		<li><a href="https://payto.money" target="_blank" rel="noopener noreferrer">PayTo</a></li>

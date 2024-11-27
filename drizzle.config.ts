@@ -31,7 +31,7 @@ const d1Config = dbType === 'd1'
 		driver: "d1-http",
 		dbCredentials: {
 			accountId: process.env.CLOUDFLARE_ACCOUNT_ID || "",
-			databaseId: process.env.D1_DB || "",
+			databaseId: process.env.DB_D1 || "",
 			token: process.env.CLOUDFLARE_API_TOKEN || "",
 		},
 	}

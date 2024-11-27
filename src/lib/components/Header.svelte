@@ -4,9 +4,9 @@
 	import { ArrowUpRight, Haze, Menu, Moon, Sun } from 'lucide-svelte';
 	import { Icon } from '$lib/components';
 	import { config } from '../../site.config';
-	import { ActionsDropdown, WalletSwitcher } from '$lib/components';
-	import { PUBLIC_ENABLE_AUTH } from '$env/dynamic/public';
-	import { walletConnected, walletsList, walletAddress, autoLogin, connectWallet, disconnectWallet } from '$lib/helpers/wallet';
+	import { ActionsDropdown } from '$lib/components';
+	import { PUBLIC_ENABLE_AUTH, PUBLIC_ENABLE_WEB4 } from '$env/static/public';
+	import { walletConnected, walletAddress, autoLogin, connectWallet, disconnectWallet } from '$lib/helpers/wallet';
 
 	const { logo, items = [], hideOnScroll, orientation = 'horizontal', style = 'auto', iconExternal } = config?.themeConfig?.navbar || {};
 	const { disableSwitch, defaultMode, respectPrefersColorScheme } = config?.themeConfig?.colorMode || {};
@@ -16,21 +16,12 @@
 	let isNavHidden: boolean = false;
 	let dropdownOpen: boolean = false;
 	let theme: 'light' | 'dark' | 'system' = respectPrefersColorScheme ? 'system' : (defaultMode ?? 'light');
-	let enableAuth = PUBLIC_ENABLE_AUTH === 'true';
-	let availableWallets: string[] = [];
-	let showWalletSwitcher = writable(false);
-	let hasOtherWallets = writable(false);
+	let authEnabled: boolean = PUBLIC_ENABLE_AUTH === 'true';
+	let web4Enabled: boolean = PUBLIC_ENABLE_WEB4 === 'true';
 
 	const menuItems = writable([
 		{ label: 'Logout', action: () => disconnectWallet() },
 	]);
-
-	if ($hasOtherWallets) {
-		menuItems.update(items => [
-			{ label: 'Switch Wallet', action: () => showWalletSwitcher.set(true) },
-			...items
-		]);
-	}
 
 	const handleSelect = (event: CustomEvent<{ label: string; action: () => void; }>) => {
 		event.detail.action();
@@ -79,11 +70,7 @@
 	};
 
 	const manualConnect = () => {
-		if(enableAuth) connectWallet();
-	}
-
-	const closeWalletSwitcher = () => {
-		showWalletSwitcher.set(false);
+		if(authEnabled) connectWallet();
 	}
 
 	const handleScroll = () => {
@@ -98,18 +85,8 @@
 	};
 
 	onMount(() => {
-		if (enableAuth) {
+		if (authEnabled) {
 			autoLogin();
-			(async () => {
-				if ($walletConnected) {
-					availableWallets = await walletsList();
-					hasOtherWallets.set(availableWallets.length > 0);
-				}
-				$hasOtherWallets && menuItems.update(items => [
-					{ label: 'Switch Wallet', action: () => showWalletSwitcher.set(true) },
-					...items,
-				]);
-			})();
 		}
 
 		const storedTheme = localStorage.getItem('theme') as string | null;
@@ -167,6 +144,24 @@
 		{#if orientation === 'vertical'}
 			<nav class="hidden md:block">
 				<ul class="flex flex-col space-y-1">
+					{#if authEnabled && $walletConnected}
+						<ActionsDropdown
+							title={$walletAddress}
+							bind:open={dropdownOpen}
+							items={$menuItems}
+							position="left"
+							isSmall={true}
+							iconExternal={iconExternal}
+							on:change={handleSelect} />
+					{:else if authEnabled}
+						<li>
+							<div class="block vertical-menu left p-2">
+								<div  class="flex items-center whitespace-nowrap">
+									<button on:click={manualConnect} class="connect"><span>Connect</span></button>
+								</div>
+							</div>
+						</li>
+					{/if}
 					{#each items as { label, to, href, target, icon }}
 						<li>
 							{#if to}
@@ -189,24 +184,7 @@
 							{/if}
 						</li>
 					{/each}
-					{#if $walletConnected}
-						<ActionsDropdown
-							title={$walletAddress}
-							bind:open={dropdownOpen}
-							items={$menuItems}
-							position="left"
-							isSmall={true}
-							iconExternal={iconExternal}
-							on:change={handleSelect} />
-					{:else if enableAuth}
-						<li>
-							<div class="block vertical-menu left p-2">
-								<div  class="flex items-center whitespace-nowrap">
-									<button on:click={manualConnect}>Connect</button>
-								</div>
-							</div>
-						</li>
-					{/if}
+					{#if items}<li><hr /></li>{/if}
 					<li class="hidden md:flex items-center">
 						<button on:click={rotateTheme} class="menu-button focus:outline-none flex items-center p-2">
 							{#if theme === 'system'}
@@ -218,6 +196,17 @@
 							{/if}
 						</button>
 					</li>
+					{#if web4Enabled}
+						<li>
+							<div class="block vertical-menu left p-2">
+								<div  class="flex items-center whitespace-nowrap">
+									<button on:click={rotateTheme} class="menu-button focus:outline-none flex items-center">
+										<Icon name="web4" className="w-6 h-6 mr-1.5" color="fill-gray-500" />Web4 Off
+									</button>
+								</div>
+							</div>
+						</li>
+					{/if}
 				</ul>
 			</nav>
 		{:else}
@@ -274,7 +263,7 @@
 						{/if}
 					{/each}
 					{#if !disableSwitch}
-						<button on:click={rotateTheme} class="menu-button focus:outline-none flex items-center p-2">
+						<button on:click={rotateTheme} class="menu-button focus:outline-none flex items-center">
 							{#if theme === 'system'}
 								<Haze class="w-6 h-6 text-gray-500" />
 							{:else if theme === 'dark'}
@@ -284,7 +273,13 @@
 							{/if}
 						</button>
 					{/if}
-					{#if $walletConnected}
+					{#if web4Enabled}
+						<button on:click={rotateTheme} class="icon">
+							<span>Web4</span>
+							<Icon name="web4" className="h-6 w-6" color="fill-gray-500" />
+						</button>
+					{/if}
+					{#if authEnabled && $walletConnected}
 						<li class="flex items-center">
 							<ActionsDropdown
 								title={$walletAddress}
@@ -294,11 +289,11 @@
 								iconExternal={iconExternal}
 								on:change={handleSelect} />
 						</li>
-					{:else if enableAuth}
+					{:else if authEnabled}
 						<li class="flex items-center">
 							<div class="block horizontal-menu neon">
 								<div  class="flex items-center whitespace-nowrap">
-									<button on:click={manualConnect}>Connect</button>
+									<button on:click={manualConnect} class="connect"><span>Connect</span></button>
 								</div>
 							</div>
 						</li>
@@ -333,7 +328,7 @@
 						{/if}
 					</li>
 				{/each}
-				{#if $walletConnected}
+				{#if authEnabled && $walletConnected}
 					<ActionsDropdown
 						title={$walletAddress}
 						bind:open={dropdownOpen}
@@ -342,7 +337,7 @@
 						isSmall={true}
 						iconExternal={iconExternal}
 						on:change={handleSelect} />
-				{:else if enableAuth}
+				{:else if authEnabled}
 					<li>
 						<div class="block horizontal-menu left">
 							<div class="flex items-center whitespace-nowrap">
@@ -351,8 +346,18 @@
 						</div>
 					</li>
 				{/if}
+				{#if web4Enabled}
+					<li>
+						<div class="block horizontal-menu left">
+							<div  class="flex items-center whitespace-nowrap">
+								<button on:click={rotateTheme}>
+									<Icon name="web4" className="h-6 w-6 mr-1.5" color="fill-gray-500" />Web4
+								</button>
+							</div>
+						</div>
+					</li>
+				{/if}
 			</ul>
 		</nav>
 	{/if}
-	<WalletSwitcher bind:isOpen={$showWalletSwitcher} onClose={closeWalletSwitcher} />
 </header>

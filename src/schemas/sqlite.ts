@@ -1,17 +1,17 @@
-import { env } from '$env/dynamic/private';
+import { DB_URL, DB_AUTH_TOKEN } from '$env/static/private';
 import { integer, sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core"
 import { createClient } from "@libsql/client"
 import { drizzle } from "drizzle-orm/libsql"
 import type { AdapterAccount } from "next-auth/adapters"
 
-const dbUrl = env.DB_URL
+const dbUrl = DB_URL
 if (!dbUrl) {
 	throw new Error("Database URL is not defined. Please set the DB_URL environment variable.")
 }
 
 const client = createClient({
 	url: dbUrl,
-	authToken: env.DB_AUTH_TOKEN || "",
+	authToken: DB_AUTH_TOKEN || "",
 })
 
 export const db = drizzle(client)

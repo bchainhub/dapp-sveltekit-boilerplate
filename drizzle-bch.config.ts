@@ -31,7 +31,6 @@ const d1BchConfig = bchDbType === 'd1'
 		driver: "d1-http",
 		dbCredentials: {
 			accountId: process.env.CLOUDFLARE_ACCOUNT_ID || "",
-			databaseId: process.env.BCH_D1_DB || "",
 			token: process.env.CLOUDFLARE_API_TOKEN || "",
 		},
 	}

@@ -1,6 +1,6 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import type { KVNamespace } from '@cloudflare/workers-types';
-import { env } from '$env/dynamic/private';
+import { KV_NAME } from '$env/static/private';
 
 /**
  * Retrieves and validates the KV namespace instance from the RequestEvent object.
@@ -8,7 +8,7 @@ import { env } from '$env/dynamic/private';
  * @returns The KV namespace instance.
  * @throws Will throw an error if the KV binding is not defined or not found.
  */
-export function getKVNamespace(event: RequestEvent, namespace = env.KV_NAME): KVNamespace {
+export function getKVNamespace(event: RequestEvent, namespace = KV_NAME): KVNamespace {
 	if (!event.platform || !event.platform.env) {
 		throw new Error("Platform or platform.env is undefined.");
 	}
