@@ -1,5 +1,5 @@
 name = "dapp-sveltekit-boilerplate"
-compatibility_date = "2024-11-04"
+compatibility_date = "2024-11-28"
 compatibility_flags = [ "nodejs_compat" ]
 pages_build_output_dir = ".svelte-kit/cloudflare"
 #account_id = "your_account_id"
@@ -30,5 +30,17 @@ mode = "smart"
 [env.production]
 name = "dapp-sveltekit-boilerplate-production"
 
+[env.production.vars]
+NODE_VERSION = "^22"
+
 [env.preview]
 name = "dapp-sveltekit-boilerplate-preview"
+
+[env.preview.vars]
+NODE_VERSION = "^22"
+
+[env.staging]
+name = "dapp-sveltekit-boilerplate-staging"
+
+[env.staging.vars]
+NODE_VERSION = "^22"
