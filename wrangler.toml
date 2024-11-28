@@ -38,9 +38,3 @@ name = "dapp-sveltekit-boilerplate-preview"
 
 [env.preview.vars]
 NODE_VERSION = "^22"
-
-[env.staging]
-name = "dapp-sveltekit-boilerplate-staging"
-
-[env.staging.vars]
-NODE_VERSION = "^22"
