@@ -25,7 +25,7 @@ Welcome to the SvelteKit Boilerplate! This project provides a solid foundation f
   - Postgres database.
   - Hyperdrive connector.
   - Web4 devices.
-  - and many more... (write your own connector in the `src/helpers/db` directory)
+  - and many more... (write your own connector in the `src/server/db` directory)
 
 ### Database connectors
 
@@ -120,7 +120,7 @@ In some cases you need to interact with the blockchain data offline. You can use
 
 ## PWA
 
-The project is a Progressive Web Application (PWA) by default. You can customize the PWA settings in the `site.config.ts` file.
+The project is a Progressive Web Application (PWA) by default. You can customize the PWA settings in the `vite.config.ts` file.
 
 ## Styling
 

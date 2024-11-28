@@ -3,7 +3,7 @@ export const config: Config = {
 	url: "http://localhost:5173",
 	organizationName: "bchainhub",
 	projectName: "dapp-sveltekit-boilerplate",
-	favicon: "/img/favicon.png",
+	favicon: "/img/icons/favicon.png",
 	themeConfig: {
 		navbar: {
 			logo: {

@@ -1,4 +1,4 @@
-import { initializeDatabases } from '$lib/server/db';
+import { initializeDatabases } from './server/db/db';
 import { getGeoData } from '$lib/helpers/geo';
 import type { Handle } from '@sveltejs/kit';
 

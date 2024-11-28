@@ -1,4 +1,4 @@
-<h1 class="text-4xl font-bold text-center mb-8">Welcome to SvelteKit Dapp Boilerplate</h1>
+<h1 class="text-4xl font-bold text-center mb-8">Welcome to SvelteKit dApp Boilerplate</h1>
 <p class="text-center mb-4">
 	Visit <a href="https://github.com/bchainhub/dapp-sveltekit-boilerplate" target="_blank" rel="noopener noreferrer">GitHub repository</a> to read the readme file and start using this template.
 </p>

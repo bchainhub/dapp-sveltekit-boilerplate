@@ -7,7 +7,7 @@ import {
 	BCH_DB_URL,
 	BCH_HYPERDRIVE
 } from '$env/static/private';
-import { getDatabaseInstance, getBCHDatabaseInstance } from '$lib/helpers/db';
+import { getDatabaseInstance, getBCHDatabaseInstance } from './index';
 import type { RequestEvent } from '@sveltejs/kit';
 
 export async function initializeDatabases(event: RequestEvent) {

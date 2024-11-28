@@ -2,11 +2,10 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { ArrowUpRight, Haze, Menu, Moon, Sun } from 'lucide-svelte';
-	import { Icon } from '$lib/components';
+	import { ActionsDropdown, Icon } from '$lib/components';
 	import { config } from '../../../site.config';
-	import { ActionsDropdown } from '$lib/components';
 	import { walletConnected, walletAddress, autoLogin, connectWallet, disconnectWallet } from '$lib/helpers/wallet';
-	import { enableWeb4, disableWeb4, isWeb4Connected, isPublicEnableWeb4 } from '$lib/helpers/db';
+	import { enableWeb4, disableWeb4, isWeb4Connected, isPublicEnableWeb4 } from '../../helpers/web4';
 	import * as publicDynamicEnv from '$env/dynamic/public';
 
 	const { logo, items = [], hideOnScroll, orientation = 'horizontal', style = 'auto', iconExternal } = config?.themeConfig?.navbar || {};

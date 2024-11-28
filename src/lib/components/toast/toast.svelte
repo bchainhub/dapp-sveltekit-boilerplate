@@ -50,7 +50,7 @@
 			in:fade
 			out:fade
 			role="alert"
-			class={`toast p-4 rounded-lg shadow-lg text-zinc-700 font-medium w-72 ${toastType(type)}`}
+			class={`toast p-4 rounded-lg shadow-lg text-zinc-700 font-medium text-sm w-72 ${toastType(type)}`}
 			on:mouseenter={() => handleMouseEnter(id)}
 			on:mouseleave={() => handleMouseLeave(id, duration)}
 		>

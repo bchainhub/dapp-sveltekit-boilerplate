@@ -2,7 +2,7 @@
 	import { config } from '../../../site.config';
 	import { ArrowUpRight } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { isWeb4Connected, isPublicEnableWeb4 } from '$lib/helpers/db';
+	import { isWeb4Connected, isPublicEnableWeb4 } from '../../helpers/web4';
 
 	const { style, logo, copyright, liner, iconExternal } = config?.themeConfig?.footer || {};
 	const footerClass = style && `footer-${style}`;
