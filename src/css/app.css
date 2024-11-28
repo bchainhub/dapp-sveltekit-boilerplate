@@ -166,10 +166,16 @@ nav button:hover {
 }
 
 .status-dot {
-	background-color: var(--skc-status-color, red);
+	background-color: red;
+}
+.status-dot.connected {
+	background-color: green;
 }
 .status-dot-web4 {
-	background-color: var(--skc-status-color-web4, gray);
+	background-color: gray;
+}
+.status-dot-web4.connected {
+	background-color: green;
 }
 
 @media (max-width: 767px) {

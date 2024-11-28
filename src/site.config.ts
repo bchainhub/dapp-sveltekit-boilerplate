@@ -1,6 +1,6 @@
 export const config: Config = {
 	title: "Mota ₡ore", // Site title - keep `₡ore` if you want to let people know it's powered by Core Infra
-	url: "http://localhost:3000",
+	url: "http://localhost:5173",
 	organizationName: "bchainhub",
 	projectName: "dapp-sveltekit-boilerplate",
 	favicon: "/img/favicon.png",

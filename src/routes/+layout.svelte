@@ -1,6 +1,6 @@
 <script lang="ts">
 	import "../css/app.css";
-	import { Header, Footer } from '$lib/components';
+	import { Header, Footer, Toast } from '$lib/components';
 	import { config } from '../site.config';
 
 	const { title, themeConfig: { metadata, navbar, footer }, favicon } = config;
@@ -31,6 +31,7 @@
 	{/if}
 	<main class={`container flex-1 mx-auto p-4 ${(navbar && navbar.orientation === 'vertical') ? '' : 'pt-8'}`}>
 		<slot />
+		<Toast />
 	</main>
 </div>
 {#if footer}

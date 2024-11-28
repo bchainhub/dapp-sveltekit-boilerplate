@@ -25,7 +25,7 @@ Welcome to the SvelteKit Boilerplate! This project provides a solid foundation f
   - Postgres database.
   - Hyperdrive connector.
   - Web4 devices.
-  - and many more... (write your own connector in the `src/db` directory)
+  - and many more... (write your own connector in the `src/helpers/db` directory)
 
 ### Database connectors
 
@@ -83,9 +83,9 @@ Environment variables are stored in the `.env` file. You can add your own enviro
 
 Public variables:
 
-- `PUBLIC_ENABLE_AUTH`: Enable or disable authentication.
-- `PUBLIC_WALLET_PRIORITY`: Wallet names delimited with `,` for priority. Default is `metamask,trustwallet,coinbase`.
-- `PUBLIC_WEB4_ENABLE`: Enable or disable Web4 blockchain. Default is true (enabled).
+- `PUBLIC_ENABLE_AUTH`: Enable or disable authentication. Default is false (disabled).
+- `PUBLIC_ENABLE_WEB4`: Enable or disable Web4 functionality. Default is false (disabled).
+- `PUBLIC_WEB4_URL`: Web4 URL if differs from default. Default is: `file:local.db`.
 
 Environment variables for database setup:
 
@@ -100,7 +100,6 @@ Blockchain database setup:
 - `BCH_DB_URL`: Database URL.
 - `BCH_DB_AUTH_TOKEN`: Database authentication token.
 - `BCH_DB_SSL`: Enable or disable SSL for Postgres database.
-- `WEB4_URL`: Web4 blockchain URL if differs from default.
 
 ## Web4
 
@@ -111,9 +110,13 @@ Currently, we are supporting the following functionality:
 - Read-only data from the blockchain ETL service.
 - TxMS transactions.
 
+What is Web4?
+
+In short Web4 is an alternative network and operations instead of the Internet. It is a secure and reliable way to interact with the blockchain data. You can use it for blockchain operations and interaction using radio frequencies as well as 0G connectivity. But it is not focused only on Blockchain, can it be various types of data.
+
 Why do you need Web4?
 
-In some cases you need to interact with the blockchain data offline. You can use Web4 for this purpose. It is a secure and reliable way to interact with the blockchain data. You can use it for blockchain operations and interaction using radio frequencies as well as 0G connectivity.
+In some cases you need to interact with the blockchain data offline. You can use Web4 + Web3 for this purpose. It is a secure and reliable way to interact with the blockchain data. You can use it for blockchain operations and interaction using radio frequencies as well as 0G connectivity.
 
 ## PWA
 

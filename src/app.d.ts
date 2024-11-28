@@ -91,9 +91,12 @@ interface Env {
 	[key: string]: string | undefined;
 }
 
+declare module '$env/static/public' {
+	export const PUBLIC_WEB4_URL: string | undefined;
+}
+
 declare module '$env/dynamic/public' {
 	export const PUBLIC_ENABLE_AUTH: string | undefined;
-	export const PUBLIC_WALLET_PRIORITY: string | undefined;
 	export const PUBLIC_ENABLE_WEB4: string | undefined;
 }
 
@@ -111,7 +114,6 @@ declare module '$env/static/private' {
 	export const DB_D1: string | undefined;
 	export const HYPERDRIVE: string | undefined;
 	export const BCH_HYPERDRIVE: string | undefined;
-	export const WEB4_URL: string | undefined;
 }
 
 declare module '$env/dynamic/private' {

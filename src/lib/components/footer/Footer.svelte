@@ -1,41 +1,29 @@
 <script lang="ts">
-	import { config } from '../../site.config';
+	import { config } from '../../../site.config';
 	import { ArrowUpRight } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import { isWeb4Connected, isPublicEnableWeb4 } from '$lib/helpers/db';
 
 	const { style, logo, copyright, liner, iconExternal } = config?.themeConfig?.footer || {};
 	const footerClass = style && `footer-${style}`;
 
-	let connectionStatus = 'Offline';
-	let web4Status = 'Web4 Off';
+	let connectionStatus: boolean = false;
+	let connectionStatusWeb4: boolean = isWeb4Connected();
+	let publicEnableWeb4: boolean = isPublicEnableWeb4();
 
 	onMount(() => {
 		const updateConnectionStatus = () => {
-			connectionStatus = navigator.onLine ? 'Online' : 'Offline';
-			document.documentElement.style.setProperty('--skc-status-color', navigator.onLine ? 'green' : 'red');
-		};
-
-		// Simulated Web4 status toggle (replace this with real logic for Web4 detection)
-		const updateWeb4Status = () => {
-			// Replace the following logic with your Web4 connectivity detection
-			const isWeb4Enabled = Math.random() > 0.5; // Simulating status
-			web4Status = isWeb4Enabled ? 'Web4 On' : 'Web4 Off';
-			document.documentElement.style.setProperty('--skc-status-color-web4', isWeb4Enabled ? 'green' : 'gray');
+			connectionStatus = navigator.onLine ? true : false;
 		};
 
 		updateConnectionStatus();
-		updateWeb4Status();
 
 		window.addEventListener('online', updateConnectionStatus);
 		window.addEventListener('offline', updateConnectionStatus);
 
-		// Replace with real Web4 event listener if applicable
-		const interval = setInterval(updateWeb4Status, 5000); // Simulate Web4 updates every 5 seconds
-
 		return () => {
 			window.removeEventListener('online', updateConnectionStatus);
 			window.removeEventListener('offline', updateConnectionStatus);
-			clearInterval(interval);
 		};
 	});
 </script>
@@ -78,13 +66,15 @@
 			{/if}
 			<div class="mt-4 md:mt-0 md:ml-auto flex items-center gap-4">
 				<div class="flex items-center gap-2">
-					<span class="status-dot inline-block w-1.5 h-1.5 rounded-full"></span>
-					<p class="text-sm text-footer-link">{connectionStatus}</p>
+					<span class="status-dot inline-block w-1.5 h-1.5 rounded-full {connectionStatus ? 'connected' : ''}"></span>
+					<p class="text-sm text-footer-link">{connectionStatus ? 'Online' : 'Offline'}</p>
 				</div>
-				<div class="flex items-center gap-2">
-					<span class="status-dot-web4 inline-block w-1.5 h-1.5 rounded-full"></span>
-					<p class="text-sm text-footer-link">{web4Status}</p>
-				</div>
+				{#if publicEnableWeb4}
+					<div class="flex items-center gap-2">
+						<span class="status-dot-web4 inline-block w-1.5 h-1.5 rounded-full {connectionStatusWeb4 ? 'connected' : ''}"></span>
+						<p class="text-sm text-footer-link">{connectionStatusWeb4 ? 'Web4 On' : 'Web4 Off'}</p>
+					</div>
+				{/if}
 			</div>
 		</div>
 	</div>

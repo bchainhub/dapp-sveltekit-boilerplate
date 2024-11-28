@@ -1,0 +1,69 @@
+<script lang="ts" context="module">
+	export function toastType(type: string): string {
+		return {
+			success: 'bg-green-500',
+			error: 'bg-red-500',
+			info: 'bg-blue-500',
+			warning: 'bg-yellow-500'
+		}[type] || 'bg-gray-800';
+	}
+</script>
+
+<script lang="ts">
+	import { fade } from 'svelte/transition';
+	import { toasts } from './toastStore';
+
+	// Timeout management using Map
+	let timeouts: Map<string, ReturnType<typeof setTimeout>> = new Map();
+
+	// Clear timeout when the mouse enters the toast
+	function handleMouseEnter(id: string) {
+		if (timeouts.has(id)) {
+			clearTimeout(timeouts.get(id));
+			timeouts.delete(id);
+		}
+	}
+
+	// Restart the timeout when the mouse leaves the toast
+	function handleMouseLeave(id: string, duration: number) {
+		timeouts.set(
+			id,
+			setTimeout(() => {
+				toasts.update((current) => current.filter((toast) => toast.id !== id));
+			}, duration)
+		);
+	}
+
+	// Remove a toast immediately
+	function closeToast(id: string) {
+		toasts.update((current) => current.filter((toast) => toast.id !== id));
+		if (timeouts.has(id)) {
+			clearTimeout(timeouts.get(id));
+			timeouts.delete(id);
+		}
+	}
+</script>
+
+<div class="fixed bottom-4 right-4 space-y-2 z-20">
+	{#each $toasts as { id, message, type = 'info', duration = 3000 } (id)}
+		<div
+			in:fade
+			out:fade
+			role="alert"
+			class={`toast p-4 rounded-lg shadow-lg text-zinc-700 font-medium w-72 ${toastType(type)}`}
+			on:mouseenter={() => handleMouseEnter(id)}
+			on:mouseleave={() => handleMouseLeave(id, duration)}
+		>
+			<div class="flex justify-between items-center">
+				<span>{message}</span>
+				<button
+					class="ml-2 bg-transparent"
+					on:click={() => closeToast(id)}
+					aria-label="Close"
+				>
+					&times;
+				</button>
+			</div>
+		</div>
+	{/each}
+</div>

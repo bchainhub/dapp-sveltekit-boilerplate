@@ -3,10 +3,11 @@
 	import { writable } from 'svelte/store';
 	import { ArrowUpRight, Haze, Menu, Moon, Sun } from 'lucide-svelte';
 	import { Icon } from '$lib/components';
-	import { config } from '../../site.config';
+	import { config } from '../../../site.config';
 	import { ActionsDropdown } from '$lib/components';
-	import { PUBLIC_ENABLE_AUTH, PUBLIC_ENABLE_WEB4 } from '$env/static/public';
 	import { walletConnected, walletAddress, autoLogin, connectWallet, disconnectWallet } from '$lib/helpers/wallet';
+	import { enableWeb4, disableWeb4, isWeb4Connected, isPublicEnableWeb4 } from '$lib/helpers/db';
+	import * as publicDynamicEnv from '$env/dynamic/public';
 
 	const { logo, items = [], hideOnScroll, orientation = 'horizontal', style = 'auto', iconExternal } = config?.themeConfig?.navbar || {};
 	const { disableSwitch, defaultMode, respectPrefersColorScheme } = config?.themeConfig?.colorMode || {};
@@ -16,8 +17,9 @@
 	let isNavHidden: boolean = false;
 	let dropdownOpen: boolean = false;
 	let theme: 'light' | 'dark' | 'system' = respectPrefersColorScheme ? 'system' : (defaultMode ?? 'light');
-	let authEnabled: boolean = PUBLIC_ENABLE_AUTH === 'true';
-	let web4Enabled: boolean = PUBLIC_ENABLE_WEB4 === 'true';
+	let authEnabled: boolean = publicDynamicEnv.env.PUBLIC_ENABLE_AUTH === 'true' || false;
+	let web4Enabled: boolean = false;
+	let publicEnableWeb4: boolean = isPublicEnableWeb4();
 
 	const menuItems = writable([
 		{ label: 'Logout', action: () => disconnectWallet() },
@@ -84,9 +86,23 @@
 		}
 	};
 
+	const toggleWeb4Connection = async () => {
+		if (web4Enabled) {
+			disableWeb4();
+			web4Enabled = isWeb4Connected();
+		} else {
+			const success = await enableWeb4();
+			web4Enabled = success ? isWeb4Connected() : false;
+		}
+	};
+
 	onMount(() => {
 		if (authEnabled) {
 			autoLogin();
+		}
+
+		if (publicEnableWeb4) {
+			web4Enabled = isWeb4Connected();
 		}
 
 		const storedTheme = localStorage.getItem('theme') as string | null;
@@ -196,12 +212,12 @@
 							{/if}
 						</button>
 					</li>
-					{#if web4Enabled}
+					{#if publicEnableWeb4}
 						<li>
 							<div class="block vertical-menu left p-2">
 								<div  class="flex items-center whitespace-nowrap">
-									<button on:click={rotateTheme} class="menu-button focus:outline-none flex items-center">
-										<Icon name="web4" className="w-6 h-6 mr-1.5" color="fill-gray-500" />Web4 Off
+									<button on:click={toggleWeb4Connection} class="menu-button focus:outline-none flex items-center">
+										<Icon name="web4" className="w-6 h-6 mr-1.5" color="fill-gray-500" />{web4Enabled ? 'Web4 On' : 'Web4 Off'}
 									</button>
 								</div>
 							</div>
@@ -273,8 +289,8 @@
 							{/if}
 						</button>
 					{/if}
-					{#if web4Enabled}
-						<button on:click={rotateTheme} class="icon">
+					{#if publicEnableWeb4}
+						<button on:click={toggleWeb4Connection} class="icon">
 							<span>Web4</span>
 							<Icon name="web4" className="h-6 w-6" color="fill-gray-500" />
 						</button>
@@ -346,12 +362,12 @@
 						</div>
 					</li>
 				{/if}
-				{#if web4Enabled}
+				{#if publicEnableWeb4}
 					<li>
 						<div class="block horizontal-menu left">
 							<div  class="flex items-center whitespace-nowrap">
-								<button on:click={rotateTheme}>
-									<Icon name="web4" className="h-6 w-6 mr-1.5" color="fill-gray-500" />Web4
+								<button on:click={toggleWeb4Connection}>
+									<Icon name="web4" className="h-6 w-6 mr-1.5" color="fill-gray-500" />{web4Enabled ? 'Web4 On' : 'Web4 Off'}
 								</button>
 							</div>
 						</div>
