@@ -1,7 +1,13 @@
-import { DB_URL, BCH_DB_URL, HYPERDRIVE, BCH_HYPERDRIVE, DB_AUTH_TOKEN, BCH_DB_AUTH_TOKEN } from '$env/static/private';
 import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 import type { Hyperdrive } from '@cloudflare/workers-types';
+
+const DB_URL = process.env.DB_URL;
+const BCH_DB_URL = process.env.BCH_DB_URL;
+const HYPERDRIVE = process.env.HYPERDRIVE;
+const BCH_HYPERDRIVE = process.env.BCH_HYPERDRIVE;
+const DB_AUTH_TOKEN = process.env.DB_AUTH_TOKEN;
+const BCH_DB_AUTH_TOKEN = process.env.BCH_DB_AUTH_TOKEN;
 
 export async function initDb($type?: string) {
 	let sqliteDatabase = ($type === 'bch') ? BCH_DB_URL : DB_URL;

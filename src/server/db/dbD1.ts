@@ -1,6 +1,7 @@
-import { DB_D1 } from '$env/static/private';
 import { drizzle } from 'drizzle-orm/d1';
 import type { D1Database } from '@cloudflare/workers-types';
+
+const DB_D1 = process.env.DB_D1;
 
 export async function initDb($type?: string) {
 	const d1: D1Database | undefined = DB_D1 as D1Database | undefined;

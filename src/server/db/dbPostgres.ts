@@ -1,7 +1,13 @@
-import { DB_URL, BCH_DB_URL, HYPERDRIVE, BCH_HYPERDRIVE, DB_SSL, BCH_DB_SSL } from '$env/static/private';
 import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import type { Hyperdrive } from '@cloudflare/workers-types';
+
+const DB_URL = process.env.DB_URL || undefined;
+const BCH_DB_URL = process.env.BCH_DB_URL || undefined;
+const HYPERDRIVE = process.env.HYPERDRIVE || undefined;
+const BCH_HYPERDRIVE = process.env.BCH_HYPERDRIVE || undefined;
+const DB_SSL = process.env.DB_SSL === 'true';
+const BCH_DB_SSL = process.env.BCH_DB_SSL === 'true';
 
 export async function initDb($type?: string) {
 	let pgDatabaseName = ($type === 'bch') ? BCH_DB_URL : DB_URL;
@@ -26,7 +32,7 @@ export async function initDb($type?: string) {
 		throw new Error("PostgreSQL Database connection string not found!");
 	}
 
-	const sslOptions = (sslConfig === 'true')
+	const sslOptions = (sslConfig)
 		? { ssl: { rejectUnauthorized: false } } // Enable SSL, don't reject unauthorized certificates
 		: { ssl: false }; // Disable SSL
 
