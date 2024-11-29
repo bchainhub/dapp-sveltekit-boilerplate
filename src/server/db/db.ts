@@ -26,7 +26,7 @@ export async function initializeDatabases(event: RequestEvent) {
 				event
 			});
 		} else {
-			console.warn('DB_TYPE is not defined. Skipping primary database initialization.');
+			if (process.env.NODE_ENV === "development") console.warn('DB_TYPE is not defined. Skipping primary database initialization.');
 		}
 
 		// BCH database initialization
@@ -38,7 +38,7 @@ export async function initializeDatabases(event: RequestEvent) {
 				event
 			});
 		} else {
-			console.warn('BCH_DB_TYPE is not defined. Skipping BCH database initialization.');
+			if (process.env.NODE_ENV === "development") console.warn('BCH_DB_TYPE is not defined. Skipping BCH database initialization.');
 		}
 	} catch (error) {
 		console.error('Error initializing databases:', error);

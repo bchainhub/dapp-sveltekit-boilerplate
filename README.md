@@ -65,7 +65,7 @@ npm run preview
 
 ## Configuration
 
-Update the `site.config.ts` file located in `/src` to customize the project settings.
+Update the `vite.config.ts` file located in the main folder to customize the project settings.
 
 You can customize application settings in `wrangler.toml` file:
 

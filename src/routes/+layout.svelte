@@ -1,9 +1,8 @@
 <script lang="ts">
 	import "../css/app.css";
 	import { Header, Footer, Toast } from '$lib/components';
-	import { config } from '../site.config';
 
-	const { title, themeConfig: { metadata, navbar, footer }, favicon } = config;
+	const { title, themeConfig: { metadata, navbar, footer }, favicon } = __SITE_CONFIG__;
 </script>
 
 <svelte:head>

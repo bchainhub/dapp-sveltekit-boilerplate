@@ -3,13 +3,12 @@
 	import { writable } from 'svelte/store';
 	import { ArrowUpRight, Haze, Menu, Moon, Sun } from 'lucide-svelte';
 	import { ActionsDropdown, Icon } from '$lib/components';
-	import { config } from '../../../site.config';
 	import { walletConnected, walletAddress, autoLogin, connectWallet, disconnectWallet } from '$lib/helpers/wallet';
 	import { enableWeb4, disableWeb4, isWeb4Connected, isPublicEnableWeb4 } from '../../helpers/web4';
 	import * as publicDynamicEnv from '$env/dynamic/public';
 
-	const { logo, items = [], hideOnScroll, orientation = 'horizontal', style = 'auto', iconExternal } = config?.themeConfig?.navbar || {};
-	const { disableSwitch, defaultMode, respectPrefersColorScheme } = config?.themeConfig?.colorMode || {};
+	const { logo, items = [], hideOnScroll, orientation = 'horizontal', style = 'auto', iconExternal } = __SITE_CONFIG__?.themeConfig?.navbar || {};
+	const { disableSwitch, defaultMode, respectPrefersColorScheme } = __SITE_CONFIG__?.themeConfig?.colorMode || {};
 
 	let isOpen: boolean = false;
 	let lastScrollTop = 0;
@@ -134,9 +133,9 @@
 				<a href="/" class={`flex justify-center md:mr-8 ${(orientation === 'vertical') ? 'space-y-2 md:mb-8' : 'space-x-2'}`}>
 					<img src={logo.src} alt={logo.alt} class="h-10" />
 				</a>
-			{:else if config?.title}
+			{:else if __SITE_CONFIG__?.title}
 				<a href="/" class={`flex justify-center md:mr-8 ${(orientation === 'vertical') ? 'space-y-2 md:mb-8' : 'space-x-2'}`}>
-					<h1 class="text-2xl font-bold">{config.title}</h1>
+					<h1 class="text-2xl font-bold">{__SITE_CONFIG__.title}</h1>
 				</a>
 			{/if}
 			{#if !disableSwitch}

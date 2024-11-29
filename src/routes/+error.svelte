@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { config } from '../site.config';
 	import { Home } from 'lucide-svelte';
 </script>
 
@@ -25,7 +24,7 @@
 				<div class="mt-4">
 					Please,
 					<a
-						href={`https://github.com/${config.organizationName}/${config.projectName}/issues`}
+						href={`https://github.com/${__SITE_CONFIG__.organizationName}/${__SITE_CONFIG__.projectName}/issues`}
 						target="_blank"
 						rel="noindex,nofollow"
 					>

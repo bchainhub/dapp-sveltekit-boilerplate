@@ -36,6 +36,12 @@ interface Config {
 	};
 }
 
+declare module 'vite-plugin-config' {
+	export type Config = import('./site.config').Config;
+}
+
+declare const __SITE_CONFIG__: Config;
+
 interface NavbarItem {
 	label: string;
 	to?: string;
@@ -123,10 +129,10 @@ declare module '$env/dynamic/private' {
 }
 
 interface Window {
-    corepass?: {
-        isCorePass?: boolean;
-        request: (args: { method: string; params?: unknown[] }) => Promise<any>;
-        on?: (eventName: string, callback: (...args: any[]) => void) => void;
-        removeListener?: (eventName: string, callback: (...args: any[]) => void) => void;
-    };
+	corepass?: {
+		isCorePass?: boolean;
+		request: (args: { method: string; params?: unknown[] }) => Promise<any>;
+		on?: (eventName: string, callback: (...args: any[]) => void) => void;
+		removeListener?: (eventName: string, callback: (...args: any[]) => void) => void;
+	};
 }

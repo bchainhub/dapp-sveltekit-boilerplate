@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { config } from '../../../site.config';
 	import { ArrowUpRight } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { isWeb4Connected, isPublicEnableWeb4 } from '../../helpers/web4';
 
-	const { style, logo, copyright, liner, iconExternal } = config?.themeConfig?.footer || {};
+	const { style, logo, copyright, liner, iconExternal } = __SITE_CONFIG__?.themeConfig?.footer || {};
 	const footerClass = style && `footer-${style}`;
 
 	let connectionStatus: boolean = false;
@@ -36,9 +35,9 @@
 				<a href="/" class="flex items-center mb-4 md:mb-0">
 					<img src={logo.src} alt={logo.alt} class="h-10" />
 				</a>
-			{:else if config?.title}
+			{:else if __SITE_CONFIG__?.title}
 				<a href="/" class="flex items-center mb-4 md:mb-0">
-					<h1 class="text-xl font-bold">{config.title}</h1>
+					<h1 class="text-xl font-bold">{__SITE_CONFIG__.title}</h1>
 				</a>
 			{/if}
 			<div class="text-center text-sm text-footer-link mt-4 md:mt-0">
