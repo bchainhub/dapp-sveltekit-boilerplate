@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { toast } from '$lib/components/Toast';
+import { toast } from '$lib/components';
 
 // Svelte stores for wallet state
 export const walletConnected = writable(false);
