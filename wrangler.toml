@@ -38,6 +38,3 @@ name = "dapp-sveltekit-boilerplate-preview"
 
 [env.preview.vars]
 NODE_VERSION = "^22"
-
-[build]
-command = "rm -rf node_modules/.vite && npm run build"
