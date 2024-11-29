@@ -7,7 +7,7 @@ export default defineConfig({
 		sveltekit(),
 		VitePWA({
 			registerType: 'autoUpdate',
-			includeAssets: ['favicon.svg', 'robots.txt', 'apple-touch-icon.png'],
+			includeAssets: ['/icons/favicon.svg', 'robots.txt', '/icons/apple-touch-icon.png'],
 			manifest: {
 				name: 'MOTA — dApp Boilerplate',
 				short_name: 'MOTA',
