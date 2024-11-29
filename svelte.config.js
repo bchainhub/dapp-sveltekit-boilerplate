@@ -7,18 +7,6 @@ const config = {
 
 	kit: {
 		adapter: adapter()
-		/*adapter: adapter({
-			routes: {
-				include: ['/*'],
-				exclude: ['<all>']
-			},
-			platformProxy: {
-				configPath: 'wrangler.toml',
-				environment: undefined,
-				experimentalJsonConfig: false,
-				persist: false
-			}
-		})*/
 	}
 };
 

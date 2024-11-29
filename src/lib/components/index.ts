@@ -1,6 +1,6 @@
-export { default as Header } from './Header/Header.svelte';
-export { default as Footer } from './Footer/Footer.svelte';
-export { default as ActionsDropdown } from './ActionsDropdown/ActionsDropdown.svelte';
-export { default as Icon } from './Icon/Icon.svelte';
-export { default as Toast } from './Toast/Toast.svelte';
-export { toast } from './Toast';
+export { ActionsDropdown } from './actions-dropdown';
+export { Footer } from './footer';
+export { Header } from './header';
+export { Icon } from './icon';
+export { Switch } from './switch';
+export { Toast, toast } from './toast';
