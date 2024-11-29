@@ -1,6 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
-//import { VitePWA } from 'vite-plugin-pwa';
+import { VitePWA } from 'vite-plugin-pwa';
 import type { Config } from 'vite-plugin-config';
 
 const siteConfig: Config = {
@@ -130,7 +130,7 @@ const siteConfig: Config = {
 export default defineConfig({
 	plugins: [
 		sveltekit(),
-		/*VitePWA({
+		VitePWA({
 			registerType: 'autoUpdate',
 			includeAssets: ['/icons/favicon.svg', 'robots.txt', '/icons/apple-touch-icon.png'],
 			manifest: {
@@ -157,7 +157,7 @@ export default defineConfig({
 					}
 				]
 			}
-		})*/
+		})
 	],
 	define: {
 		__SITE_CONFIG__: JSON.stringify(siteConfig),
