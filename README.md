@@ -253,6 +253,34 @@ Dependencies:
 - CorePass Extension
 - Node.js version 22 or higher.
 
+## Sitemaps
+
+Sitemaps help search engines prioritize pages within your site, particularly when you have a large amount of content. You can create a sitemap dynamically using an endpoint: `src/routes/sitemap.xml/+server.ts`
+
+```ts
+export async function GET() {
+  return new Response(
+    `
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <urlset
+      xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xhtml="https://www.w3.org/1999/xhtml"
+      xmlns:mobile="https://www.google.com/schemas/sitemap-mobile/1.0"
+      xmlns:news="https://www.google.com/schemas/sitemap-news/0.9"
+      xmlns:image="https://www.google.com/schemas/sitemap-image/1.1"
+      xmlns:video="https://www.google.com/schemas/sitemap-video/1.1"
+    >
+      <!-- <url> elements go here -->
+    </urlset>`.trim(),
+    {
+      headers: {
+        'Content-Type': 'application/xml'
+      }
+    }
+  );
+}
+```
+
 ## Security
 
 About Platform Environment Variables:

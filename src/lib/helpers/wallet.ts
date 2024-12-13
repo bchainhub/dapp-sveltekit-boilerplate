@@ -25,24 +25,15 @@ export async function connectWallet(automessage: boolean = true) {
 					walletAddress.set(accounts[0]);
 					walletConnected.set(true);
 				} else {
-					toast({
-						message: 'CorePass Extension is not configured.',
-						type: 'warning'
-					});
+					toast.warning('CorePass Extension is not configured.');
 					throw new Error("No accounts found.");
 				}
 		} catch (error) {
 			console.error("CorePass connection failed:", error);
-			toast({
-				message: 'Cannot connect CorePass Extension.',
-				type: 'warning'
-			});
+			toast.warning('Cannot connect CorePass Extension.');
 		}
 	} else if (automessage) {
-		toast({
-			message: 'CorePass Extension is not installed or enabled.',
-			type: 'warning'
-		});
+		toast.warning('CorePass Extension is not installed or enabled.');
 	}
 }
 
@@ -51,8 +42,5 @@ export function disconnectWallet() {
 	walletConnected.set(false);
 	walletType.set(null);
 	walletAddress.set(null);
-	toast({
-		message: 'CorePass disconnected.',
-		type: 'success'
-	});
+	toast.success('CorePass disconnected.');
 }

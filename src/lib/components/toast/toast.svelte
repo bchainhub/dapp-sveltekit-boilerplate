@@ -13,10 +13,8 @@
 	import { fade } from 'svelte/transition';
 	import { toasts } from './toastStore';
 
-	// Timeout management using Map
 	let timeouts: Map<string, ReturnType<typeof setTimeout>> = new Map();
 
-	// Clear timeout when the mouse enters the toast
 	function handleMouseEnter(id: string) {
 		if (timeouts.has(id)) {
 			clearTimeout(timeouts.get(id));
@@ -24,7 +22,6 @@
 		}
 	}
 
-	// Restart the timeout when the mouse leaves the toast
 	function handleMouseLeave(id: string, duration: number) {
 		timeouts.set(
 			id,
@@ -34,7 +31,6 @@
 		);
 	}
 
-	// Remove a toast immediately
 	function closeToast(id: string) {
 		toasts.update((current) => current.filter((toast) => toast.id !== id));
 		if (timeouts.has(id)) {
@@ -45,12 +41,12 @@
 </script>
 
 <div class="fixed bottom-4 right-4 space-y-2 z-20">
-	{#each $toasts as { id, message, type = 'info', duration = 3000 } (id)}
+	{#each $toasts as { id, message, type = 'info', duration = 3000, className } (id)}
 		<div
 			in:fade
 			out:fade
 			role="alert"
-			class={`toast p-4 rounded-lg shadow-lg text-zinc-700 font-medium text-sm w-72 ${toastType(type)}`}
+			class={`toast p-4 rounded-lg shadow-lg text-zinc-700 font-medium text-sm w-72 ${toastType(type)} ${className}`}
 			on:mouseenter={() => handleMouseEnter(id)}
 			on:mouseleave={() => handleMouseLeave(id, duration)}
 		>

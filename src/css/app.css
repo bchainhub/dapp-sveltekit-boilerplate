@@ -165,6 +165,10 @@ nav button:hover {
 	-webkit-backdrop-filter: blur(10px);
 }
 
+label {
+	cursor: pointer;
+}
+
 .status-dot {
 	background-color: red;
 }
