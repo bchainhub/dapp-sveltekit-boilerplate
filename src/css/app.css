@@ -1,8 +1,13 @@
 @import 'variables.css';
 @import 'extensions.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@layer base {
+	button:not(:disabled),
+	[role="button"]:not(:disabled) {
+		cursor: pointer;
+	}
+}
 
 html, body {
 	height: 100%;

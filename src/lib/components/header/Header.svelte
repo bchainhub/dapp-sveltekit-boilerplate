@@ -139,7 +139,7 @@
 				</a>
 			{/if}
 			{#if !disableSwitch}
-				<button onclick={rotateTheme} class="focus:outline-none flex items-center md:hidden">
+				<button onclick={rotateTheme} class="focus:outline-hidden flex items-center md:hidden">
 					{#if theme === 'system'}
 						<Haze class="w-6 h-6 text-gray-500" />
 					{:else if theme === 'dark'}
@@ -151,7 +151,7 @@
 			{/if}
 		</div>
 		<div class="md:hidden flex items-center">
-			<button id="hamburger-button" class="cursor-context-menu focus:outline-none flex items-center" onclick={toggleMenu}>
+			<button id="hamburger-button" class="cursor-context-menu focus:outline-hidden flex items-center" onclick={toggleMenu}>
 				<Menu class="w-8 h-8" />
 			</button>
 		</div>
@@ -171,7 +171,7 @@
 						<li>
 							<div class="block vertical-menu left p-2">
 								<div  class="flex items-center whitespace-nowrap">
-									<button onclick={manualConnect} class="connect"><span>Connect</span></button>
+									<button onclick={manualConnect} class="action"><span>Connect</span></button>
 								</div>
 							</div>
 						</li>
@@ -200,7 +200,7 @@
 					{/each}
 					{#if items}<li><hr /></li>{/if}
 					<li class="hidden md:flex items-center">
-						<button onclick={rotateTheme} class="menu-button focus:outline-none flex items-center p-2">
+						<button onclick={rotateTheme} class="menu-button focus:outline-hidden flex items-center p-2">
 							{#if theme === 'system'}
 								<Haze class="w-6 h-6 mr-1.5 text-gray-500" />System theme
 							{:else if theme === 'dark'}
@@ -214,7 +214,7 @@
 						<li>
 							<div class="block vertical-menu left p-2">
 								<div  class="flex items-center whitespace-nowrap">
-									<button onclick={toggleWeb4Connection} class="menu-button focus:outline-none flex items-center">
+									<button onclick={toggleWeb4Connection} class="menu-button focus:outline-hidden flex items-center">
 										<Icon name="web4" className="w-6 h-6 mr-1.5" color="fill-gray-500" />{web4Enabled ? 'Web4 On' : 'Web4 Off'}
 									</button>
 								</div>
@@ -277,7 +277,7 @@
 						{/if}
 					{/each}
 					{#if !disableSwitch}
-						<button onclick={rotateTheme} class="menu-button focus:outline-none flex items-center">
+						<button onclick={rotateTheme} class="menu-button focus:outline-hidden flex items-center">
 							{#if theme === 'system'}
 								<Haze class="w-6 h-6 text-gray-500" />
 							{:else if theme === 'dark'}
@@ -307,7 +307,7 @@
 						<li class="flex items-center">
 							<div class="block horizontal-menu neon">
 								<div  class="flex items-center whitespace-nowrap">
-									<button onclick={manualConnect} class="connect"><span>Connect</span></button>
+									<button onclick={manualConnect} class="action"><span>Connect</span></button>
 								</div>
 							</div>
 						</li>

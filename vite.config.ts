@@ -2,6 +2,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import type { Config } from 'vite-plugin-config';
+import tailwindcss from '@tailwindcss/vite';
 
 const siteConfig: Config = {
 	title: "Mota ₡ore", // Site title - keep `₡ore` if you want to let people know it's powered by Core Infra
@@ -157,7 +158,8 @@ export default defineConfig({
 					}
 				]
 			}
-		})
+		}),
+		tailwindcss()
 	],
 	define: {
 		__SITE_CONFIG__: JSON.stringify(siteConfig),

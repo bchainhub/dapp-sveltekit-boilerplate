@@ -2,9 +2,10 @@
 	import { writable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
 
-	export let items: ({ value: string; label: string; ticker?: string; group?: string } | { group: string; items: { value: string; label: string; ticker?: string }[] })[] = [];
-	export let value: string | undefined;
+	export let items: ({ value: string | number; label: string; ticker?: string; group?: string } | { group: string; items: { value: string | number; label: string; ticker?: string }[] })[] = [];
+	export let value: string | number;
 	export let id: string = '';
+	export let onChange: (value: string | number) => void = () => {};
 
 	const expanded = writable(false);
 
@@ -14,13 +15,14 @@
 		expanded.update((e) => !e);
 	}
 
-	function select(item: { value: string; label: string; ticker?: string }) {
-		if (value === item.value) {
+	function select(item: { value: string | number; label: string; ticker?: string }) {
+		if (String(value) === String(item.value)) {
 			expanded.update((e) => !e);
 			return;
 		}
 		value = item.value;
 		expanded.set(false);
+		onChange(item.value);
 	}
 
 	function handleOutsideClick(event: MouseEvent) {
@@ -29,16 +31,16 @@
 		}
 	}
 
-	function isCategory(item: any): item is { group: string; items: { value: string; label: string; ticker?: string }[] } {
+	function isCategory(item: any): item is { group: string; items: { value: string | number; label: string; ticker?: string }[] } {
 		return item.items && Array.isArray(item.items);
 	}
 
 	function findSelectedLabel(): string {
 		for (const item of items) {
 			if (isCategory(item)) {
-				const selectedItem = item.items.find(subItem => subItem.value === value);
+				const selectedItem = item.items.find(subItem => String(subItem.value) === String(value));
 				if (selectedItem) return selectedItem.label;
-			} else if (item.value === value) {
+			} else if (String(item.value) === String(value)) {
 				return item.label;
 			}
 		}
@@ -49,14 +51,10 @@
 <div class="relative w-full dropdown" bind:this={dropdownElement}>
 	<button
 		id={id}
-        type="button"
+		type="button"
 		on:click={toggle}
 		aria-label="Toggle dropdown"
-		class={
-			'[ inline-flex items-center justify-between bg-slate-100 text-zinc-900 border-2' +
-			'[ w-full px-3 py-2 rounded-md cursor-pointer ]' +
-			'[ focus:outline-none focus-visible:ring-4 focus-visible:ring-opacity-75 focus-visible:ring-green-800 ]'
-		}
+		class="inline-flex items-center justify-between bg-slate-100 text-zinc-900 border-2 w-full px-3 py-2 rounded-md cursor-pointer focus:outline-hidden focus-visible:ring-4 focus-visible:ring-opacity-75 focus-visible:ring-green-800"
 	>
 		<span class="truncate">{findSelectedLabel()}</span>
 		<span class="ml-2">
@@ -68,17 +66,14 @@
 
 	{#if $expanded}
 		<ul
-			class={
-				'[ absolute mt-1 max-h-60 w-full overflow-auto rounded-md shadow-lg z-10 ]' +
-				'[ ring-1 ring-black ring-opacity-5 focus:outline-none bg-slate-100 border-2 border-green-800 ]'
-			}
+			class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md shadow-lg z-10 ring-1 ring-black ring-opacity-5 focus:outline-hidden bg-slate-100 border-2 border-[var(--cp-c2-adj)]"
 			tabindex="-1"
 			in:slide={{ duration: 200 }}
 			out:slide={{ duration: 100 }}
 		>
 			{#each items as item}
 				{#if isCategory(item)}
-					<li class="bg-green-800 px-3 py-1 text-sm font-semibold">{item.group}</li>
+					<li class="bg-[var(--cp-c2)] px-3 py-1 text-sm font-semibold">{item.group}</li>
 					{#each item.items as subItem}
 						<li>
 							<button
@@ -86,10 +81,10 @@
 								aria-label={subItem.label}
 								on:click={() => select(subItem)}
 								on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && select(subItem)}
-								class="flex items-center w-full px-3 py-2 text-zinc-900 hover:bg-green-800 hover:brightness-150"
+								class="flex items-center w-full px-3 py-2 text-zinc-900 hover:bg-[var(--cp-c2-adj)] hover:brightness-150"
 							>
-								{#if value === subItem.value}
-									<span class="w-3 h-3 mr-2 rounded-full bg-green-800"></span>
+								{#if String(value) === String(subItem.value)}
+									<span class="w-3 h-3 mr-2 rounded-full bg-[var(--cp-c2)]"></span>
 								{:else}
 									<span class="w-3 h-3 mr-2"></span>
 								{/if}
@@ -107,10 +102,10 @@
 							aria-label={item.label}
 							on:click={() => select(item)}
 							on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && select(item)}
-							class="flex items-center w-full px-3 py-2 text-zinc-900 hover:bg-green-800 hover:brightness-150"
+							class="flex items-center w-full px-3 py-2 text-zinc-900 hover:bg-[var(--cp-c2-adj)] hover:brightness-150"
 						>
-							{#if value === item.value}
-								<span class="w-3 h-3 mr-2 rounded-full bg-green-800"></span>
+							{#if String(value) === String(item.value)}
+								<span class="w-3 h-3 mr-2 rounded-full bg-[var(--cp-c2)]"></span>
 							{:else}
 								<span class="w-3 h-3 mr-2"></span>
 							{/if}
