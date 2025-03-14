@@ -1,21 +1,68 @@
-@import 'variables.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "./theme.css";
+
+@layer base {
+	button:not(:disabled),
+	[role="button"]:not(:disabled),
+	label:not(:disabled) {
+		cursor: pointer;
+	}
+
+	--color-primary-100: oklch(0.95 0.05 178);
+	--color-primary-200: oklch(0.90 0.07 178);
+	--color-primary-300: oklch(0.85 0.09 178);
+	--color-primary-400: oklch(0.80 0.10 178);
+	--color-primary-500: oklch(0.72 0.11 178);
+	--color-primary-600: oklch(0.68 0.12 178);
+	--color-primary-700: oklch(0.64 0.13 178);
+	--color-primary-800: oklch(0.60 0.14 178);
+	--color-primary-900: oklch(0.56 0.15 178);
+}
+
+@layer components {
+	.sticky-footer {
+		@apply flex flex-col min-h-screen;
+	}
+	.sticky-footer main {
+		@apply flex-grow;
+	}
+}
+
+@layer utilities {
+	.bg-background-light {
+		background-color: var(--bg-background-light);
+	}
+	.bg-background-dark {
+		background-color: var(--bg-background-dark);
+	}
+	.bg-background-surface {
+		background-color: var(--bg-background-surface);
+	}
+	.bg-background-surface-dark {
+		background-color: var(--bg-background-surface-dark);
+	}
+	.bg-background-surface-light {
+		background-color: var(--bg-background-surface-light);
+	}
+	.bg-background-surface-light-dark {
+		background-color: var(--bg-background-surface-light-dark);
+	}
+}
 
 html, body {
 	height: 100%;
-	font-family: var(--skc-font-family-base);
+	@apply font-sans;
 }
 
 body {
 	display: flex;
 	flex-direction: column;
 	margin: 0;
-	background-color: var(--skc-background-color);
-	color: var(--skc-color-content);
-	font-size: var(--skc-font-size-base);
-	font-weight: var(--skc-font-weight-base);
+	@apply bg-white text-gray-900;
+}
+
+.dark body {
+	@apply bg-gray-900 text-white;
 }
 
 .holder {
@@ -29,23 +76,19 @@ body {
 }
 
 a {
-	color: var(--skc-link-color);
-	transition: color var(--skc-transition-fast) var(--skc-transition-timing-default);
+	@apply text-blue-500 transition-colors duration-300 ease-in-out;
 }
 
 a:hover {
-	color: var(--skc-link-hover-color);
-	text-decoration: underline;
+	@apply text-blue-700 underline;
 }
 
 header {
 	position: sticky;
 	top: 0;
 	z-index: 1000;
-	background-color: var(--skc-navbar-background-color);
-	color: var(--skc-navbar-link-color);
-	box-shadow: var(--skc-navbar-shadow);
-	transition: transform 0.3s ease;
+	@apply bg-gray-800 text-white shadow-md;
+	transition: transform 300ms ease-in-out;
 }
 
 header.nav-hidden {
@@ -53,58 +96,52 @@ header.nav-hidden {
 }
 
 header a {
-	color: var(--skc-navbar-link-color);
+	@apply text-white;
 }
 
 header a:hover {
-	color: var(--skc-navbar-link-hover-color);
-	text-decoration: none;
+	@apply text-gray-300 no-underline;
 }
 
 footer {
 	flex-shrink: 0;
-	background-color: var(--skc-footer-background-color);
-	color: var(--skc-footer-link-color);
+	@apply bg-gray-800 text-white;
 }
 
 footer a {
-	color: var(--skc-footer-link-color);
+	@apply text-white;
 }
 
 footer a:hover {
-	color: var(--skc-footer-link-hover-color);
-	text-decoration: none;
+	@apply text-gray-300 no-underline;
 }
 
 .footer {
-	background-color: var(--skc-ft-bg-color);
-	color: var(--skc-ft-text-color);
+	@apply bg-gray-800 text-white;
 }
 
 .footer a {
-	color: var(--skc-ft-link-color);
+	@apply text-white;
 }
 
 .footer a:hover {
-	color: var(--skc-ft-link-hover-color);
-	text-decoration: none;
+	@apply text-gray-300 no-underline;
 }
 
 hr {
-	border-color: var(--skc-hr-background-color);
+	@apply border-gray-700;
 }
 
 .menu-item:hover {
-	background-color: var(--skc-menu-color-background-hover);
+	@apply bg-gray-700;
 }
 
 code {
-	font-family: var(--skc-font-family-monospace);
-	font-size: var(--skc-code-font-size);
+	@apply font-mono;
 }
 
 nav#dropdown-menu {
-	background-color: var(--skc-navbar-background-color);
+	@apply bg-gray-800;
 }
 
 nav button {
@@ -112,46 +149,29 @@ nav button {
 	border: none;
 	outline: none;
 	cursor: pointer;
-	color: var(--skc-navbar-link-color);
+	@apply text-white;
 }
 
 nav button:hover {
-	color: var(--skc-navbar-link-hover-color);
+	@apply text-gray-300;
 }
 
 .nav-hidden {
-	transform: translateY(-100%);
-	transition: transform 0.3s ease;
+	@apply -translate-y-full transition-transform duration-300 ease-in-out;
 }
 
 .shadow-navbar {
-	box-shadow: var(--skc-navbar-shadow);
+	@apply shadow-md;
 }
 
 .menu-button {
 	width: 100%;
-	transition: color var(--skc-transition-fast) var(--skc-transition-timing-default);
-}
-
-button.neon, .neon > button {
-	border: 2px solid var(--skc-color-primary);
-	color: var(--skc-color-primary);
-	background-color: hsla(167, 68%, 45%, 0.2);
-	border-radius: 1.4rem;
-	padding: .3rem .7rem;
-	cursor: pointer;
-	transition: background-color var(--skc-transition-fast) var(--skc-transition-timing-default),
-                border-color var(--skc-transition-fast) var(--skc-transition-timing-default);
-}
-
-button.neon:hover, .neon > button:hover {
-	border-color: var(--skc-color-primary-dark);
-	color: var(--skc-color-primary-dark);
+	@apply transition-colors duration-300 ease-in-out;
 }
 
 .horizontal-menu > button {
 	width: 100%;
-	transition: color var(--skc-transition-fast) var(--skc-transition-timing-default);
+	@apply transition-colors duration-300 ease-in-out;
 }
 
 .horizontal-menu.left > button {
@@ -164,7 +184,7 @@ button.neon:hover, .neon > button:hover {
 
 .vertical-menu > button {
 	width: 100%;
-	transition: color var(--skc-transition-fast) var(--skc-transition-timing-default);
+	@apply transition-colors duration-300 ease-in-out;
 }
 
 .vertical-menu.left > button {
@@ -180,6 +200,23 @@ button.neon:hover, .neon > button:hover {
 	-webkit-backdrop-filter: blur(10px);
 }
 
+label {
+	cursor: pointer;
+}
+
+.status-dot {
+	@apply bg-red-500;
+}
+.status-dot.connected {
+	@apply bg-green-500;
+}
+.status-dot-web4 {
+	@apply bg-gray-500;
+}
+.status-dot-web4.connected {
+	@apply bg-green-500;
+}
+
 @media (max-width: 767px) {
 	.vertical-max-w {
 		max-width: 100%;
@@ -188,8 +225,7 @@ button.neon:hover, .neon > button:hover {
 
 @media (min-width: 768px) {
 	header.transparent.vertical nav ul li :hover {
-		background-color: var(--skc-navbar-background-color);
-		border-radius: var(--skc-navbar-border-radius);
+		@apply bg-gray-700 rounded-md;
 	}
 
 	header.transparent {

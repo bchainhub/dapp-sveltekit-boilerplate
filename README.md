@@ -12,24 +12,24 @@ Welcome to the SvelteKit Boilerplate! This project provides a solid foundation f
 - **[PostCSS](https://postcss.org/)**: Transform CSS with JavaScript plugins.
 - **[ESLint](https://eslint.org/)**: Linting utility for identifying and reporting on patterns in JavaScript.
 - **[Prettier](https://prettier.io/)**: Code formatter for maintaining consistent style.
-- **[Auth.js](https://authjs.dev/)**: Authentication library for secure login functionality.
-- **[Hono API](https://hono.dev/)**: Web framework for building fast web applications and APIs.
 - **[Lucide icons](https://lucide.dev/)**: Beautiful and customizable icon set.
 - **[blo identicons](https://github.com/bchainhub/blo)**: blo is a small and fast library to generate Blockchain identicons.
 - **[ICAN / IBAN validation](https://github.com/bchainhub/ican.js)**: Validate international bank account numbers.
 - **[Exchange Number Format](https://github.com/bchainhub/exchange-rounding)**: Utility for formatting and rounding exchange numbers.
 
-## Compatibility
+## Databases
 
-- **[CloudFlare Pages](https://developers.cloudflare.com/pages/)**: Deploy web applications directly to Cloudflare's global network.
-- **[CloudFlare Functions API](https://developers.cloudflare.com/workers/)**: Build and deploy serverless functions.
-- **[CloudFlare KV](https://developers.cloudflare.com/workers/runtime-apis/kv/)**: Key-Value storage for serverless applications.
-- **[Cloudflare R2](https://developers.cloudflare.com/r2/)**: Cloudflare R2 Storage allows developers to store large amounts of unstructured data.
+- **[Drizzle ORM](https://orm.drizzle.team)**: Headless TypeScript ORM with a head.
+  - SQLite / CloudFlare D1 database.
+  - Postgres database.
+  - Hyperdrive connector.
+  - and many more... (write your own connector in the `src/server/db` directory)
 
-## Database Support
+### Database connectors
 
-- **[CloudFlare D1](https://developers.cloudflare.com/d1/)**: Database solution for Cloudflare applications.
-- **[Prisma](https://www.prisma.io/)**: Prisma with Accelerate. Modern database access for TypeScript & Node.js.
+- [Postgres.js](https://github.com/porsager/postgres) for Postgres database.
+- [libSQL](https://github.com/tursodatabase/libsql) for SQLite and Web4 database.
+- [Hyperdrive](https://developers.cloudflare.com/hyperdrive/) connector for Cloudflare (paid plan).
 
 ## Installation
 
@@ -63,51 +63,50 @@ npm run preview
 
 ## Configuration
 
-Update the `site.config.ts` file located in `/src` to customize the project settings.
+Update the `vite.config.ts` file located in the main folder to customize the project settings.
 
 You can customize application settings in `wrangler.toml` file:
 
-- `AUTH_SECRET`: Secret key for authentication.
-- `LOGIN_MAX_AGE`: Login expiration time. Default is 24 hours (86400).
-- `DB_INIT`: Enable the functionality to initialize the database using token value. Append `tk` to the URL to define custom token. (Example: `…?tk=yourtoken`).
 - `NODE_VERSION`: Node.js version.
 
 Environment variables are stored in the `.env` file. You can add your own environment variables to this file.
 
 - `CLOUDFLARE_ACCOUNT_ID`: Cloudflare account ID.
 - `CLOUDFLARE_API_TOKEN`: Cloudflare API token.
-- `ENABLE_API`: Enable or disable the API.
-- `ENABLE_AUTH`: Enable or disable authentication.
-- `REG_COREID`: Valid Core ID for WebAuthn provider registration. Default is true.
-- `VERIFIED_ONLY`: Enable or disable only verified users. This prevents not KYC verified users to register.
-- `VERIFIED_EXPIRATION_DAYS`: Verified expiration time. (Value in days).
-- `ENABLE_FILE_ACCESS`: Enable or disable file access.
-- `KV_NAME`: Cloudflare KV namespace name.
-- `R2_NAME`: Cloudflare R2 namespace name.
-- `PASSKEY_DURATION`: Passkey expiration time. Default is 2 minutes (120000).
-- `CAPTURE_COUNTRY`: Capture country from CF pages, Netlify, Vercel. If enabled.
-- `CAPTURE_CITY`: Capture city from CF pages, Netlify, Vercel. If enabled.
+- `CAPTURE_COUNTRY`: Provide country as a variable from CF pages, Netlify, Vercel. If enabled.
+- `CAPTURE_CITY`: Provide city as a variable from CF pages, Netlify, Vercel. If enabled.
+
+Public variables:
+
+- `PUBLIC_ENABLE_AUTH`: Enable or disable authentication. Default is false (disabled).
 
 Environment variables for database setup:
 
-- `DB_TYPE`: Database type: D1, PRISMA. Default is no database (empty string).
-- `DB_NAME`: Database name.
-- `PRISMA_PROVIDER`: Prisma provider.
-- `PRISMA_API_KEY`: Prisma API key.
+- `DB_TYPE`: Database type: SQLite, PostgeSQL. Default is no database (empty string).
+- `DB_URL`: Database URL.
+- `DB_AUTH_TOKEN`: Database authentication token.
+- `DB_SSL`: Enable or disable SSL for Postgres database.
 
-Generate the authentication secret key, cleaning token, JWT secret in secure way or using the following command:
+## Web4
 
-```bash
-openssl rand -base64 33
-```
+Web4 is the tool for connecting to the offline blockchain data and ecosystem using specialized devices. You can use it for blockchain operations and interaction using radio frequencies. Native support for Web4 is included in the project.
 
-## API
+Currently, we are supporting the following functionality:
 
-Api is disabled by default. You can enable it by setting `ENABLE_API=true` in the `.env` filed. If you don't need the API, you can remove the `functions/` directory. It is good practice to disable the API in production environment if you don't need it as well as removing the folder.
+- Read-only data from the blockchain ETL service.
+- TxMS transactions.
 
-Api is using Hono API framework. You can find more information in the [Hono API documentation](https://hono.dev/).
+What is Web4?
 
-Api is versioned and the version is defined in the `functions/api/${version}/` folder, where `${version}` is the number of version. It is good practice to divide the versions in the folders.
+In short Web4 is an alternative network and operations instead of the Internet. It is a secure and reliable way to interact with the blockchain data. You can use it for blockchain operations and interaction using radio frequencies as well as 0G connectivity. But it is not focused only on Blockchain, can it be various types of data.
+
+Why do you need Web4?
+
+In some cases you need to interact with the blockchain data offline. You can use Web4 + Web3 for this purpose. It is a secure and reliable way to interact with the blockchain data. You can use it for blockchain operations and interaction using radio frequencies as well as 0G connectivity.
+
+## PWA
+
+The project is a Progressive Web Application (PWA) by default. You can customize the PWA settings in the `vite.config.ts` file.
 
 ## Styling
 
@@ -117,144 +116,91 @@ Custom styles and variables are defined in the `src/css` directory. You can use 
 
 You can use tool to generate TailwindCSS colors: [TailwindCSS Color Generator](https://javisperez.github.io/tailwindcolorshades/) or [TailwindCSS Color Shades](https://www.tailwindshades.com/).
 
-## Connection to D1
+## Database setup
 
-You can connect your application to Cloudflare D1 by setting the `DB_NAME` variable in the `.env` file. You can find the D1 namespace in the Cloudflare dashboard and bind it with your `DB_NAME` setup.
+Types of connectors:
 
-Make sure the `wrangler.toml` file is properly configured with the correct DB binding information.
+- [D1 database](https://developers.cloudflare.com/d1/) Cloudflare's free plan
+- [Hyperdrive connector](https://developers.cloudflare.com/hyperdrive/) Cloudflare's paid plan
 
-## Connection to KV
+We are recommending purchasing the Hyperdrive connector for production use. There are many advantages and you can bind plenty of databases.
 
-You can connect your application to Cloudflare KV by setting the `KV_NAME` variable in the `.env` file. You can find the KV namespace in the Cloudflare dashboard and bind it with your `KV_NAME` setup.
+You can use SQLite, Postgres database, or any other supported by Drizzle. Supported drivers by Cloudflare are listed [here](https://developers.cloudflare.com/hyperdrive/configuration/connect-to-postgres/#supported-drivers). The database setup is defined in the `.env` file prefixed with `DB_`.
 
-Make sure the `wrangler.toml` file is properly configured with the correct KV binding information.
+### ORM Database Setup
 
-## Connection to R2
+The project uses Drizzle ORM for database setup. You can find more information in the [Drizzle ORM documentation](https://orm.drizzle.team/).
 
-You can connect your application to Cloudflare R2 by setting the `R2_NAME` variable in the `.env` file or dashboard. You can find the R2 namespace in the Cloudflare dashboard and bind it with your `R2_NAME` setup.
+This step is optional, but required for authentication and blockchain operations.
 
-Make sure the `wrangler.toml` file is properly configured with the correct R2 binding information.
+We are supporting three categories of databases:
 
-## Deployment
+- Ordinary databases
+- Blockchain databases
+- Local Blockchain databases on the ORB (or any other) device
 
-Deploying your SvelteKit application on Cloudflare Pages is straightforward.
+### Drizzle setup
 
-You can follow Cloudflare dashboard deployment or use Wrangler CLI for deployment.
+Drizzle setup is located in the `drizzle.config.ts` file. Configure it for your database setup.
 
-Follow these steps to get started with Wrangler CLI:
+Schemas are located in the `src/schemas` directory. You can add your own schema files.
 
-### Step 1: Install Wrangler CLI
+### Recommended database setup
 
-First, ensure that you have the Wrangler CLI installed. If you don't have it installed, you can install it using npm:
+We are recommending to use the following setup:
 
-```bash
-npm install -g wrangler
-```
+If you own the Orb device, you can use it for blockchain operations. You can use the D1 database for ordinary operations. You can use the Hyperdrive connector for production use - for Apps they need the heavy load.
 
-### Step 2: Authenticate Wrangler
-
-Next, authenticate Wrangler with your Cloudflare account:
-
-```bash
-wrangler login
-```
-
-### Step 3: wrangler.toml Configuration
-
-In your project root, you have a `wrangler.toml` file that contains the configuration for deploying your application.
-
-Customize the configuration to match your project settings.
-
-### Step 4: Specify Node.js Version
-
-Default Node.js version is 20 (Iron LTS). You can specify a different version in the `package.json` and `wrangler.toml` file.
-
-### Step 5: Deploy the Application
-
-To deploy your application, run:
-
-```bash
-wrangler pages publish ./build
-```
-
-### Additional Information
-
-For more details on configuring and using Wrangler with Cloudflare Pages, visit the [official Wrangler documentation](https://developers.cloudflare.com/workers/wrangler/).
-
-### Cloudflare deployment using dashboard
-
-1. Create a new Pages project in the Cloudflare dashboard.
-2. Connect the project to your GitHub repository.
-3. Configure the build settings.
-4. Deploy the project.
+- Small applications: D1 database + Blockchain database on Orb device or D1.
+- Medium applications: Hyperdrive connector + Blockchain database on Orb device.
+- Large applications: Hyperdrive connector + Blockchain database on Orb device or another Hyperdrive instance.
 
 ## Authentication
 
-The project uses Auth.js for authentication together with Passkey & CorePass.
+The project uses CorePass Extension for authentication but Passkey is possible to build also.
 
 Dependencies:
 
-- Cloudflare D1 database.
-- DB initialization process.
-- Node.js version 20.9.0 or higher.
-- CorePass if you would like to use Pipe - activation model.
+- CorePass Extension
+- Node.js version 22 or higher.
 
-Before first run of your application you need to:
+## Sitemaps
 
-- Create a new database.
-- Set the DB name `DB_NAME` in the `wrangler.toml` file or dashboard.
-- Initialize the database with enabling `DB_INIT=yourtoken` in the `wrangler.toml` file or dashboard.
-- Load the url: `yoururl.com/db/init?tk=yourtoken` to initialize the seeding.
-- Set the `DB_INIT=false` in the `wrangler.toml` file or dashboard. This is important to disable db initialization.
+Sitemaps help search engines prioritize pages within your site, particularly when you have a large amount of content. You can create a sitemap dynamically using an endpoint: `src/routes/sitemap.xml/+server.ts`
+
+```ts
+export async function GET() {
+  return new Response(
+    `
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <urlset
+      xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xhtml="https://www.w3.org/1999/xhtml"
+      xmlns:mobile="https://www.google.com/schemas/sitemap-mobile/1.0"
+      xmlns:news="https://www.google.com/schemas/sitemap-news/0.9"
+      xmlns:image="https://www.google.com/schemas/sitemap-image/1.1"
+      xmlns:video="https://www.google.com/schemas/sitemap-video/1.1"
+    >
+      <!-- <url> elements go here -->
+    </urlset>`.trim(),
+    {
+      headers: {
+        'Content-Type': 'application/xml'
+      }
+    }
+  );
+}
+```
 
 ## Security
 
-There is difference between access local environment variables and environment variables in Cloudflare.
-
-Key points:
-
-- Separate Management Systems: The environment variables for Cloudflare Workers and SvelteKit are managed separately and do not overlap. `platform.env` in Cloudflare Workers is not directly accessible to SvelteKit components or server-side logic.
-- Deployment Context: When using SvelteKit, the environment variables accessed via `import { env } from '$env/dynamic/private';` are provided by the deployment environment's configuration. These could come from services like Vercel, Netlify, or other hosting providers that support environment variable management.
-- No Cross-Access: SvelteKit does not have a built-in mechanism to directly access Cloudflare Workers' environment variables set via `wrangler.toml`. Similarly, Cloudflare Workers cannot directly access environment variables set up for a SvelteKit deployment.
-
 About Platform Environment Variables:
 
-- Platform environment variables are stored in the `wrangler.toml` file.
 - These variables are accessible in server-side code except those that are prefixed with `PUBLIC_`.
 
 ### Local environment variables
 
 We can access local environment variables using the `env` function. This function is used to read the environment variables from the `.env` file. Any value is returned as `string`.
-
-```ts
-import { env } from '$env/dynamic/private';
-const secret = env.SECRET;
-```
-
-This is SvelteKit way of reading the environment variables.
-
-### Cloudflare environment variables
-
-We have helper function `genv` to read Cloudflare's environment variables. This function is used to read the environment variables directly from Cloudflare instead of the classic `.env` variables. `true` and `false` (not case sensitive) is returned as boolean value, all other values are returned as `string`.
-
-```ts
-import { genv } from from '$lib/helpers/genv';
-const secret = genv(platform).SECRET;
-```
-
-## Management API
-
-### DB / Initialize
-
-- Initialize the database.
-
-`GET /db/init`
-
-## Error codes (WIP)
-
-Err ID | Err Code | Category | Description
---- | --- | --- | ---
-400 | 400.01 | Validation | Invalid request
 
 ## Contributing
 
@@ -262,4 +208,4 @@ Contributions are welcome! For feature requests, bug reports, or questions, plea
 
 ## License
 
-This project is open source and available under the [Core License](LICENSE).
+This project is open source and available under the [CORE License](LICENSE).
