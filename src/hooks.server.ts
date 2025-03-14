@@ -5,9 +5,8 @@ import type { Handle } from '@sveltejs/kit';
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
 		// Initialize the databases and attach them to locals
-		const { db, bchdb } = await initializeDatabases(event);
+		const { db } = await initializeDatabases(event);
 		event.locals.db = db;
-		event.locals.bchdb = bchdb;
 
 		// Attach geolocation data if available
 		getGeoData(event);

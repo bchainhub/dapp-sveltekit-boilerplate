@@ -1,14 +1,11 @@
 <script lang="ts">
 	import { ArrowUpRight } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { isWeb4Connected, isPublicEnableWeb4 } from '../../helpers/web4';
 
 	const { style, logo, copyright, liner, iconExternal } = __SITE_CONFIG__?.themeConfig?.footer || {};
 	const footerClass = style && `footer-${style}`;
 
 	let connectionStatus: boolean = false;
-	let connectionStatusWeb4: boolean = isWeb4Connected();
-	let publicEnableWeb4: boolean = isPublicEnableWeb4();
 
 	onMount(() => {
 		const updateConnectionStatus = () => {
@@ -68,12 +65,6 @@
 					<span class="status-dot inline-block w-1.5 h-1.5 rounded-full {connectionStatus ? 'connected' : ''}"></span>
 					<p class="text-sm text-footer-link">{connectionStatus ? 'Online' : 'Offline'}</p>
 				</div>
-				{#if publicEnableWeb4}
-					<div class="flex items-center gap-2">
-						<span class="status-dot-web4 inline-block w-1.5 h-1.5 rounded-full {connectionStatusWeb4 ? 'connected' : ''}"></span>
-						<p class="text-sm text-footer-link">{connectionStatusWeb4 ? 'Web4 On' : 'Web4 Off'}</p>
-					</div>
-				{/if}
 			</div>
 		</div>
 	</div>

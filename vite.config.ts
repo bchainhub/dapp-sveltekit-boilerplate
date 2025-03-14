@@ -109,7 +109,7 @@ const siteConfig: Config = {
 					target: "_blank"
 				}
 			],
-			copyright: `Copyright © 2020-${new Date().getFullYear()} MOTA Foundation` // Copyright text
+			copyright: `Core ⊛ 2020-${new Date().getFullYear()} MOTA Foundation` // Copyright text
 		},
 		metadata: [
 			{ name: "viewport", content: "width=device-width, initial-scale=1.0" }, // Viewport meta tag
@@ -117,7 +117,7 @@ const siteConfig: Config = {
 			{ name: "description", content: "This is SvetleKit Boilerplate website" }, // Description meta tag
 			{ name: "keywords", content: "website, sveltekit, vite, cloudflare" }, // Keywords meta tag
 			{ property: "og:type", content: "website" }, // Open Graph type meta tag
-			{ property: "ican:xcb", content: "cb7147879011ea207df5b35a24ca6f0859dcfb145999" }, // ICAN XCB meta tag - For payment contact; see https://payto.money
+			{ property: "ican:xcb", content: "cb7147879011ea207df5b35a24ca6f0859dcfb145999" }, // FinTag
 			{ property: "defi:fee", content: "1%" } // DeFi fee meta tag - To receive kickbacks for clients
 		],
 		colorMode: {
@@ -130,6 +130,7 @@ const siteConfig: Config = {
 
 export default defineConfig({
 	plugins: [
+		tailwindcss(),
 		sveltekit(),
 		VitePWA({
 			registerType: 'autoUpdate',
@@ -158,8 +159,7 @@ export default defineConfig({
 					}
 				]
 			}
-		}),
-		tailwindcss()
+		})
 	],
 	define: {
 		__SITE_CONFIG__: JSON.stringify(siteConfig),

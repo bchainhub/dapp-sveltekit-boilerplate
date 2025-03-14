@@ -89,7 +89,7 @@ declare namespace App {
 	}
 }
 
-type dbType = 'd1' | 'sqlite' | 'web4' | 'postgres';
+type dbType = 'd1' | 'sqlite' | 'postgres';
 
 interface Env {
 	CLOUDFLARE_ACCOUNT_ID?: string;
@@ -97,33 +97,20 @@ interface Env {
 	[key: string]: string | undefined;
 }
 
-declare module '$env/static/public' {
-	export const PUBLIC_WEB4_URL: string | undefined;
-}
-
 declare module '$env/dynamic/public' {
 	export const PUBLIC_ENABLE_AUTH: string | undefined;
-	export const PUBLIC_ENABLE_WEB4: string | undefined;
 }
 
 declare module '$env/static/private' {
-	export const KV_NAME: string | undefined;
-	export const R2_NAME: string | undefined;
 	export const DB_TYPE: string | undefined;
 	export const DB_URL: string | undefined;
 	export const DB_AUTH_TOKEN: string | undefined;
 	export const DB_SSL: string | undefined;
-	export const BCH_DB_TYPE: string | undefined;
-	export const BCH_DB_URL: string | undefined;
-	export const BCH_DB_AUTH_TOKEN: string | undefined;
-	export const BCH_DB_SSL: string | undefined;
 	export const DB_D1: string | undefined;
 	export const HYPERDRIVE: string | undefined;
-	export const BCH_HYPERDRIVE: string | undefined;
 }
 
 declare module '$env/dynamic/private' {
-	export const ENABLE_FILE_ACCESS: string | undefined;
 	export const CAPTURE_COUNTRY: string | undefined;
 	export const CAPTURE_CITY: string | undefined;
 }
